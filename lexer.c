@@ -1,34 +1,52 @@
 #include "lexer.h"
 
-int	get_type(char c)
+static void type_arr(void)
 {
-	if (c == ' ')
-		return (BLANK);
-	else if (c == '\'')
-		return (S_QUOTE);
-	else if (c == '\"')
-		return (D_QUOTE);
-	else if (c == '|')
-		return (PIPE);
-	else if (c == ';')
-		return (SEMI_COL);
-	else if (c == '>')
-		return (GREATER);
-	else if (c == '<')
-		return (LESSER);
-	else if (c == '&')
-		return (AMPERSAND);
-	else if (c == '\\')
-		return (ESCAPE);
-	else if (c == '\t')
-		return (TAB);
-	else if (c == '\n')
-		return (NEWLINE);
-	else if (c == 0)
-		return (CHAR_NULL);
-	else
-		return (DEFAULT);
+	char type_arr[12];
+
+	type_arr[CHAR_NULL] = 0;
+	type_arr[BLANK] = ' ';
+	type_arr[S_QUOTE] = '\'';
+	type_arr[D_QUOTE] = '\"';
+	type_arr[PIPE] = '|';
+	type_arr[SEMI_COL] = ';';
+	type_arr[GREATER] = '>';
+	type_arr[LESSER] = '<';
+	type_arr[AMPERSAND] = '&';
+	type_arr[ESCAPE] = '\\';
+	type_arr[TAB] = '\t';
+	type_arr[NEWLINE] = '\n';
 }
+
+// int	get_type(char c)
+// {
+// 	if (c == ' ')
+// 		return (BLANK);
+// 	else if (c == '\'')
+// 		return (S_QUOTE);
+// 	else if (c == '\"')
+// 		return (D_QUOTE);
+// 	else if (c == '|')
+// 		return (PIPE);
+// 	else if (c == ';')
+// 		return (SEMI_COL);
+// 	else if (c == '>')
+// 		return (GREATER);
+// 	else if (c == '<')
+// 		return (LESSER);
+// 	else if (c == '&')
+// 		return (AMPERSAND);
+// 	else if (c == '\\')
+// 		return (ESCAPE);
+// 	else if (c == '\t')
+// 		return (TAB);
+// 	else if (c == '\n')
+// 		return (NEWLINE);
+// 	else if (c == 0)
+// 		return (CHAR_NULL);
+// 	else
+// 		return (DEFAULT);
+// }
 void	quotes_content(char *src, char *dst)
 {
 	int		len;
