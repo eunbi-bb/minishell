@@ -1,196 +1,143 @@
 #include "lexer.h"
 
-static void type_arr(void)
+t_types	is_token(int c)
 {
-	char type_arr[12];
+	t_lexer_utils type;
+	int i;
 
-	type_arr[CHAR_NULL] = 0;
-	type_arr[BLANK] = ' ';
-	type_arr[S_QUOTE] = '\'';
-	type_arr[D_QUOTE] = '\"';
-	type_arr[PIPE] = '|';
-	type_arr[SEMI_COL] = ';';
-	type_arr[GREATER] = '>';
-	type_arr[LESSER] = '<';
-	type_arr[AMPERSAND] = '&';
-	type_arr[ESCAPE] = '\\';
-	type_arr[TAB] = '\t';
-	type_arr[NEWLINE] = '\n';
-}
-
-// int	get_type(char c)
-// {
-// 	if (c == ' ')
-// 		return (BLANK);
-// 	else if (c == '\'')
-// 		return (S_QUOTE);
-// 	else if (c == '\"')
-// 		return (D_QUOTE);
-// 	else if (c == '|')
-// 		return (PIPE);
-// 	else if (c == ';')
-// 		return (SEMI_COL);
-// 	else if (c == '>')
-// 		return (GREATER);
-// 	else if (c == '<')
-// 		return (LESSER);
-// 	else if (c == '&')
-// 		return (AMPERSAND);
-// 	else if (c == '\\')
-// 		return (ESCAPE);
-// 	else if (c == '\t')
-// 		return (TAB);
-// 	else if (c == '\n')
-// 		return (NEWLINE);
-// 	else if (c == 0)
-// 		return (CHAR_NULL);
-// 	else
-// 		return (DEFAULT);
-// }
-void	quotes_content(char *src, char *dst)
-{
-	int		len;
-	int		quote;
-	int		i;
-	int		j;
-	char	c;
-
-	len = ft_strlen(src);
-	if (len <= 1)
-		ft_strlcpy(dst, src, 1);
-	quote = 0;
+	type.type_arr[PIPE] = '|';
+	type.type_arr[LESSER] = '<';
+	type.type_arr[LESSER_TWO] = '<<';
+	type.type_arr[GREATER] = '>';
+	type.type_arr[GREATER_TWO] = '>>';
 	i = 0;
-	j = 0;
-	while (i < len)
+	while (i < 3)
 	{
-		c = src[i];
-		if ((c == '\'' || c == '\"') && quote == 0)
-			quote = c;
-		else if (c == quote)
-			quote = 0;
-		else
-		{
-			dst[j] = c;
-			j++;
-		}
+		if (type.type_arr[i] == c)
+			return (i);
 		i++;
 	}
-	dst[j] = '\0';
+	return (FALSE);
 }
 
-int	generate_lexer(char *input, int size, t_lexer *lexer)
+int	handle_token(t_tokens **token_list, char *str, int i)
 {
-	t_token	*token;
-	int		i;
-	int		j;
-	int		tmp;
-	char	c;
-	int		type;
-	int		state;
+	t_types	token;
 
-	if (lexer == NULL)
-		return (-1);
-	if (size == 0)
-	{
-		lexer->token_num = 0;
+	token = check_token(str[i]);
+	if (token == NULL)
 		return (0);
+	if (token == GREATER && check_token(str[i + 1]) == GREATER)
+	{
+		if (!add_node(token_list, GREATER_TWO, NULL))
+			return (-1);
+		return (2);
 	}
-	lexer->token_list = malloc(sizeof(t_token));
-	token = lexer->token_list;
-	new_node(0, size);
-	i = 0;
+	else if (token == LESSER && check_token(str[i + 1] == LESSER))
+	{
+		if (!add_node(token_list, LESSER_TWO, NULL))
+			return (-1);
+		return (2);
+	}
+	else
+	{
+		if (!add_node(token_list, token, NULL))
+			return (-1);
+		return (1);
+	}
+	return (0);
+}
+
+int	skip_whitespace(char *str, int i)
+{
+	int		j;
+	char	c;
+
 	j = 0;
-	tmp = 0;
-	c = input[i];
-	while (c != '\0')
+	while (str[i + j])
 	{
-		c = input[i];
-		type = get_type(c);
-		state = STATE_GENERAL;
-		if (state = STATE_GENERAL)
-		{
-			if (type == S_QUOTE)
-			{
-				state = STATE_SQUOTE;
-				token->arr[j++] = S_QUOTE;
-				token->data = TOKEN;
-			}
-			else if (type == D_QUOTE)
-			{
-				state = STATE_DQUOTE;
-				token->arr[j++] = D_QUOTE;
-				token->data = TOKEN;
-			}
-			else if (type == ESCAPE)
-			{
-				token->arr[j++] = input[++i];
-				token->data = TOKEN;
-			}
-			else if (type == DEFAULT)
-			{
-				token->arr[j++] = c;
-				token->data = TOKEN;
-			}
-			else if (type == BLANK)
-			{
-				if (j > 0)
-				{
-					token->arr[j] = 0;
-					token->next = malloc(sizeof(t_token));
-					token = token->next;
-					new_node(token, size - i);
-					j = 0;
-				}
-			}
-			else if ((type == PIPE) ||(type == SEMI_COL) || (type == GREATER) || (type == LESSER) || (type == AMPERSAND))
-			{
-				if (j > 0)
-				{
-					token->arr[j] = 0;
-					token->next = malloc(sizeof(t_token));
-					token = token->next;
-					new_node(token, size - i);
-					j = 0;
-				}
-			}
-			token->arr[0] = type;
-			token->arr[1] = 0;
-			token->data = type;
-			token->next = malloc(sizeof(t_token));
-			token = token->next;
-			new_node(token, size - i);
-		}
-		else if (state == STATE_SQUOTE)
-		{
-			token->arr[j++] = c;
-			if (type == S_QUOTE)
-				state = STATE_GENERAL;
-		}
-		else if (state == STATE_DQUOTE)
-		{
-			token->arr[j++] = c;
-			if (type == D_QUOTE)
-				state = STATE_GENERAL;
-		}
-		if (type == CHAR_NULL)
-		{
-			if (j > 0)
-			{
-				token->arr[j] = 0;
-				tmp++;
-				j = 0;
-			}
-		}
+		c = str[i + j];
+		if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+			j++;
 	}
-	/**********************/
-	int	k = 0;
-	token = lexer->token_list;
-	while (token != NULL)
+	return (j);
+}
+
+int	add_node(t_types type, t_tokens **token_list, char *str)
+{
+	t_tokens	*node;
+
+	node = new_node(str, ft_strlen(str));
+	add_after(NULL, node);
+	return (1);
+}
+
+int	s_quotes(char *str, int i)
+{
+	int	j;
+
+	j = 0;
+	if (str[i + j] == '\'')
 	{
-		if (token->data == TOKEN)
-		{
-			glob_t buf;
-			glob(token->arr, GLOB_TILDE, NULL, &buf)
-		}
+		j++;
+		while (str[i + j] && str[i + j] != '\'')
+			j++;
+		j++;
 	}
+	return (j);
+}
+
+int	d_quotes(char *str, int i)
+{
+	int	j;
+
+	j = 0;
+	if (str[i + j] == '\"')
+	{
+		j++;
+		while (str[i + j] && str[i + j] != '\"')
+			j++;
+		j++;
+	}
+	return (j);
+}
+
+int	in_quotes(t_tokens **token_list, char *str, int i)
+{
+	int	j;
+
+	j = 0;
+	while (str[i + j] && !(check_token(str[i + j])))
+	{
+		j += s_quotes(str, i + j);
+		j += d_quotes(str, i + j);
+		if (str[i + j] == ' ' || (str[i + j] >= '\t' && str[i + j] <= '\r'))
+			break ;
+		else
+			j++;
+	}
+	if (!add_node(token_list, 0, ft_substr(str, i, j)))
+		return (-1);
+	return (j);
+}
+
+t_boolean	lexical_analyzer(t_lexer_utils *lexer)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (lexer->arg[i])
+	{
+		j = 0;
+		i += skip_whitespace(lexer->arg, i);
+		if (is_token(lexer->arg[i]))
+			j = handle_token(lexer->arg, i, &lexer->token_list);
+		else
+			j = read_words(i, lexer->arg, &lexer->token_list);
+		if (j < 0)
+			return (FALSE);
+		i = i + j;
+	}
+	return (TRUE);
 }

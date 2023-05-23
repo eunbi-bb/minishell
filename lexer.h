@@ -4,48 +4,48 @@
 # include <stdio.h>
 # include "../libft/libft.h"
 
+typedef enum boolean
+{
+	FALSE = 0,
+	TRUE
+}	t_boolean;
+
 typedef enum types
 {
-	TOKEN = -1,
-	CHAR_NULL,
-	BLANK,
-	S_QUOTE,
-	D_QUOTE,
-	PIPE,
-	SEMI_COL,
-	GREATER,
-	LESSER,
-	AMPERSAND,
-	ESCAPE,
-	TAB,
-	NEWLINE,
 	DEFAULT,
-} t_types;
+	PIPE,
+	LESSER,
+	LESSER_TWO,
+	GREATER,
+	GREATER_TWO
+}	t_types;
 
 typedef enum quotes
 {
-	STATE_SQUOTE,
+	STATE_SQUOTE = 10,
 	STATE_DQUOTE,
 	STATE_GENERAL,
-} t_quotes;
+}	t_quotes;
 
-typedef	struct	s_token
+typedef	struct	s_tokens
 {
 	char			*arr;
 	int				data;
-	struct s_token	*prev;
-	struct s_token	*next;
-	char			*state;
-}	t_token;
+	t_types			token;
+	int				*arr;
+	struct s_tokens	*prev;
+	struct s_tokens	*next;
+}	t_tokens;
 
-typedef struct s_lexer
+typedef	struct s_lexer_utils
 {
-	struct s_token	*token_list;
-	int				token_num;
-}	t_lexer;
+	char		*arg;
+	t_tokens	*token_list;
+	int			*type_arr;
+}	t_lexer_utils;
 
-t_token	*new_node(int data, int size);
-void	add_before(t_token *current, t_token *new_node);
-void	add_after(t_token *before, t_token *new_node);
-void	del_node(t_token **head, t_token **tail, t_token *p);
+t_tokens	*new_node(char *data, int size);
+void	add_before(t_tokens *current, t_tokens *new_node);
+void	add_after(t_tokens *before, t_tokens *new_node);
+void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p);
 #endif

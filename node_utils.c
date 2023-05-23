@@ -6,15 +6,15 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/05/13 18:31:33 by eucho         ########   odam.nl         */
+/*   Updated: 2023/05/21 18:08:41 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token	*new_node(int data, int size)
+t_tokens	*new_node(char *data, int size)
 {
-	t_token	*new_node;
+	t_tokens	*new_node;
 
 	new_node = malloc(size + 1);
 	if (!new_node)
@@ -25,9 +25,9 @@ t_token	*new_node(int data, int size)
 	return (new_node);
 }
 
-void	add_before(t_token *current, t_token *new_node)
+void	add_before(t_tokens *current, t_tokens *new_node)
 {
-	t_token	*head;
+	t_tokens	*head;
 
 	head = lst_front(current);
 	if (current == NULL)
@@ -49,10 +49,10 @@ void	add_before(t_token *current, t_token *new_node)
 	}
 }
 
-void	add_after(t_token *before, t_token *new_node)
+void	add_after(t_tokens *before, t_tokens *new_node)
 {
-	t_token	*head;
-	t_token	*tail;
+	t_tokens	*head;
+	t_tokens	*tail;
 
 	head = lst_front(before);
 	tail = lst_last(before);
@@ -77,7 +77,7 @@ void	add_after(t_token *before, t_token *new_node)
 	}
 }
 
-void	del_node(t_token **head, t_token **tail, t_token *p)
+void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p)
 {
 	if (head == NULL || *head == NULL || p == NULL)
 		return ;
