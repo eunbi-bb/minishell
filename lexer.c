@@ -6,12 +6,14 @@ int	skip_whitespace(char *str, int i)
 	char	c;
 
 	j = 0;
-	while (str[i + j])
+	while (1)
 	{
 		c = str[i + j];
 		if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+		{
 			j++;
-		i++;
+			break ;
+		}
 	}
 	return (j);
 }
@@ -110,9 +112,11 @@ int	in_quotes(t_tokens **token_list, char *str, int i)
 	j = 0;
 	while (str[i + j] && !(is_token(str[i + j])))
 	{
-		j += s_quotes(str, i + j);
-		j += d_quotes(str, i + j);
-		if (str[i + j] == ' ' || (str[i + j] >= '\t' && str[i + j] <= '\r'))
+		if (str[i + j] == '\'')
+			j += s_quotes(str, i + j);
+		else if (str[i + j] == '\"')
+			j += d_quotes(str, i + j);
+		else if (str[i + j] == ' ' || (str[i + j] >= '\t' && str[i + j] <= '\r'))
 			break ;
 		else
 			j++;
@@ -132,7 +136,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	{
 		j = 0;
 		i += skip_whitespace(lexer->arg, i);
-		if (is_token(lexer->arg[i]))
+		if (is_token(lexer->arg[i]) != 0)
 			j = handle_token(&lexer->token_list, &lexer->arg[i], i);
 		else
 			j = in_quotes(&lexer->token_list, &lexer->arg[i], i);

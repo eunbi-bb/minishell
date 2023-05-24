@@ -36,7 +36,7 @@ typedef	struct	s_tokens
 	struct s_tokens	*next;
 }	t_tokens;
 
-typedef	struct ßs_lexer_utils
+typedef	struct s_lexer_utils
 {
 	char		*arg;
 	t_tokens	*token_list;
