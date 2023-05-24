@@ -2,7 +2,7 @@
 # define LEXER_H
 
 # include <stdio.h>
-# include "../libft/libft.h"
+# include "libft/libft.h"
 
 typedef enum boolean
 {
@@ -29,7 +29,6 @@ typedef enum quotes
 
 typedef	struct	s_tokens
 {
-	char			*arr;
 	int				data;
 	t_types			token;
 	int				*arr;
@@ -37,11 +36,11 @@ typedef	struct	s_tokens
 	struct s_tokens	*next;
 }	t_tokens;
 
-typedef	struct s_lexer_utils
+typedef	struct ßs_lexer_utils
 {
 	char		*arg;
 	t_tokens	*token_list;
-	int			*type_arr;
+	char		*type_arr;
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data, int size);
