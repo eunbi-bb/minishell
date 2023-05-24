@@ -2,7 +2,7 @@
 # define LEXER_H
 
 # include <stdio.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 typedef enum boolean
 {
@@ -17,7 +17,7 @@ typedef enum types
 	LESSER,
 	LESSER_TWO,
 	GREATER,
-	GREATER_TWO
+	GREATER_TWO,
 }	t_types;
 
 typedef enum quotes

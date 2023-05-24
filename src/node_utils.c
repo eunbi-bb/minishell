@@ -6,11 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/05/21 18:08:41 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/05/24 21:35:56 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../includes/lexer.h"
 
 t_tokens	*new_node(char *data, int size)
 {
