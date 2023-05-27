@@ -1,8 +1,8 @@
-NAME	= lexer.a
-CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
-OBJ_DIR	= obj/
+NAME		= lexer.a
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror
 LIBFT		= libft
+OBJ_DIR		= obj/
 SRC_DIR		= src/
 
 HEADER_DIR	= includes/
@@ -23,8 +23,6 @@ all: $(NAME)
 
 $(NAME):	$(OBJ) $(OBJF)
 			@make -C $(LIBFT)
-			@cp libft/libft.a .
-			@mv libft.a $(NAME)
 			@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME)
 			@echo "$(CYAN_B)- Lexer is compiled -"
 

@@ -1,21 +1,10 @@
 #include "../includes/lexer.h"
 
-int	skip_whitespace(char *str, int i)
+int	skip_whitespace(char *s, int i)
 {
-	int		j;
-	char	c;
-
-	j = 0;
-	while (1)
-	{
-		c = str[i + j];
-		if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
-		{
-			j++;
-			break ;
-		}
-	}
-	return (j);
+	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
+		i++;
+	return (i);
 }
 
 t_types	is_token(int c)
@@ -23,11 +12,10 @@ t_types	is_token(int c)
 	t_lexer_utils type;
 	int i;
 
+	type.type_arr = NULL;
 	type.type_arr[PIPE] = '|';
 	type.type_arr[LESSER] = '<';
-	//type.type_arr[LESSER_TWO] = "<<";
 	type.type_arr[GREATER] = '>';
-	//type.type_arr[GREATER_TWO] = ">>";
 	i = 0;
 	while (i < 3)
 	{
@@ -38,38 +26,21 @@ t_types	is_token(int c)
 	return (0);
 }
 
-int	add_node(t_tokens **token_list, t_types type, char *str)
+int	take_tokens(t_tokens *token_list, char *str, int i)
 {
-	t_tokens	*node;
-
-	node = new_node(str, ft_strlen(str));
-	add_after(NULL, node);
-	return (1);
-}
-
-int	handle_token(t_tokens **token_list, char *str, int i)
-{
-	t_types	token;
-
-	token = is_token(str[i]);
-	if (token == NULL)
-		return (0);
-	if (token == GREATER && is_token(str[i + 1]) == GREATER)
+	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
-		if (!add_node(token_list, GREATER_TWO, NULL))
-			return (-1);
+		add_after(token_list, new_node((char *)GREATER_TWO, 1));
 		return (2);
 	}
-	else if (token == LESSER && is_token(str[i + 1] == LESSER))
+	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
 	{
-		if (!add_node(token_list, LESSER_TWO, NULL))
-			return (-1);
+		add_after(token_list, new_node((char *)HERE_DOC, 1));
 		return (2);
 	}
 	else
 	{
-		if (!add_node(token_list, token, NULL))
-			return (-1);
+		add_after(token_list, new_node((char *)PIPE, 1));
 		return (1);
 	}
 	return (0);
@@ -105,9 +76,10 @@ int	d_quotes(char *str, int i)
 	return (j);
 }
 
-int	in_quotes(t_tokens **token_list, char *str, int i)
+int	in_quotes(t_tokens *token_list, char *str, int i)
 {
-	int	j;
+	int		j;
+	char	*tmp;
 
 	j = 0;
 	while (str[i + j] && !(is_token(str[i + j])))
@@ -121,8 +93,8 @@ int	in_quotes(t_tokens **token_list, char *str, int i)
 		else
 			j++;
 	}
-	if (!add_node(token_list, 0, ft_substr(str, i, j)))
-		return (-1);
+	tmp = ft_substr(str, i, j);
+	add_after(token_list, new_node(tmp, ft_strlen(tmp)));
 	return (j);
 }
 
@@ -137,9 +109,9 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		j = 0;
 		i += skip_whitespace(lexer->arg, i);
 		if (is_token(lexer->arg[i]) != 0)
-			j = handle_token(&lexer->token_list, &lexer->arg[i], i);
+			j = take_tokens(lexer->token_list, lexer->arg, i);
 		else
-			j = in_quotes(&lexer->token_list, &lexer->arg[i], i);
+			j = in_quotes(lexer->token_list, lexer->arg, i);
 		if (j < 0)
 			return (FALSE);
 		i = i + j;
@@ -147,21 +119,55 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	return (TRUE);
 }
 
-int	main(int argc, char **argv)
+t_boolean	match_quotes(char *str)
 {
-	t_lexer_utils	lexer;
-	int				i;
+	int	i;
+	int	j;
+	int	num_s;
+	int	num_d;
 
-	argv[0] = "hello";
-	lexer.arg = argv[0];
-	if (lexical_analyzer(&lexer) == TRUE)
+	i = 0;
+	while (str[i])
 	{
-		i = 0;
-		while (lexer.arg[i])
+		if (str[i] == '\'')
 		{
-			printf("tokens: %c\n", lexer.arg[i]);
-			i++;
+			j = i + 1;
+			num_s = 1;
+			while (str[j] != '\'' && str[j])
+			{
+				if (str[j] == '\'')
+					++num_s;
+				j++;
+			}
 		}
+		else if (str[i] == '\"')
+		{
+			j = i + 1;
+			num_d = 1;
+			while (str[j] != '\"' && str[j])
+			{
+				if (str[j] == '\"')
+					++num_d;
+				j++;
+			}
+		}
+		i++;
 	}
+	if ((num_s % 2) != 0 || (num_d % 2) != 0)
+		return (FALSE);
+	return (TRUE);
+}
+
+int	main(void)
+{
+	t_lexer_utils lexer;
+	char	*str;
+
+	str = "    grep 'Hello World' | cat -e    ";
+	// lexer.arg = readline();
+	lexer.arg = ft_strtrim(str, " ");
+	if (match_quotes(lexer.arg) == FALSE)
+		return (-1);
+	lexical_analyzer(&lexer);
 	return (0);
 }

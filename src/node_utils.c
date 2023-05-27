@@ -6,11 +6,35 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/05/24 21:35:56 by eucho         ########   odam.nl         */
+/*   Updated: 2023/05/27 23:25:35 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lexer.h"
+
+t_tokens	*lst_last(t_tokens *lst)
+{
+	t_tokens	*tmp;
+
+	tmp = lst;
+	if (!tmp)
+		return (tmp);
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
+}
+
+t_tokens	*lst_front(t_tokens *lst)
+{
+	t_tokens	*tmp;
+
+	tmp = lst;
+	if (!tmp)
+		return (tmp);
+	while (tmp->prev)
+		tmp = tmp->prev;
+	return (tmp);
+}
 
 t_tokens	*new_node(char *data, int size)
 {

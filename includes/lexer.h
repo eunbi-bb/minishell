@@ -15,7 +15,7 @@ typedef enum types
 	DEFAULT,
 	PIPE,
 	LESSER,
-	LESSER_TWO,
+	HERE_DOC,
 	GREATER,
 	GREATER_TWO,
 }	t_types;
@@ -29,7 +29,7 @@ typedef enum quotes
 
 typedef	struct	s_tokens
 {
-	int				data;
+	char *			data;
 	t_types			token;
 	int				*arr;
 	struct s_tokens	*prev;
