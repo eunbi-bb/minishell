@@ -132,27 +132,29 @@ t_boolean	match_quotes(char *str)
 	int	num_d;
 
 	i = 0;
+	num_s = 0;
+	num_d = 0;
 	while (str[i])
 	{
 		if (str[i] == '\'')
 		{
+			num_s++;
 			j = i + 1;
-			num_s = 1;
 			while (str[j] != '\'' && str[j])
 			{
 				if (str[j] == '\'')
-					++num_s;
+					num_s++;
 				j++;
 			}
 		}
 		else if (str[i] == '\"')
 		{
+			num_d++;
 			j = i + 1;
-			num_d = 1;
 			while (str[j] != '\"' && str[j])
 			{
 				if (str[j] == '\"')
-					++num_d;
+					num_d++;
 				j++;
 			}
 		}
@@ -171,8 +173,12 @@ int	main(void)
 	str = "    grep 'Hello World' | cat -e    ";
 	// lexer.arg = readline();
 	lexer.arg = ft_strtrim(str, " ");
+	//printf("arg : %s\n", lexer.arg);
 	if (match_quotes(lexer.arg) == FALSE)
+	{
+		printf("match_quotes: %d\n", match_quotes(lexer.arg));
 		return (-1);
-	lexical_analyzer(&lexer);
+	}
+	//lexical_analyzer(&lexer);
 	return (0);
 }
