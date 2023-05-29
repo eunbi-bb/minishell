@@ -4,6 +4,7 @@ int	skip_whitespace(char *s, int i)
 {
 	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
 		i++;
+	printf("i = %d\n", i);
 	return (i);
 }
 
@@ -14,9 +15,8 @@ t_types	is_token(int c)
 	int i;
 
 	type.type_arr = NULL;
-	type.type_arr[PIPE] = '|';
-	type.type_arr[LESSER] = '<';
-	type.type_arr[GREATER] = '>';
+	type.type_arr = "|<>";
+	printf("type arr[PIPE]: %c \n", type.type_arr[PIPE]);
 	i = 0;
 	while (type.type_arr[i])
 	{
@@ -111,8 +111,12 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	{
 		j = 0;
 		i += skip_whitespace(lexer->arg, i);
+		// printf("i = %d\n", i);
 		if (is_token(lexer->arg[i]) != 0)
+		{
+			printf("is_token = %d\n", is_token(lexer->arg[i]));
 			j = take_tokens(lexer->token_list, lexer->arg, i);
+		}
 		else
 			j = in_quotes(lexer->token_list, lexer->arg, i);
 		if (j < 0)
@@ -175,10 +179,7 @@ int	main(void)
 	lexer.arg = ft_strtrim(str, " ");
 	//printf("arg : %s\n", lexer.arg);
 	if (match_quotes(lexer.arg) == FALSE)
-	{
-		printf("match_quotes: %d\n", match_quotes(lexer.arg));
 		return (-1);
-	}
-	//lexical_analyzer(&lexer);
+	lexical_analyzer(&lexer);
 	return (0);
 }

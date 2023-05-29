@@ -12,7 +12,7 @@ typedef enum boolean
 
 typedef enum types
 {
-	DEFAULT,
+	DEFAULT = -1,
 	PIPE,
 	LESSER,
 	HERE_DOC,
