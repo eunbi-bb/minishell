@@ -7,6 +7,7 @@ int	skip_whitespace(char *s, int i)
 	return (i);
 }
 
+//Checking if the character is a token or not.
 t_types	is_token(int c)
 {
 	t_lexer_utils type;
@@ -17,7 +18,7 @@ t_types	is_token(int c)
 	type.type_arr[LESSER] = '<';
 	type.type_arr[GREATER] = '>';
 	i = 0;
-	while (i < 3)
+	while (type.type_arr[i])
 	{
 		if (type.type_arr[i] == c)
 			return (i);
@@ -26,21 +27,22 @@ t_types	is_token(int c)
 	return (0);
 }
 
+//Putting a token in a node
 int	take_tokens(t_tokens *token_list, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
-		add_after(token_list, new_node((char *)GREATER_TWO, 1));
+		add_after(token_list, new_token_node(GREATER_TWO));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
 	{
-		add_after(token_list, new_node((char *)HERE_DOC, 1));
+		add_after(token_list, new_token_node(HERE_DOC));
 		return (2);
 	}
 	else
 	{
-		add_after(token_list, new_node((char *)PIPE, 1));
+		add_after(token_list, new_token_node(str[i]));
 		return (1);
 	}
 	return (0);
@@ -76,6 +78,7 @@ int	d_quotes(char *str, int i)
 	return (j);
 }
 
+//Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
 int	in_quotes(t_tokens *token_list, char *str, int i)
 {
 	int		j;
@@ -119,6 +122,8 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	return (TRUE);
 }
 
+
+//Checking if quotes are in a pair.
 t_boolean	match_quotes(char *str)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/05/27 23:25:35 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/05/29 13:54:34 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ t_tokens	*new_node(char *data, int size)
 	if (!new_node)
 		return (NULL);
 	new_node->data = data;
+	new_node->prev = NULL;
+	new_node->next = NULL;
+	return (new_node);
+}
+
+t_tokens	*new_token_node(char token)
+{
+	t_tokens	*new_node;
+
+	new_node = malloc((sizeof(char) * 1));
+	if (!new_node)
+		return (NULL);
+	new_node->token = token;
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	return (new_node);

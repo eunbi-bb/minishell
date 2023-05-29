@@ -44,6 +44,7 @@ typedef	struct s_lexer_utils
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data, int size);
+t_tokens	*new_token_node(char token);
 void	add_before(t_tokens *current, t_tokens *new_node);
 void	add_after(t_tokens *before, t_tokens *new_node);
 void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p);
