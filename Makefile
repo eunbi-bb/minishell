@@ -1,6 +1,10 @@
 NAME		= lexer.a
 CC			= gcc
+ifdef DEBUG
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g 
+else
 CFLAGS		= -Wall -Wextra -Werror
+endif
 LIBFT		= libft
 OBJ_DIR		= obj/
 SRC_DIR		= src/

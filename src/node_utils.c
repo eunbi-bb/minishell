@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/05/29 13:54:34 by eucho         ########   odam.nl         */
+/*   Updated: 2023/05/31 14:24:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ t_tokens	*lst_front(t_tokens *lst)
 	return (tmp);
 }
 
-t_tokens	*new_node(char *data, int size)
+t_tokens	*new_node(char *data)
 {
 	t_tokens	*new_node;
 
-	new_node = malloc(size + 1);
+	new_node = (t_tokens *)malloc(sizeof(t_tokens));
 	if (!new_node)
 		return (NULL);
 	new_node->data = data;
@@ -53,7 +53,7 @@ t_tokens	*new_token_node(char token)
 {
 	t_tokens	*new_node;
 
-	new_node = malloc((sizeof(char) * 1));
+	new_node = (t_tokens *)malloc(sizeof(t_tokens));
 	if (!new_node)
 		return (NULL);
 	new_node->token = token;

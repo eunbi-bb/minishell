@@ -12,11 +12,10 @@ typedef enum boolean
 
 typedef enum types
 {
-	DEFAULT = -1,
 	PIPE,
 	LESSER,
-	HERE_DOC,
 	GREATER,
+	HERE_DOC,
 	GREATER_TWO,
 }	t_types;
 
@@ -29,7 +28,7 @@ typedef enum quotes
 
 typedef	struct	s_tokens
 {
-	char *			data;
+	char			*data;
 	t_types			token;
 	int				*arr;
 	struct s_tokens	*prev;
@@ -43,7 +42,7 @@ typedef	struct s_lexer_utils
 	char		*type_arr;
 }	t_lexer_utils;
 
-t_tokens	*new_node(char *data, int size);
+t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(char token);
 void	add_before(t_tokens *current, t_tokens *new_node);
 void	add_after(t_tokens *before, t_tokens *new_node);
