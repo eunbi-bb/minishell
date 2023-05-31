@@ -30,7 +30,6 @@ typedef	struct	s_tokens
 {
 	char			*data;
 	t_types			token;
-	int				*arr;
 	struct s_tokens	*prev;
 	struct s_tokens	*next;
 }	t_tokens;
@@ -40,6 +39,7 @@ typedef	struct s_lexer_utils
 	char		*arg;
 	t_tokens	*token_list;
 	char		*type_arr;
+	int			pipe_num;
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data);
