@@ -15,5 +15,6 @@ typedef struct Node {
 } Node;
 
 Node* createLinkedList(char** envp);
+int cmd_echo(int argc, char **argv);
 
 #endif
