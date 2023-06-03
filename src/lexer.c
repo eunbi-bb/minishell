@@ -2,12 +2,8 @@
 
 int	skip_whitespace(char *s, int i)
 {
-	// printf("s[%d] = %c\n", i, s[i]);
-	// while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
-	while (s[i] == ' ')
+	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
 		i++;
-	printf("skipped white spaces : %d\n", i);
-	printf("s[%d] = %c\n", i, s[i]);
 	return (i);
 }
 
@@ -41,9 +37,10 @@ int	take_tokens(t_tokens *token_list, char *str, int i)
 		add_after(token_list, new_token_node(HERE_DOC));
 		return (2);
 	}
-	else
+	else if (is_token(str[i]) == PIPE)
 	{
 		add_after(token_list, new_token_node(str[i]));
+		//pipe_num++;
 		return (1);
 	}
 	return (0);
@@ -69,7 +66,7 @@ int	d_quotes(char *str, int i)
 	int	j;
 
 	j = 0;
-	if (str[i + j] == '\"')
+	if (str[i + j] != '\"')
 	{
 		j++;
 		while (str[i + j] && str[i + j] != '\"')
@@ -86,27 +83,18 @@ int	in_quotes(t_tokens *token_list, char *str, int i)
 	char	*tmp;
 
 	j = 0;
-	printf("str[i+j] = %c\n", str[i + j]);
 	while (str[i + j] && !(is_token(str[i + j])))
 	{
 		if (str[i + j] == '\'')
-		{
-			printf("s_quotes\n");
 			j += s_quotes(str, i + j);
-		}
 		else if (str[i + j] == '\"')
-		{
-			printf("d_quotes\n");
 			j += d_quotes(str, i + j);
-		}
-		else if (str[i + j] == ' ' || (str[i + j] >= '\t' && str[i + j] <= '\r'))
+		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
 			break ;
 		else
 			j++;
 	}
 	tmp = ft_substr(str, i, j);
-	// printf("j = %d\n", j);
-	// printf("tmp = %s\n", tmp);
 	add_after(token_list, new_node(tmp));
 	return (j);
 }
@@ -120,8 +108,8 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	while (lexer->arg[i])
 	{
 		j = 0;
-		i += skip_whitespace(lexer->arg, i);
-		// printf("arg = %c\n", lexer->arg[i]);
+		i = skip_whitespace(lexer->arg, i);
+		//printf("after skipwhite : %d\n", i);
 		if (is_token(lexer->arg[i]))
 			j = take_tokens(lexer->token_list, lexer->arg, i);
 		else
@@ -129,7 +117,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		if (j < 0)
 			return (FALSE);
 		i = i + j;
-		printf("i = %d\n", i);
+		//printf("i + j = %d\n", i);
 	}
 	return (TRUE);
 }
@@ -182,8 +170,8 @@ int	main(void)
 	t_lexer_utils lexer;
 	char	*str;
 
-	str = "    grep 'Hello World'";
-	// str = "    grep 'Hello World' | cat -e    ";
+	// str = "    grep 'Hello World'";
+	str = "    grep 'Hello World' | cat -e    ";
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
