@@ -25,55 +25,38 @@ t_types	is_token(int c)
 }
 
 //Putting a token in a node
-int	take_tokens(t_tokens *token_list, char *str, int i)
+int	take_tokens(t_lexer_utils *lexer, t_tokens *token_list, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
+		printf("Two greater token\n");
 		add_after(token_list, new_token_node(GREATER_TWO));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
 	{
+		printf("Two lesser token\n");
 		add_after(token_list, new_token_node(HERE_DOC));
 		return (2);
 	}
 	else if (is_token(str[i]) == PIPE)
 	{
+		printf("pipe token\n");
 		add_after(token_list, new_token_node(str[i]));
-		//pipe_num++;
+		lexer->pipe_num++;
 		return (1);
 	}
 	return (0);
 }
 
-int	s_quotes(char *str, int i)
+int	quotes(char *str, int i)
 {
 	int	j;
 
-	j = 0;
-	if (str[i + j] == '\'')
-	{
+	j = 1;
+	while (str[i + j] && str[i + j] != str[i])
 		j++;
-		while (str[i + j] && str[i + j] != '\'')
-			j++;
-		j++;
-	}
-	return (j);
-}
-
-int	d_quotes(char *str, int i)
-{
-	int	j;
-
-	j = 0;
-	if (str[i + j] != '\"')
-	{
-		j++;
-		while (str[i + j] && str[i + j] != '\"')
-			j++;
-		j++;
-	}
-	return (j);
+	return (++j);
 }
 
 //Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
@@ -81,19 +64,16 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 {
 	int		j;
 	char	*tmp;
+	char	quote;
 
 	j = 0;
 	while (str[i + j] && !(is_token(str[i + j])))
 	{
-		if (str[i + j] == '\'')
+		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
-			j += s_quotes(str, i + j);
-			tmp = ft_strtrim(ft_substr(str, i, j), "\'");
-		}
-		else if (str[i + j] == '\"')
-		{
-			j += d_quotes(str, i + j);
-			tmp = ft_strtrim(ft_substr(str, i, j), "\"");
+			quote = str[i + j];
+			j += quotes(str, i + j);
+			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
 		}
 		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
 			break ;
@@ -103,7 +83,7 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 			tmp = ft_substr(str, i, j);
 		}
 	}
-	//printf("tmp = %s\n", tmp);
+	printf("tmp = %s\n", tmp);
 	add_after(token_list, new_node(tmp));
 	return (j);
 }
@@ -120,7 +100,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		i = skip_whitespace(lexer->arg, i);
 		//printf("after skipwhite : %d\n", i);
 		if (is_token(lexer->arg[i]))
-			j = take_tokens(lexer->token_list, lexer->arg, i);
+			j = take_tokens(lexer, lexer->token_list, lexer->arg, i);
 		else
 			j = arg_divider(lexer->token_list, lexer->arg, i);
 		if (j < 0)
@@ -182,8 +162,8 @@ int	main(void)
 	// str = "    grep 'Hello World'";
 	str = "    grep 'Hello World' | cat -e    ";
 	lexer.arg = ft_strtrim(str, " ");
-	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
 	lexical_analyzer(&lexer);
+	printf("pipe_num : %d\n", lexer.pipe_num);
 	return (0);
 }
