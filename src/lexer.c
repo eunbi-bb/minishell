@@ -77,7 +77,7 @@ int	d_quotes(char *str, int i)
 }
 
 //Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
-int	in_quotes(t_tokens *token_list, char *str, int i)
+int	arg_divider(t_tokens *token_list, char *str, int i)
 {
 	int		j;
 	char	*tmp;
@@ -122,7 +122,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		if (is_token(lexer->arg[i]))
 			j = take_tokens(lexer->token_list, lexer->arg, i);
 		else
-			j = in_quotes(lexer->token_list, lexer->arg, i);
+			j = arg_divider(lexer->token_list, lexer->arg, i);
 		if (j < 0)
 			return (FALSE);
 		i = i + j;
