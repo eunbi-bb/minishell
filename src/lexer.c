@@ -86,15 +86,24 @@ int	in_quotes(t_tokens *token_list, char *str, int i)
 	while (str[i + j] && !(is_token(str[i + j])))
 	{
 		if (str[i + j] == '\'')
+		{
 			j += s_quotes(str, i + j);
+			tmp = ft_strtrim(ft_substr(str, i, j), "\'");
+		}
 		else if (str[i + j] == '\"')
+		{
 			j += d_quotes(str, i + j);
+			tmp = ft_strtrim(ft_substr(str, i, j), "\"");
+		}
 		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
 			break ;
 		else
+		{
 			j++;
+			tmp = ft_substr(str, i, j);
+		}
 	}
-	tmp = ft_substr(str, i, j);
+	//printf("tmp = %s\n", tmp);
 	add_after(token_list, new_node(tmp));
 	return (j);
 }
