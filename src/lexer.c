@@ -162,6 +162,7 @@ int	main(void)
 	// str = "    grep 'Hello World'";
 	str = "    grep 'Hello World' | cat -e    ";
 	lexer.arg = ft_strtrim(str, " ");
+	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
 	lexical_analyzer(&lexer);
 	printf("pipe_num : %d\n", lexer.pipe_num);
