@@ -8,7 +8,7 @@ int	skip_whitespace(char *s, int i)
 }
 
 //Checking if the character is a token or not.
-t_types	is_token(int c)
+int	is_token(int c)
 {
 	t_lexer_utils type;
 	int i;
@@ -18,10 +18,13 @@ t_types	is_token(int c)
 	while (type.type_arr[i])
 	{
 		if (type.type_arr[i] == c)
+		{
+			printf("\nis_token active : %c\n", type.type_arr[i]);
 			return (i);
+		}
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 //Putting a token in a node
@@ -41,7 +44,6 @@ int	take_tokens(t_lexer_utils *lexer, t_tokens *token_list, char *str, int i)
 	}
 	else if (is_token(str[i]) == PIPE)
 	{
-		printf("pipe token\n");
 		add_after(token_list, new_token_node(str[i]));
 		lexer->pipe_num++;
 		return (1);
@@ -67,7 +69,7 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 	char	quote;
 
 	j = 0;
-	while (str[i + j] && !(is_token(str[i + j])))
+	while (str[i + j] && (is_token(str[i + j]) == -1))
 	{
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
@@ -80,7 +82,8 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 		else
 		{
 			j++;
-			tmp = ft_substr(str, i, j);
+			if (is_token(str[i + j]) == -1)
+				tmp = ft_substr(str, i, j);
 		}
 	}
 	printf("tmp = %s\n", tmp);
@@ -99,7 +102,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		j = 0;
 		i = skip_whitespace(lexer->arg, i);
 		//printf("after skipwhite : %d\n", i);
-		if (is_token(lexer->arg[i]))
+		if (is_token(lexer->arg[i]) >= 0)
 			j = take_tokens(lexer, lexer->token_list, lexer->arg, i);
 		else
 			j = arg_divider(lexer->token_list, lexer->arg, i);
@@ -167,4 +170,4 @@ int	main(void)
 	lexical_analyzer(&lexer);
 	printf("pipe_num : %d\n", lexer.pipe_num);
 	return (0);
-}
+}s
