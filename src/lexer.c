@@ -169,13 +169,12 @@ int	main(void)
 	lexical_analyzer(&lexer);
 	printf("pipe_num : %i\n", lexer.pipe_num);
 
-	t_tokens *top = NULL;
-	t_tokens *current = top;
-	while(current != NULL)
+	t_tokens *current = lexer.token_list;
+	while (current != NULL)
 	{
-		printf("current->token:%c",current->token);
+		printf("current->token: %d\n",current->token);
+		printf("current->data: %s\n", current->data);
 		current = current->next;
 	}
-	printf("token: %s\n", lexer.token_list->data);
 	return (0);
 }
