@@ -29,8 +29,7 @@ typedef enum quotes
 typedef	struct	s_tokens
 {
 	char			*data;
-	t_types			token;
-	struct s_tokens	*prev;
+	int				token;
 	struct s_tokens	*next;
 }	t_tokens;
 
@@ -44,7 +43,8 @@ typedef	struct s_lexer_utils
 
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(char token);
-void	add_before(t_tokens *current, t_tokens *new_node);
-void	add_after(t_tokens *before, t_tokens *new_node);
-void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p);
+//void	add_before(t_tokens *current, t_tokens *new_node);
+void	add_after(t_tokens **before, t_tokens *new_node);
+//void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p);
+void	create_list(t_tokens *new);
 #endif

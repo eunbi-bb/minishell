@@ -19,7 +19,6 @@ int	is_token(int c)
 	{
 		if (type.type_arr[i] == c)
 		{
-			printf("\nis_token active : %c\n", type.type_arr[i]);
 			return (i);
 		}
 		i++;
@@ -28,23 +27,28 @@ int	is_token(int c)
 }
 
 //Putting a token in a node
-int	take_tokens(t_lexer_utils *lexer, t_tokens *token_list, char *str, int i)
+int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
 		printf("Two greater token\n");
-		add_after(token_list, new_token_node(GREATER_TWO));
+		add_after(&lexer->token_list, new_token_node(GREATER_TWO));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
 	{
 		printf("Two lesser token\n");
-		add_after(token_list, new_token_node(HERE_DOC));
+		add_after(&lexer->token_list, new_token_node(HERE_DOC));
 		return (2);
 	}
 	else if (is_token(str[i]) == PIPE)
 	{
-		add_after(token_list, new_token_node(str[i]));
+		t_tokens *new;
+
+		new = new_token_node(PIPE);
+		add_after(&lexer->token_list, new);
+		// printf("new %d\n", new->token);
+		//printf("og %d\n", lexer->token_list->token);
 		lexer->pipe_num++;
 		return (1);
 	}
@@ -87,7 +91,7 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 		}
 	}
 	printf("tmp = %s\n", tmp);
-	add_after(token_list, new_node(tmp));
+	add_after(&token_list, new_node(tmp));
 	return (j);
 }
 
@@ -103,13 +107,12 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		i = skip_whitespace(lexer->arg, i);
 		//printf("after skipwhite : %d\n", i);
 		if (is_token(lexer->arg[i]) >= 0)
-			j = take_tokens(lexer, lexer->token_list, lexer->arg, i);
+			j = take_tokens(lexer, lexer->arg, i);
 		else
 			j = arg_divider(lexer->token_list, lexer->arg, i);
 		if (j < 0)
 			return (FALSE);
 		i = i + j;
-		//printf("i + j = %d\n", i);
 	}
 	return (TRUE);
 }
@@ -170,4 +173,4 @@ int	main(void)
 	lexical_analyzer(&lexer);
 	printf("pipe_num : %d\n", lexer.pipe_num);
 	return (0);
-}s
+}
