@@ -44,8 +44,6 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	else if (is_token(str[i]) == PIPE)
 	{
 		add_after(&lexer->token_list, new_token_node(PIPE));
-		// printf("new %d\n", new->token);
-		//printf("og %d\n", lexer->token_list->token);
 		lexer->pipe_num++;
 		return (1);
 	}
@@ -63,7 +61,7 @@ int	quotes(char *str, int i)
 }
 
 //Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
-int	arg_divider(t_tokens *token_list, char *str, int i)
+int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
 	int		j;
 	char	*tmp;
@@ -87,8 +85,8 @@ int	arg_divider(t_tokens *token_list, char *str, int i)
 				tmp = ft_substr(str, i, j);
 		}
 	}
-	printf("tmp = %s\n", tmp);
-	add_after(&token_list, new_node(tmp));
+	//printf("tmp = %s\n", tmp);
+	add_after(&lexer->token_list, new_node(tmp));
 	return (j);
 }
 
@@ -105,7 +103,7 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 		if (is_token(lexer->arg[i]) >= 0)
 			j = take_tokens(lexer, lexer->arg, i);
 		else
-			j = arg_divider(lexer->token_list, lexer->arg, i);
+			j = arg_divider(lexer, lexer->arg, i);
 		if (j < 0)
 			return (FALSE);
 		i = i + j;
@@ -172,8 +170,8 @@ int	main(void)
 	t_tokens *current = lexer.token_list;
 	while (current != NULL)
 	{
-		printf("current->token: %d\n",current->token);
-		printf("current->data: %s\n", current->data);
+		printf("current->data: %s  ||", current->data);
+		printf("  current->token: %d\n",current->token);
 		current = current->next;
 	}
 	return (0);
