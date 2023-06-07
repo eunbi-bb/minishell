@@ -35,16 +35,13 @@ typedef	struct	s_tokens
 
 typedef	struct s_lexer_utils
 {
-	char		*arg;
-	t_tokens	*token_list;
-	char		*type_arr;
-	int			pipe_num;
+	char			*arg;
+	t_tokens		*token_list;
+	char			*type_arr;
+	unsigned int	pipe_num;
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(char token);
-//void	add_before(t_tokens *current, t_tokens *new_node);
 void	add_after(t_tokens **before, t_tokens *new_node);
-//void	del_node(t_tokens **head, t_tokens **tail, t_tokens *p);
-void	create_list(t_tokens *new);
 #endif

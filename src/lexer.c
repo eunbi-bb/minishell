@@ -43,10 +43,7 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	}
 	else if (is_token(str[i]) == PIPE)
 	{
-		t_tokens *new;
-
-		new = new_token_node(PIPE);
-		add_after(&lexer->token_list, new);
+		add_after(&lexer->token_list, new_token_node(PIPE));
 		// printf("new %d\n", new->token);
 		//printf("og %d\n", lexer->token_list->token);
 		lexer->pipe_num++;
@@ -105,7 +102,6 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	{
 		j = 0;
 		i = skip_whitespace(lexer->arg, i);
-		//printf("after skipwhite : %d\n", i);
 		if (is_token(lexer->arg[i]) >= 0)
 			j = take_tokens(lexer, lexer->arg, i);
 		else
@@ -116,7 +112,6 @@ t_boolean	lexical_analyzer(t_lexer_utils *lexer)
 	}
 	return (TRUE);
 }
-
 
 //Checking if quotes are in a pair.
 t_boolean	match_quotes(char *str)
@@ -170,7 +165,17 @@ int	main(void)
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
+	lexer.pipe_num = 0;
 	lexical_analyzer(&lexer);
-	printf("pipe_num : %d\n", lexer.pipe_num);
+	printf("pipe_num : %i\n", lexer.pipe_num);
+
+	t_tokens *top = NULL;
+	t_tokens *current = top;
+	while(current != NULL)
+	{
+		printf("current->token:%c",current->token);
+		current = current->next;
+	}
+	printf("token: %s\n", lexer.token_list->data);
 	return (0);
 }
