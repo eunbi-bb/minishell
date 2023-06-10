@@ -19,12 +19,12 @@ typedef enum types
 	GREATER_TWO,
 }	t_types;
 
-typedef enum quotes
-{
-	STATE_SQUOTE = 10,
-	STATE_DQUOTE,
-	STATE_GENERAL,
-}	t_quotes;
+// typedef enum quotes
+// {
+// 	STATE_SQUOTE = 10,
+// 	STATE_DQUOTE,
+// 	STATE_GENERAL,
+// }	t_quotes;
 
 typedef	struct	s_tokens
 {
