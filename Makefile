@@ -10,11 +10,11 @@ OBJ_DIR		= obj/
 SRC_DIR		= src/
 
 HEADER_DIR	= includes/
-HEADER_SRC	= lexer.h
+HEADER_SRC	= lexer.h parser.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/
-SRC_FILE	= lexer.c node_utils.c
+SRC_FILE	= lexer.c node_utils.c parser.c
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 

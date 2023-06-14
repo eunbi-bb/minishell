@@ -5,14 +5,13 @@
 # include "../libft/libft.h"
 # include "lexer.h"
 
-typedef struct	s_parser_node
+typedef struct	s_node
 {
 	char			*str;
-	t_types			token;
-	int				i;
-	struct s_tree	*prev;
-	struct s_tree	*next;
-}	t_parser_node;
+	struct s_node	*prev;
+	struct s_node	*next;
+}	t_node;
+
 
 typedef struct s_parser_utils
 {
