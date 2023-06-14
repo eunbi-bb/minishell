@@ -6,7 +6,7 @@
 #    By: ssemanco <ssemanco@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/06/07 10:16:07 by ssemanco      #+#    #+#                  #
-#    Updated: 2023/06/07 15:54:39 by ssemanco      ########   odam.nl          #
+#    Updated: 2023/06/14 15:38:17 by ssemanco      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ SRC =   cmd_echo.c \
 		cmd_pwd.c \
 		env.c \
 		exec.c \
-		cmd_cd.c
+		cmd_cd.c \
+		cmd_export.c
 
 OBJ = $(SRC:.c=.o)
 
