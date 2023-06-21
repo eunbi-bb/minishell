@@ -16,7 +16,7 @@ typedef enum types
 	LESSER,
 	GREATER,
 	HERE_DOC,
-	GREATER_TWO,
+	APPEND
 }	t_types;
 
 // typedef enum quotes

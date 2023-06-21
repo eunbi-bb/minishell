@@ -32,7 +32,7 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
 		printf("Two greater token\n");
-		add_after(&lexer->token_list, new_token_node(GREATER_TWO));
+		add_after(&lexer->token_list, new_token_node(APPEND));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))

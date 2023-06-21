@@ -14,26 +14,26 @@ t_cmd	*create_cmd_node(char *data)
 {
 	t_cmd	*new;
 
-	new = (t_node *)malloc(sizeof(t_node));
+	new = (t_cmd *)malloc(sizeof(t_cmd));
 	new->data = data;
 	new->next = NULL;
 	return (new); 
 }
 
-t_node	*add_node_tree(t_node *root, char *data)
-{
-	if (root = NULL)
-		root = create_node(data);
-	else if ()
-		root->left = add_node_tree(root->left, data);
-	else if ()
-		root->right = add_node_tree(root->right, data);
-	return (root);
-}
+// t_cmd	*add_node_tree(t_cmd *root, char *data)
+// {
+// 	if (root = NULL)
+// 		root = create_node(data);
+// 	else if ()
+// 		root->left = add_node_tree(root->left, data);
+// 	else if ()
+// 		root->right = add_node_tree(root->right, data);
+// 	return (root);
+// }
 
-t_node	generate_simple_cmd(t_lexer_utils *lexer)
+t_cmd	generate_simple_cmd(t_lexer_utils *lexer)
 {
-	t_node		*args;
+	t_cmd		*cmd;
 	t_tokens	*current;
 
 	current = lexer->token_list;

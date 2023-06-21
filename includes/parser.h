@@ -5,12 +5,18 @@
 # include "../libft/libft.h"
 # include "lexer.h"
 
+typedef struct s_redir
+{
+	char		*file_name;
+	t_types		redir_type;
+	struct s_redir *next;
+}	t_redir;
+
 typedef struct	s_cmd
 {
+	/*First pointer will be the name of command*/
 	char			**data;
-	char			*option;
-	int				redirection;
-	char			*file;
+	t_redir			*redirection;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -20,20 +26,10 @@ typedef struct s_parser_utils
 	char	*args;
 	char	**paths;
 	char	**envp;
-	char	*pwd;
-	char	*prev_pwd;
 	int		pipes;
 	int		pid;
 	t_boolean	heredoc;
 	t_boolean	reset;
 }	t_parser_utils;
-
-typedef struct	s_redir_utils
-{
-	struct s_tokens			*redir;
-	struct s_tokens			*lexer_lst;
-	int						num_redir;
-	struct s_parser_utils	*utils;
-}	t_redir_utils;
 
 #endif
