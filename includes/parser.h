@@ -5,13 +5,15 @@
 # include "../libft/libft.h"
 # include "lexer.h"
 
-typedef struct	s_node
+typedef struct	s_cmd
 {
-	char			*str;
-	struct s_node	*prev;
-	struct s_node	*next;
-}	t_node;
-
+	char			**data;
+	char			*option;
+	int				redirection;
+	char			*file;
+	struct s_cmd	*prev;
+	struct s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_parser_utils
 {
@@ -28,7 +30,7 @@ typedef struct s_parser_utils
 
 typedef struct	s_redir_utils
 {
-	struct s_parser_node	*redir;
+	struct s_tokens			*redir;
 	struct s_tokens			*lexer_lst;
 	int						num_redir;
 	struct s_parser_utils	*utils;

@@ -10,8 +10,28 @@
 // 	redir.utils = parser;
 // 	return (redir);
 // }
+t_cmd	*create_cmd_node(char *data)
+{
+	t_cmd	*new;
 
-t_node	split_tokens(t_lexer_utils *lexer)
+	new = (t_node *)malloc(sizeof(t_node));
+	new->data = data;
+	new->next = NULL;
+	return (new); 
+}
+
+t_node	*add_node_tree(t_node *root, char *data)
+{
+	if (root = NULL)
+		root = create_node(data);
+	else if ()
+		root->left = add_node_tree(root->left, data);
+	else if ()
+		root->right = add_node_tree(root->right, data);
+	return (root);
+}
+
+t_node	generate_simple_cmd(t_lexer_utils *lexer)
 {
 	t_node		*args;
 	t_tokens	*current;
@@ -21,7 +41,7 @@ t_node	split_tokens(t_lexer_utils *lexer)
 	args->str = ft_strdup("");
 	while (current != NULL)
 	{
-		while (current->token == NULL)
+		while (current->token == -1)
 		{
 			args->str = ft_strjoin(args->str, current->data);
 			args->str = ft_strjoin(args->str, " ");
@@ -41,12 +61,18 @@ int	parser(t_parser_utils *parser)
 	t_lexer_utils	*lexer;
 	
 	// if (lexer->token_list->token == PIPE)
-	// 	return (token_error); 
+	// 	return (token_error);
+
+	//If there is no pipes or any tokens. It's ready to execute.
+	if (lexer->pipe_num == 0)
+	{
+		generate_simple_cmd(&lexer);
+	}
+
 	while (lexer->token_list != NULL)
 	{
 		if (lexer->token_list->token == PIPE)
-			//Split tokens depends on tokens. Put all the data in a str(to put execve()).
-			split_tokens(&lexer);
 		//init_parser_utils(&lexer, &parser);
 	}
+}
 	
