@@ -6,14 +6,14 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/05/31 14:28:44 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/06/21 17:42:53 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-Node* createNode(char* key, char* value) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+t_env* createNode(char* key, char* value) {
+    t_env* newNode = (t_env*)malloc(sizeof(t_env));
     if (newNode == NULL) {
         perror("malloc");
         exit(1);
@@ -26,9 +26,9 @@ Node* createNode(char* key, char* value) {
     return newNode;
 }
 
-Node* createLinkedList(char** envp) {
-    Node* head = NULL;
-    Node* current = NULL;
+t_env* createLinkedList(char** envp) {
+    t_env* head = NULL;
+    t_env* current = NULL;
 
     for (int i = 0; envp[i] != NULL; i++) {
         char* env = envp[i];
@@ -41,7 +41,7 @@ Node* createLinkedList(char** envp) {
         char* key = strndup(env, keyLength);
         char* value = strdup(equalSign);
 
-        Node* newNode = createNode(key, value);
+        t_env* newNode = createNode(key, value);
 
         if (head == NULL) {
             head = newNode;

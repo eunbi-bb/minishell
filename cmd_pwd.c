@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/24 15:35:55 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/06/07 15:50:55 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/06/21 18:01:27 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@ void cmd_pwd()
 int main(int argc, char **argv, char **envp)
 {
     //int i = 0;   
+    t_env *env = NULL;
 
-    envp = NULL;
-    //createLinkedList(envp);
+    env = createLinkedList(envp);
     if (strcmp(argv[1], "echo") == 0)
         cmd_echo(argc, argv);
     if (strcmp(argv[1], "pwd") == 0)
         cmd_pwd();
     if (strcmp(argv[1], "cd") == 0)
         cmd_cd(argc, argv);
+    if (strcmp(argv[1], "export") == 0)
+        cmd_export(&env, argv[2]);
     // while (envp[i])
     // {
     //      printf("%s\n", envp[i]);

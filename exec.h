@@ -8,13 +8,14 @@
 #include <limits.h>
 #include "libft/libft.h"
 
-typedef struct Node {
+typedef struct s_env
+{
     char* key;
     char* value;
-    struct Node* next;
-} Node;
+    struct s_env *next;
+}               t_env;
 
-Node* createLinkedList(char** envp);
+t_env* createLinkedList(char** envp);
 int cmd_echo(int argc, char **argv);
 void cmd_cd(int argc, char **path);
 void cmd_pwd();
