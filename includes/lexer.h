@@ -2,6 +2,7 @@
 # define LEXER_H
 
 # include <stdio.h>
+# include <stdbool.h>
 # include "../libft/libft.h"
 
 typedef enum boolean
@@ -12,6 +13,7 @@ typedef enum boolean
 
 typedef enum types
 {
+	DEFAULT = -1,
 	PIPE,
 	LESSER,
 	GREATER,
@@ -42,6 +44,11 @@ typedef	struct s_lexer_utils
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data);
-t_tokens	*new_token_node(char token);
-void	add_after(t_tokens **before, t_tokens *new_node);
+t_tokens	*new_token_node(t_types token);
+void		add_after(t_tokens **before, t_tokens *new_node);
+bool		match_quotes(char *str);
+bool		lexical_analyzer(t_lexer_utils *lexer);
+int			arg_divider(t_lexer_utils *lexer, char *str, int i);
+int			quotes(char *str, int i);
+int			take_tokens(t_lexer_utils *lexer, char *str, int i);
 #endif

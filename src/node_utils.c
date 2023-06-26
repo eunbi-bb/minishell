@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/06/07 20:29:08 by eucho         ########   odam.nl         */
+/*   Updated: 2023/06/22 21:29:38 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_tokens	*new_node(char *data)
 	if (!new_node)
 		return (NULL);
 	new_node->data = ft_strdup(data);
-	new_node->token = -1;
+	new_node->token = DEFAULT;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -86,7 +86,7 @@ t_tokens	*new_node(char *data)
 // 	}
 // }
 
-t_tokens	*new_token_node(char token)
+t_tokens	*new_token_node(t_types token)
 {
 	t_tokens	*new;
 

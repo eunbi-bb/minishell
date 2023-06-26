@@ -16,7 +16,7 @@ typedef struct	s_cmd
 {
 	/*First pointer will be the name of command*/
 	char			**data;
-	t_redir			*redirection;
+	t_redir			*redir;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -28,8 +28,8 @@ typedef struct s_parser_utils
 	char	**envp;
 	int		pipes;
 	int		pid;
-	t_boolean	heredoc;
-	t_boolean	reset;
+	bool	heredoc;
+	bool	reset;
 }	t_parser_utils;
 
 #endif

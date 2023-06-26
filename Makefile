@@ -1,4 +1,4 @@
-NAME		= lexer.a
+NAME		= parser.a
 CC			= gcc
 ifdef DEBUG
 CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g 
