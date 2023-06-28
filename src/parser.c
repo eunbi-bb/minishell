@@ -105,11 +105,7 @@ void	parser(t_lexer_utils *lexer)
 		if (current->token != PIPE)
 		{
 			generate_cmd(current);
-			current = current->next;
-		}
-		else
-		{
-			while (current->token != PIPE)
+			while (current->token != PIPE && current->next)
 				current = current->next;
 		}
 		current = current->next;
