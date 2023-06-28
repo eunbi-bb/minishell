@@ -97,12 +97,21 @@ void	generate_cmd(t_tokens *current)
 
 void	parser(t_lexer_utils *lexer)
 {
-	static t_tokens	*current;
+	t_tokens	*current;
 
 	current = lexer->token_list;
 	while (current)
 	{
-		generate_cmd(current);
+		if (current->token != PIPE)
+		{
+			generate_cmd(current);
+			current = current->next;
+		}
+		else
+		{
+			while (current->token != PIPE)
+				current = current->next;
+		}
 		current = current->next;
 	}
 }
