@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/06/22 21:29:38 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/06/28 11:21:30 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_tokens	*new_token_node(t_types token)
 		perror("malloc");
 		exit(1);
 	}
-	new->data = ft_strdup("token");
+	new->data = NULL;
 	new->token = token;
 	new->next = NULL;
 

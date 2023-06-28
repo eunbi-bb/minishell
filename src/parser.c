@@ -1,4 +1,5 @@
 #include "../includes/parser.h"
+#include <readline/readline.h>
 
 // t_cmd	generate_simple_cmd(t_lexer_utils *lexer)
 // {
@@ -50,32 +51,39 @@ t_cmd	*create_cmd_node(void)
 	return (new); 
 }
 
-void	generate_cmd(t_lexer_utils *lexer)
+int	count_args(t_tokens	*lexer)
 {
-	t_cmd		cmd;
-	int			arg_num;
-	t_tokens	*current;
+	int	arg_num;
 	t_tokens	*tmp;
-	int			i;
 
-	current = lexer->token_list;
-	tmp = current;
-	create_cmd_node();
-	printf("parser\n");
-	while (tmp && tmp->token != PIPE)
+	tmp = lexer;
+	arg_num = 0;
+	while (tmp)
 	{
 		if (tmp->token == PIPE)
 			break ;
 		arg_num++;
 		tmp = tmp->next;
 	}
-	cmd.data = malloc(arg_num * sizeof(char *));
+	return (arg_num);
+}
+
+void	generate_cmd(t_tokens *current)
+{
+	t_cmd		cmd;
+	int			arg_num;
+	int			i;
+
+	create_cmd_node();
 	i = 0;
+	arg_num = count_args(current);
+	cmd.data = malloc(arg_num * sizeof(char *));
 	while (i < arg_num)
 	{
 		cmd.data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
-		ft_strlcpy(cmd.data[i], current->data, ft_strlen(current->data));
-		if (current->token != DEFAULT)
+		ft_strlcpy(cmd.data[i], current->data, (ft_strlen(current->data) + 1));
+		printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
+		if (current->token != DEFAULT && current->next)
 		{
 			cmd.redir->redir_type = current->token;
 			if (current->next)
@@ -87,13 +95,25 @@ void	generate_cmd(t_lexer_utils *lexer)
 	}
 }
 
+void	parser(t_lexer_utils *lexer)
+{
+	static t_tokens	*current;
+
+	current = lexer->token_list;
+	while (current)
+	{
+		generate_cmd(current);
+		current = current->next;
+	}
+}
+
 int	main(void)
 {
 	t_lexer_utils lexer;
 	char	*str;
 
-	// str = "    grep 'Hello World'";
-	str = "    grep 'Hello World' | cat -e    ";
+	// str = readline("parser> ");
+	str = "    grep -p 'Hello World' | cat -e    ";
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
@@ -115,7 +135,7 @@ int	main(void)
 	// 	printf("\n");
 	// }
 
-	generate_cmd(&lexer);
+	parser(&lexer);
 	
 	return (0);
 }
