@@ -6,17 +6,19 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/06/21 17:56:19 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/06/28 12:36:07 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void cmd_export(t_env **head, char *var, char *val)
+void cmd_export(t_env **head, char *str)
 {
     t_env* newNode = (t_env*)malloc(sizeof(t_env));
-    newNode->key = strdup(var);
-    newNode->value = strdup(val);
+    char* equalSign = ft_strchr(str, '=');
+    size_t keyLength = equalSign - str;
+    newNode->key = ft_substr(str, 0, keyLength);;
+    newNode->value = ft_strdup(equalSign);
     newNode->next = NULL;
 
     if (*head == NULL) {
@@ -27,4 +29,5 @@ void cmd_export(t_env **head, char *var, char *val)
             current = current->next;
         }
         current->next = newNode; }
+        printf("%s%s\n", newNode->key, newNode->value);
 }

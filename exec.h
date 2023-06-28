@@ -19,5 +19,6 @@ t_env* createLinkedList(char** envp);
 int cmd_echo(int argc, char **argv);
 void cmd_cd(int argc, char **path);
 void cmd_pwd();
+void cmd_export(t_env **head, char *str);
 
 #endif
