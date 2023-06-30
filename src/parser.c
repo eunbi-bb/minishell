@@ -118,29 +118,29 @@ int	main(void)
 	char	*str;
 
 	// str = readline("parser> ");
-	str = "    grep -p 'Hello World' | cat -e    ";
+	str = "    < infile grep -p 'Hello World' | cat -e > outfile    ";
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
 	lexer.pipe_num = 0;
 	lexical_analyzer(&lexer);
 	//Print lexer
-	// printf("\n");
-	// printf("INPUT : %s\n\n", str);
-	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	printf("\n");
+	printf("INPUT : %s\n\n", str);
+	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
 
-	// t_tokens *current = lexer.token_list;
-	// int i = 1;
-	// while (current != NULL)
-	// {
-	// 	printf("%d. current->data: %s\n", i, current->data);
-	// 	printf("%d. current->token: %d\n", i, current->token);
-	// 	current = current->next;
-	// 	i++;
-	// 	printf("\n");
-	// }
+	t_tokens *current = lexer.token_list;
+	int i = 1;
+	while (current != NULL)
+	{
+		printf("%d. current->data: %s\n", i, current->data);
+		printf("%d. current->token: %d\n", i, current->token);
+		current = current->next;
+		i++;
+		printf("\n");
+	}
 
-	parser(&lexer);
+	// parser(&lexer);
 	
 	return (0);
 }

@@ -30,24 +30,23 @@ int	is_token(int c)
 int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
-	{
-		printf("Two greater token\n");
 		add_after(&lexer->token_list, new_token_node(APPEND));
-		return (2);
-	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
-	{
-		printf("Two lesser token\n");
 		add_after(&lexer->token_list, new_token_node(HERE_DOC));
-		return (2);
-	}
+	else if (is_token(str[i]) == GREATER)
+		add_after(&lexer->token_list, new_token_node(GREATER));
+	else if (is_token(str[i]) == LESSER)
+		add_after(&lexer->token_list, new_token_node(LESSER));
 	else if (is_token(str[i]) == PIPE)
 	{
 		add_after(&lexer->token_list, new_token_node(PIPE));
 		lexer->pipe_num++;
-		return (1);
 	}
-	return (0);
+	else
+	{
+		return (0);
+	}
+	return (1);
 }
 
 int	quotes(char *str, int i)
