@@ -80,11 +80,16 @@ void	generate_cmd(t_tokens *current)
 	cmd.data = malloc(arg_num * sizeof(char *));
 	while (i < arg_num)
 	{
-		cmd.data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
-		ft_strlcpy(cmd.data[i], current->data, (ft_strlen(current->data) + 1));
-		printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
+		if (current->data != NULL)
+		{
+			printf("data\n");
+			cmd.data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
+			ft_strlcpy(cmd.data[i], current->data, (ft_strlen(current->data) + 1));
+		}
+		// printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
 		if (current->token != DEFAULT && current->next)
 		{
+			printf("redir\n");
 			cmd.redir->redir_type = current->token;
 			if (current->next)
 				cmd.redir->file_name = ft_strdup(current->next->data);
@@ -118,29 +123,30 @@ int	main(void)
 	char	*str;
 
 	// str = readline("parser> ");
-	str = "    < infile grep -p 'Hello World' | cat -e > outfile    ";
+	// str = "    < infile grep -p 'Hello World' | cat -e > outfile    ";
+	// str = "    grep -p 'Hello World' | cat -e   ";
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
 	lexer.pipe_num = 0;
 	lexical_analyzer(&lexer);
-	//Print lexer
-	printf("\n");
-	printf("INPUT : %s\n\n", str);
-	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	// Print lexer
+	// printf("\n");
+	// printf("INPUT : %s\n\n", str);
+	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
 
-	t_tokens *current = lexer.token_list;
-	int i = 1;
-	while (current != NULL)
-	{
-		printf("%d. current->data: %s\n", i, current->data);
-		printf("%d. current->token: %d\n", i, current->token);
-		current = current->next;
-		i++;
-		printf("\n");
-	}
+	// t_tokens *current = lexer.token_list;
+	// int i = 1;
+	// while (current != NULL)
+	// {
+	// 	printf("%d. current->data: %s\n", i, current->data);
+	// 	printf("%d. current->token: %d\n", i, current->token);
+	// 	current = current->next;
+	// 	i++;
+	// 	printf("\n");
+	// }
 
-	// parser(&lexer);
+	parser(&lexer);
 	
 	return (0);
 }

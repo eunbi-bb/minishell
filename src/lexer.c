@@ -43,9 +43,7 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 		lexer->pipe_num++;
 	}
 	else
-	{
 		return (0);
-	}
 	return (1);
 }
 
