@@ -1,40 +1,74 @@
 #include "../includes/parser.h"
 #include <readline/readline.h>
 
-// t_cmd	generate_simple_cmd(t_lexer_utils *lexer)
-// {
-// 	t_cmd		*cmd;
-// 	t_tokens	*current;
+t_cmd	*cmd_lst_front(t_cmd *lst)
+{
+	t_cmd	*tmp;
 
-// 	current = lexer->token_list;
-// 	cmd = (t_node *)malloc(sizeof(t_node));
-// 	cmd->str = ft_strdup("");
-// 	while (current != NULL)
-// 	{
-// 		while (current->token == -1)
-// 		{
-// 			args->str = ft_strjoin(args->str, current->data);
-// 			args->str = ft_strjoin(args->str, " ");
-// 		}
-// 		ft_strtrim(args->str, " ");
-// 		current = current->next;
-// 		free(current);
-// 		args = args->next;
-// 	}
-// 	return (*args);
-// }
+	tmp = lst;
+	if (!tmp)
+		return (tmp);
+	while (tmp->prev)
+		tmp = tmp->prev;
+	return (tmp);
+}
 
-// void	init_parser_utils(t_lexer_utils *lexer, t_parser_utils *parser)
-// {
-// 	t_redir_utils	redir;
+t_cmd	*cmd_lst_last(t_cmd *lst)
+{
+	t_cmd	*tmp;
 
-// 	redir.lexer_lst = lexer->token_list;
-// 	redir.redir = NULL;
-// 	redir.num_redir = 0;
-// 	redir.utils = parser;
-// 	return (redir);
-// }
+	tmp = lst;
+	if (!tmp)
+		return (tmp);
+	while (tmp->next)
+		tmp = tmp->next;
+	return (tmp);
+}
 
+void	add_after_cmd(t_cmd *before, t_cmd *new_node)
+{
+	t_cmd	*head;
+	t_cmd	*tail;
+
+	head = cmd_lst_front(before);
+	tail = cmd_lst_last(before);
+	if (before == NULL)
+	{
+		new_node->next = head;
+		if (head)
+			head->prev = new_node;
+	}
+	else if (before == tail)
+	{
+		new_node->prev = tail;
+		tail->next = new_node;
+		tail = new_node;
+	}
+	else
+	{
+		new_node->prev = before;
+		new_node->next = before->next;
+		before->next->prev = new_node;
+		before->next = new_node;
+	}
+}
+
+void	add_after_redir(t_redir **before, t_redir *new_node)
+{
+	t_redir	*head;
+
+	head = *before;//lst_front(before);
+	if (head == NULL)
+	{
+		*before = new_node;
+	}
+	else
+	{
+		while (head->next != NULL)
+			head = head->next;
+		head->next = new_node;
+	}
+}
 
 t_cmd	*create_cmd_node(void)
 {
@@ -68,48 +102,55 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-void	generate_cmd(t_tokens *current)
+t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 {
-	t_cmd		cmd;
 	int			arg_num;
 	int			i;
 
-	create_cmd_node();
 	i = 0;
 	arg_num = count_args(current);
-	cmd.data = malloc(arg_num * sizeof(char *));
+	cmd->data = malloc(arg_num * sizeof(char *));
 	while (i < arg_num)
 	{
 		if (current->data != NULL)
 		{
 			printf("data\n");
-			cmd.data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
-			ft_strlcpy(cmd.data[i], current->data, (ft_strlen(current->data) + 1));
+			cmd->data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
+			ft_strlcpy(cmd->data[i], current->data, (ft_strlen(current->data) + 1));
 		}
 		// printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
-		if (current->token != DEFAULT && current->next)
+		if (current->token != DEFAULT)
 		{
 			printf("redir\n");
-			cmd.redir->redir_type = current->token;
+			cmd->redir->redir_type = current->token;
+			printf("cmd.redir : %d\n", cmd->redir->redir_type);
 			if (current->next)
-				cmd.redir->file_name = ft_strdup(current->next->data);
-			cmd.redir = cmd.redir->next;
+				cmd->redir->file_name = ft_strdup(current->next->data);
 		}
 		i++;
 		current = current->next;
 	}
+	return (cmd);
 }
 
 void	parser(t_lexer_utils *lexer)
 {
+	t_parser_utils	parser;
 	t_tokens	*current;
+	t_cmd		*cmd;
 
 	current = lexer->token_list;
+	parser.cmd_list = NULL;
 	while (current)
 	{
 		if (current->token != PIPE)
 		{
-			generate_cmd(current);
+			cmd = create_cmd_node();
+			if (parser.cmd_list != NULL)
+				parser.cmd_list = cmd;
+			else
+				add_after_cmd(parser.cmd_list, cmd);
+			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 				current = current->next;
 		}
@@ -123,7 +164,7 @@ int	main(void)
 	char	*str;
 
 	// str = readline("parser> ");
-	// str = "    < infile grep -p 'Hello World' | cat -e > outfile    ";
+	str = "    < infile grep -p 'Hello World' | cat -e > outfile    ";
 	// str = "    grep -p 'Hello World' | cat -e   ";
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
@@ -145,7 +186,6 @@ int	main(void)
 	// 	i++;
 	// 	printf("\n");
 	// }
-
 	parser(&lexer);
 	
 	return (0);

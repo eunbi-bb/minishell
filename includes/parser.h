@@ -23,6 +23,7 @@ typedef struct	s_cmd
 
 typedef struct s_parser_utils
 {
+	t_cmd	*cmd_list;
 	char	*args;
 	char	**paths;
 	char	**envp;
