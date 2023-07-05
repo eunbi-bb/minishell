@@ -110,7 +110,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	i = 0;
 	arg_num = count_args(current);
 	cmd->data = malloc(arg_num * sizeof(char *));
-	while (i < arg_num)
+	while (i < arg_num && current)
 	{
 		if (current->data != NULL)
 		{
@@ -155,7 +155,6 @@ void	parser(t_lexer_utils *lexer)
 				parser.cmd_list = cmd;
 			else
 				add_after_cmd(parser.cmd_list, cmd);
-			printf("\n%d\n", i);
 			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 				current = current->next;
