@@ -114,19 +114,23 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	{
 		if (current->data != NULL)
 		{
-			printf("data\n");
+			// printf("data\n");
 			cmd->data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
 			ft_strlcpy(cmd->data[i], current->data, (ft_strlen(current->data) + 1));
+			printf("data : %s\n", cmd->data[i]);
 		}
 		// printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
-		if (current->token != DEFAULT)
+		if (current->token != DEFAULT && current->token != PIPE)
 		{
-			printf("redir\n");
+			// printf("redir\n");
 			cmd->redir->redir_type = current->token;
 			printf("cmd.redir : %d\n", cmd->redir->redir_type);
 			if (current->next && current->next->token == DEFAULT)
+			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
-			printf("filename : %s\n", cmd->redir->file_name);
+				printf("filename : %s\n", cmd->redir->file_name);
+				current = current->next;
+			}
 		}
 		i++;
 		current = current->next;
@@ -151,6 +155,7 @@ void	parser(t_lexer_utils *lexer)
 				parser.cmd_list = cmd;
 			else
 				add_after_cmd(parser.cmd_list, cmd);
+			printf("\n%d\n", i);
 			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 				current = current->next;
@@ -176,19 +181,19 @@ int	main(void)
 	// Print lexer
 	printf("\n");
 	printf("INPUT : %s\n\n", str);
-	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
 
-	t_tokens *current = lexer.token_list;
-	int i = 1;
-	while (current != NULL)
-	{
-		printf("%d. current->data: %s\n", i, current->data);
-		printf("%d. current->token: %d\n", i, current->token);
-		current = current->next;
-		i++;
-		printf("\n");
-	}
-	// parser(&lexer);
+	// t_tokens *current = lexer.token_list;
+	// int i = 1;
+	// while (current != NULL)
+	// {
+	// 	printf("%d. current->data: %s\n", i, current->data);
+	// 	printf("%d. current->token: %d\n", i, current->token);
+	// 	current = current->next;
+	// 	i++;
+	// 	printf("\n");
+	// }
+	parser(&lexer);
 	
 	return (0);
 }
