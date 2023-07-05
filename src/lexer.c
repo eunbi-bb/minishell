@@ -30,9 +30,15 @@ int	is_token(int c)
 int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
+	{
+		printf("%c | %c\n", str[i], str[i + 1]);
 		add_after(&lexer->token_list, new_token_node(APPEND));
-	else if (is_token(str[i]) == LESSER && is_token(str[i + 1] == LESSER))
+	}
+	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
+	{
+		printf("%c | %c\n", str[i], str[i + 1]);
 		add_after(&lexer->token_list, new_token_node(HERE_DOC));
+	}
 	else if (is_token(str[i]) == GREATER)
 		add_after(&lexer->token_list, new_token_node(GREATER));
 	else if (is_token(str[i]) == LESSER)
