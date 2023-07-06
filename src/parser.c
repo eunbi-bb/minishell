@@ -114,21 +114,18 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	{
 		if (current->data != NULL)
 		{
-			// printf("data\n");
 			cmd->data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
 			ft_strlcpy(cmd->data[i], current->data, (ft_strlen(current->data) + 1));
-			printf("data : %s\n", cmd->data[i]);
+			//printf("data : %s\n", cmd->data[i]);
 		}
-		// printf ("cmd.data[%d] : %s\n", i, cmd.data[i]);
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
-			// printf("redir\n");
 			cmd->redir->redir_type = current->token;
-			printf("cmd.redir : %d\n", cmd->redir->redir_type);
+			//printf("cmd.redir : %d\n", cmd->redir->redir_type);
 			if (current->next && current->next->token == DEFAULT)
 			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
-				printf("filename : %s\n", cmd->redir->file_name);
+				//printf("filename : %s\n", cmd->redir->file_name);
 				current = current->next;
 			}
 		}
@@ -138,60 +135,79 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	return (cmd);
 }
 
-void	parser(t_lexer_utils *lexer)
+void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 {
-	t_parser_utils	parser;
 	t_tokens	*current;
 	t_cmd		*cmd;
 
 	current = lexer->token_list;
-	parser.cmd_list = NULL;
+	parser->cmd_list = NULL;
 	while (current)
 	{
 		if (current->token != PIPE)
 		{
 			cmd = create_cmd_node();
-			if (parser.cmd_list != NULL)
-				parser.cmd_list = cmd;
+			if (parser->cmd_list == NULL)
+			{
+				printf("check1\n");
+				parser->cmd_list = cmd;
+			}
 			else
-				add_after_cmd(parser.cmd_list, cmd);
+			{
+				printf("check2\n");
+				add_after_cmd(parser->cmd_list, cmd);
+			}
 			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 				current = current->next;
+			printf("cmd: %s\n", cmd->data[0]);
+			printf("cmd_list: %s\n", parser->cmd_list->data[0]);
 		}
 		current = current->next;
 	}
-
 }
 
 int	main(void)
 {
 	t_lexer_utils lexer;
+	t_parser_utils parser_list;
 	char	*str;
 
-	// str = "    < infile grep -p 'Hello World' | cat -e >> outfile    ";
-	str = readline("Minishell%");
+	str = "    < infile grep -p 'Hello World' | cat -e >> outfile    ";
+	// str = readline("Minishell%");
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
 	lexer.pipe_num = 0;
 	lexical_analyzer(&lexer);
-	// Print lexer
-	printf("\n");
-	printf("INPUT : %s\n\n", str);
-	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
 
-	t_tokens *current = lexer.token_list;
-	int i = 1;
-	while (current != NULL)
-	{
-		printf("%d. current->data: %s\n", i, current->data);
-		printf("%d. current->token: %d\n", i, current->token);
-		current = current->next;
-		i++;
-		printf("\n");
-	}
-	parser(&lexer);
-	free (str);
+	/***** PRINT LEXER *****/
+	// printf("\n");
+	// printf("INPUT : %s\n\n", str);
+	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+
+	// t_tokens *current = lexer.token_list;
+	// int i = 1;
+	// while (current != NULL)
+	// {
+	// 	printf("%d. current->data: %s\n", i, current->data);
+	// 	printf("%d. current->token: %d\n", i, current->token);
+	// 	current = current->next;
+	// 	i++;
+	// 	printf("\n");
+	// }
+	parser(&lexer, &parser_list);
+	/***** PRINT PARSER ****/
+	// t_cmd	*current = parser_list.cmd_list;
+	// int i = 0;
+	// while (current)
+	// {
+	// 	printf("babo");
+	// 	printf("cmd->data[%d] : %s\n", i, parser_list.cmd_list->data[i]);
+	// 	printf("cmd->redir_type : %d\n cmd->redir_filename : %s\n", parser_list.cmd_list->redir->redir_type, parser_list.cmd_list->redir->file_name);
+	// 	current = current->next;
+	// 	i++;
+	// }
+	// free (str);
 	return (0);
 }
