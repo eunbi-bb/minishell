@@ -149,19 +149,15 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 			cmd = create_cmd_node();
 			if (parser->cmd_list == NULL)
 			{
-				printf("check1\n");
 				parser->cmd_list = cmd;
 			}
 			else
 			{
-				printf("check2\n");
 				add_after_cmd(parser->cmd_list, cmd);
 			}
 			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 				current = current->next;
-			printf("cmd: %s\n", cmd->data[0]);
-			printf("cmd_list: %s\n", parser->cmd_list->data[0]);
 		}
 		current = current->next;
 	}
@@ -198,16 +194,28 @@ int	main(void)
 	// }
 	parser(&lexer, &parser_list);
 	/***** PRINT PARSER ****/
-	// t_cmd	*current = parser_list.cmd_list;
-	// int i = 0;
-	// while (current)
-	// {
-	// 	printf("babo");
-	// 	printf("cmd->data[%d] : %s\n", i, parser_list.cmd_list->data[i]);
-	// 	printf("cmd->redir_type : %d\n cmd->redir_filename : %s\n", parser_list.cmd_list->redir->redir_type, parser_list.cmd_list->redir->file_name);
-	// 	current = current->next;
-	// 	i++;
-	// }
+	t_cmd	*current = parser_list.cmd_list;
+	int i = 0;
+
+	while (current)
+	{
+		if (parser_list.cmd_list->data)
+		{
+			while (parser_list.cmd_list->data[i])
+			{
+				printf("cmd->data[%d] : %s\n", i, parser_list.cmd_list->data[i]);
+				i++;
+			}
+		}
+		else
+			i++;
+		// if (parser_list.cmd_list->redir->redir_type != DEFAULT)
+		// {
+		// 	printf("cmd->redir_type : %d\n", parser_list.cmd_list->redir->redir_type);
+		// 	printf("cmd->redir_filename : %s\n",  parser_list.cmd_list->redir->file_name);
+		// }
+		current = current->next;
+	}
 	// free (str);
 	return (0);
 }
