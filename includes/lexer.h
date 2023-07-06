@@ -3,6 +3,8 @@
 
 # include <stdio.h>
 # include <stdbool.h>
+# include <stdlib.h>
+# include <readline/readline.h>
 # include "../libft/libft.h"
 
 typedef enum boolean

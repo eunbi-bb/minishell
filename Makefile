@@ -1,9 +1,9 @@
 NAME		= parser.a
 CC			= gcc
 ifdef DEBUG
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g 
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g -lreadline
 else
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -lreadline
 endif
 LIBFT		= libft
 OBJ_DIR		= obj/
