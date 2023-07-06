@@ -1,9 +1,11 @@
 NAME		= parser.a
 CC			= gcc
 ifdef DEBUG
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g -lreadline
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g
+READLINE	= -lreadline
 else
-CFLAGS		= -Wall -Wextra -Werror -lreadline
+CFLAGS		= -Wall -Wextra -Werror
+READLINE	= -lreadline
 endif
 LIBFT		= libft
 OBJ_DIR		= obj/
@@ -27,7 +29,7 @@ all: $(NAME)
 
 $(NAME):	$(OBJ) $(OBJF)
 			@make -C $(LIBFT)
-			@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME)
+			@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME) $(READLINE)
 			@echo "$(CYAN_B)- Lexer is compiled -"
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)

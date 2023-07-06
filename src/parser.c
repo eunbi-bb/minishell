@@ -170,7 +170,7 @@ int	main(void)
 	char	*str;
 
 	// str = "    < infile grep -p 'Hello World' | cat -e >> outfile    ";
-	str = readline("Minishell >");
+	str = readline("Minishell%");
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
 		return (-1);
@@ -192,6 +192,6 @@ int	main(void)
 		printf("\n");
 	}
 	parser(&lexer);
-	
+	free (str);
 	return (0);
 }
