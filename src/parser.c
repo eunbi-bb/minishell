@@ -180,18 +180,18 @@ int	main(void)
 	/***** PRINT LEXER *****/
 	printf("\n");
 	printf("INPUT : %s\n\n", str);
-	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
 
-	// t_tokens *current = lexer.token_list;
-	// int i = 1;
-	// while (current != NULL)
-	// {
-	// 	printf("%d. current->data: %s\n", i, current->data);
-	// 	printf("%d. current->token: %d\n", i, current->token);
-	// 	current = current->next;
-	// 	i++;
-	// 	printf("\n");
-	// }
+	t_tokens *curr = lexer.token_list;
+	int i = 1;
+	while (curr != NULL)
+	{
+		printf("%d. curr->data: %s\n", i, curr->data);
+		printf("%d. curr->token: %d\n", i, curr->token);
+		curr = curr->next;
+		i++;
+		printf("\n");
+	}
 	parser(&lexer, &parser_list);
 	/***** PRINT PARSER ****/
 	t_cmd	*current = parser_list.cmd_list;
@@ -215,16 +215,20 @@ int	main(void)
 				i++;
 			}
 		}
-		t_redir *cmd_redir = current->redir;
-		while (cmd_redir)
+		if (current->redir)
 		{
-			printf("cmd->redir_type : %d\n", cmd_redir->redir_type);
-			printf("cmd->filename : %s\n", cmd_redir->file_name);
-			cmd_redir = cmd_redir->next;
+			t_redir *cmd_redir = current->redir;
+			while (cmd_redir)
+			{
+				printf("cmd->redir_type : %d\n", cmd_redir->redir_type);
+				printf("cmd->filename : %s\n", cmd_redir->file_name);
+				cmd_redir = cmd_redir->next;
+			}
 		}
 		current = current->next;
 		n++;
 	}
-	// free (str);
+	free (str);
 	return (0);
 }
+
