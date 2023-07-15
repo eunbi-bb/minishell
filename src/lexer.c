@@ -37,6 +37,7 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
 	{
 		add_after(&lexer->token_list, new_token_node(HERE_DOC));
+		lexer->heredoc = TRUE;
 		return (2);
 	}
 	else if (is_token(str[i]) == GREATER)

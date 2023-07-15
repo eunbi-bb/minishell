@@ -1,77 +1,57 @@
-#include "../includes/minishell.h"
+#include "./includes/minishell.h"
 #include <stdio.h>
 #include <fcntl.h>
 
-int	create_heredoc(t_tokens *heredoc, bool quotes, char *tmp_file)
+char	tmp_filename(int i)
 {
-	int		fd;
-	char	*str;
-
-	fd = open(tmp_file, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
-	str = readline(">"); 
-	while (str && ft_strncmp(heredoc->data, str, ft_strlen(heredoc->data)))
-	{
-		write(fd, str, ft_strlen(str));
-		write(fd, "\n", 1);
-		free(str);
-		str = readline(">");
-	}
-	free(str);
-	close(fd);
-	return(EXIT_SUCCESS);
-}
-
-char	tmp_filename(void)
-{
-	static int	i;
 	char		*num;
 	char		*filename;
 
-	num = ft_itoa(i++);
+	num = ft_itoa(i);
 	filename = ft_strjoin("tmp_", num);
 	free(num);
 	return (filename);
 }
 
-int	here_document(t_parser_utils *parser, t_cmd *heredoc, char *filename)
+int	here_document(char	*delim, char *filename)
 {
-	g_global.begin = 1;
-	g_global.finish = 0;
-	bool	quotes;
-	int		str;
-	int		len;
+	int		heredoc;
+	int		file;
+	char	*str;
 
-	len = ft_strlen(heredoc->data);
-	str = EXIT_SUCCESS;
-	if ((heredoc->data[0] == '\'' && heredoc->data[len - 1] == '\'') || (heredoc->str[0] == '\"' && heredoc->data[len - 1] == '\"'))
-		quotes = TRUE;
-	else
-		quotes = FALSE;
-	str = create_heredoc(heredoc, quotes);
-	parser->heredoc = TRUE;
-	return (str);
+	file = open(tmp_file, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
+	if (file < 0)
+		return(2);
+	while (1)
+	{
+		str = readline(">");
+		if (!ft_strncmp(delim, str, ft_strlen(delim)))
+			break ;
+		write(file, str, ft_strlen(str));
+		write(file, "\n", 1);
+		free(str);
+	}
+	free(str);
+	close(file);
+	return(EXIT_SUCCESS);
 }
 
-int	send_heredoc(t_cmd	*cmd, t_parser_utils *parser)
+int	send_heredoc(t_cmd	*cmd, t_lexer_utils *lexer)
 {
+	static int	i;
+	char		*delim;
 	t_tokens	*start;
-	int			s;
 
 	start = cmd->redir;
 	s = EXIT_SUCCESS;
 	while (cmd->redir)
 	{
-		if (cmd->redir->redir_type == HERE_DOC)
+		if (lexer->heredoc == TRUE)
 		{
-			if (cmd->redir->file_name)
-				free(cmd->redir->file_name);
-			cmd->redir->file_name = heredoc_filename();
-			s = here_document(parser, cmd, cmd->redir->file_name);
-			if (s)
-			{
-				g_global.error_num = 1;
-				return (reset_parser(parser));
-			}
+			delim = cmd->redir->file_name;
+			cmd->redir->file_name = tmp_filename(i);
+			i++;
+			here_document(delim, cmd->redir->file_name);
 		}
 		cmd->redir = cmd->redir->next;
 	}

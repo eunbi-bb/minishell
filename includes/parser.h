@@ -29,7 +29,6 @@ typedef struct s_parser_utils
 	char	**envp;
 	int		pipes;
 	int		pid;
-	bool	heredoc;
 	bool	reset;
 }	t_parser_utils;
 

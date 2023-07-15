@@ -1,5 +1,7 @@
 #include "../includes/parser.h"
 #include <readline/readline.h>
+#include <stddef.h>
+
 
 t_cmd	*cmd_lst_front(t_cmd *lst)
 {
@@ -115,8 +117,9 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	{
 		if (current->data != NULL)
 		{
-			cmd->data[i] = malloc((ft_strlen(current->data) + 1) * sizeof(char));
-			ft_strlcpy(cmd->data[i], current->data, (ft_strlen(current->data) + 1));
+			size_t data_length = ft_strlen(current->data);
+    		cmd->data[i] = malloc((data_length + 1) * sizeof(char));
+    		ft_strlcpy(cmd->data[i], current->data, data_length + 1);
 		}
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
@@ -206,7 +209,7 @@ int	main(void)
 			printf("cmd->data[%d] : (null)\n", i);
 			i++;
 		}
-		if (current->data[i] )
+		if (current->data)
 		{
 			while (current->data[i] && i < arg_num)
 			{
