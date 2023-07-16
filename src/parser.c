@@ -115,7 +115,6 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	i = 0;
 	j = 0;
 	arg_num = count_args(current);
-	printf ("arg_num = %d\n\n", arg_num);
 	if (arg_num > 0)
 		cmd->data = malloc((arg_num + 1) * sizeof(char *));
 	while (i <= arg_num && current)
@@ -130,8 +129,6 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
 			cmd->redir->redir_type = current->token;
-			// if (arg_num == 1)
-			// 	cmd->data[i] = NULL;
 			if (current->next && current->next->token == DEFAULT)
 			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
@@ -216,14 +213,9 @@ int	main(void)
 		printf("\n--------Number of command : %d---------\n", n);
 		int	arg_num = count_args(lexer.token_list);
 		int i = 0;
-		if (current->data[i] == NULL)
+		if (current->data && current->data[i] != NULL)
 		{
-			printf("cmd->data[%d] : (null)\n", i);
-			i++;
-		}
-		if (current->data[i] != NULL)
-		{
-			while (current->data[i] && i < arg_num)
+			while (current->data[i] && i <= arg_num)
 			{
 				printf("cmd->data[%d] : %s\n", i, current->data[i]);
 				i++;
