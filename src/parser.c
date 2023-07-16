@@ -115,7 +115,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	cmd->data = malloc(arg_num * sizeof(char *));
 	while (i < arg_num && current)
 	{
-		if (current->data != NULL)
+		if (current->data != NULL && current->token == DEFAULT)
 		{
 			size_t data_length = ft_strlen(current->data);
     		cmd->data[i] = malloc((data_length + 1) * sizeof(char));
@@ -124,6 +124,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
 			cmd->redir->redir_type = current->token;
+			cmd->data[0] = NULL;
 			if (current->next && current->next->token == DEFAULT)
 			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
@@ -182,6 +183,7 @@ int	main(void)
 	printf("\n");
 	printf("INPUT : %s\n\n", str);
 	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	printf("HEREDOC ACTIVE : %d\n", lexer.heredoc);
 
 	t_tokens *curr = lexer.token_list;
 	int i = 1;
@@ -194,6 +196,9 @@ int	main(void)
 		printf("\n");
 	}
 	parser(&lexer, &parser_list);
+	//if (lexer.heredoc == TRUE)
+
+		
 	/***** PRINT PARSER ****/
 	t_cmd	*current = parser_list.cmd_list;
 
@@ -209,7 +214,7 @@ int	main(void)
 			printf("cmd->data[%d] : (null)\n", i);
 			i++;
 		}
-		if (current->data)
+		if (current->data[i] != NULL)
 		{
 			while (current->data[i] && i < arg_num)
 			{
