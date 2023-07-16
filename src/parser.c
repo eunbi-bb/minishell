@@ -124,7 +124,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
 			cmd->redir->redir_type = current->token;
-			cmd->data[0] = NULL;
+			cmd->data[i] = NULL;
 			if (current->next && current->next->token == DEFAULT)
 			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
