@@ -94,11 +94,13 @@ int	count_args(t_tokens	*lexer)
 
 	tmp = lexer;
 	arg_num = 0;
-	while (tmp)
+	while (tmp != NULL)
 	{
 		if (tmp->token == PIPE)
 			break ;
 		arg_num++;
+		if (tmp->token != PIPE && tmp->token != DEFAULT)
+			arg_num -= 2;
 		tmp = tmp->next;
 	}
 	return (arg_num);
@@ -108,23 +110,28 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 {
 	int			arg_num;
 	int			i;
+	int			j;
 
 	i = 0;
+	j = 0;
 	arg_num = count_args(current);
-	printf ("arg_num = %d\n", arg_num);
-	cmd->data = malloc(arg_num * sizeof(char *));
-	while (i < arg_num && current)
+	printf ("arg_num = %d\n\n", arg_num);
+	if (arg_num > 0)
+		cmd->data = malloc((arg_num + 1) * sizeof(char *));
+	while (i <= arg_num && current)
 	{
 		if (current->data != NULL && current->token == DEFAULT)
 		{
 			size_t data_length = ft_strlen(current->data);
-    		cmd->data[i] = malloc((data_length + 1) * sizeof(char));
-    		ft_strlcpy(cmd->data[i], current->data, data_length + 1);
+    		cmd->data[j] = malloc((data_length + 1) * sizeof(char));
+    		ft_strlcpy(cmd->data[j], current->data, data_length + 1);
+			j++;
 		}
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
 			cmd->redir->redir_type = current->token;
-			cmd->data[i] = NULL;
+			// if (arg_num == 1)
+			// 	cmd->data[i] = NULL;
 			if (current->next && current->next->token == DEFAULT)
 			{
 				cmd->redir->file_name = ft_strdup(current->next->data);
@@ -179,22 +186,22 @@ int	main(void)
 	lexer.pipe_num = 0;
 	lexical_analyzer(&lexer);
 
-	/***** PRINT LEXER *****/
-	printf("\n");
-	printf("INPUT : %s\n\n", str);
-	printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
-	printf("HEREDOC ACTIVE : %d\n", lexer.heredoc);
+	// /***** PRINT LEXER *****/
+	// printf("\n");
+	// printf("INPUT : %s\n\n", str);
+	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
+	// printf("HEREDOC ACTIVE : %d\n", lexer.heredoc);
 
-	t_tokens *curr = lexer.token_list;
-	int i = 1;
-	while (curr != NULL)
-	{
-		printf("%d. curr->data: %s\n", i, curr->data);
-		printf("%d. curr->token: %d\n", i, curr->token);
-		curr = curr->next;
-		i++;
-		printf("\n");
-	}
+	// t_tokens *curr = lexer.token_list;
+	// int i = 1;
+	// while (curr != NULL)
+	// {
+	// 	printf("%d. curr->data: %s\n", i, curr->data);
+	// 	printf("%d. curr->token: %d\n", i, curr->token);
+	// 	curr = curr->next;
+	// 	i++;
+	// 	printf("\n");
+	// }
 	parser(&lexer, &parser_list);
 	//if (lexer.heredoc == TRUE)
 
