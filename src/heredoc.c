@@ -24,7 +24,7 @@ int	create_heredoc(char *delim, char *filename)
 		return(2);
 	while (1)
 	{
-		str = readline(">");
+		str = readline("> ");
 		if (!ft_strncmp(delim, str, ft_strlen(delim)))
 			break ;
 		write(file, str, ft_strlen(str));

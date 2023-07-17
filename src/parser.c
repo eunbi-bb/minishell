@@ -1,4 +1,5 @@
 #include "../includes/parser.h"
+#include "../includes/minishell.h"
 #include <readline/readline.h>
 #include <stddef.h>
 
@@ -111,6 +112,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	int			arg_num;
 	int			i;
 	int			j;
+	size_t		len;
 
 	i = 0;
 	j = 0;
@@ -121,9 +123,9 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	{
 		if (current->data != NULL && current->token == DEFAULT)
 		{
-			size_t data_length = ft_strlen(current->data);
-    		cmd->data[j] = malloc((data_length + 1) * sizeof(char));
-    		ft_strlcpy(cmd->data[j], current->data, data_length + 1);
+			len = ft_strlen(current->data) + 1;
+    		cmd->data[j] = malloc(len * sizeof(char));
+    		ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
 		}
 		if (current->token != DEFAULT && current->token != PIPE)
@@ -200,7 +202,10 @@ int	main(void)
 	// 	printf("\n");
 	// }
 	parser(&lexer, &parser_list);
-	//if (lexer.heredoc == TRUE)
+	if (lexer.heredoc == TRUE)
+	{
+		here_document(parser_list.cmd_list, &lexer);
+	}
 
 		
 	/***** PRINT PARSER ****/
