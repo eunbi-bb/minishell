@@ -1,6 +1,20 @@
 #include "../includes/executor.h"
 #include "../includes/parser.h"
 
+static void	create_pipes(t_lexer_utils *lexer, int end[2])
+{
+	int	i;
+
+	i = 0;
+	while (i < lexer->pipe_num)
+	{
+		if (pipe(end) == -1)
+			free_parent();
+		i++;
+	}
+}
+
+
 t_cmd	*call_expander(t_parser_utils *cmd, t_cmd *cmd_list)
 {
 	t_tokens	*start;
