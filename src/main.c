@@ -1,62 +1,47 @@
-#include <stdio.h>
-#include <stdlib.h>
-typedef	struct	s_tokens
+#include "../includes/minishell.h"
+
+int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
-	char			*data;
-	char				token;
-	struct s_tokens	*next;
-}	t_tokens;
-
-
-t_tokens	*new_token_node(char token)
-{
-	t_tokens	*new;
-
-	new = (t_tokens *)malloc(sizeof(t_tokens));
-	if (new == NULL)
-	{
-		perror("malloc");
-		exit(1);
-	}
-	new->data = NULL;
-	new->token = token;
-	new->next = NULL;
-
-	return (new);
+	lexer->pipe_num = 0;
+	lexer->heredoc = FALSE;
+	lexer->token_list = NULL;
 }
 
-void	add_after(t_tokens **before, t_tokens *new_node)
-{
-	t_tokens	*head;
 
-	head = *before;//lst_front(before);
-	if (head == NULL)
+void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser)
+{
+	char			*line;
+	int				status;
+
+	while (status)
 	{
-		*before = new_node;
-		return ;
-	}
-	else
-	{
-		while (head->next != NULL)
-			head = head->next;
-		head->next = new_node;
+		line = readline("Minishell% ");
+		lexer->arg = ft_strtrim(line, " ");
+		if (match_quotes(lexer->arg) == FALSE)
+			return (-1);
+		lexical_analyzer(lexer);
+		parser(lexer, parser_list);
+		if (lexer->heredoc == TRUE)
+			here_document(parser->cmd_list, lexer);
+		status = executer(parser->cmd_list);
+		free(line);
+		free(lexer->token_list);
+		free(parser->cmd_list);
 	}
 }
 
-int main(void)
-{
-	
-	t_tokens *top = NULL;//new_token_node('c');
 
-	add_after(&top,new_token_node('c'));
-	add_after(&top,new_token_node('c'));
-	add_after(&top,new_token_node('c'));
-	int i = 0;
-	t_tokens *current = top;
-	while(current != NULL)
+int	main(int argc, char **argv, char **envp)
+{
+	t_lexer_utils	lexer;
+	t_parser_utils	parser;
+
+	if (argc != 1)
 	{
-		printf("current->token:%c",current->token);
-		current = current->next;
+		printf("Invalid argument.\n");
+		exit(0);
 	}
-	return 0;
+	init_utils(&lexer, &parser);
+	shell_loop(&lexer, &parser);
+	return (EXIT_SUCCESS);
 }

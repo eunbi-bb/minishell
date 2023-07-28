@@ -177,7 +177,6 @@ int	main(void)
 	t_parser_utils parser_list;
 	char	*str;
 
-	//str = "< infile grep -p 'Hello World' | cat -e >> outfile";
 	str = readline("Minishell% ");
 	lexer.arg = ft_strtrim(str, " ");
 	if (match_quotes(lexer.arg) == FALSE)
