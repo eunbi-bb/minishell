@@ -1,10 +1,15 @@
 #include "../includes/minishell.h"
+#include "../includes/executor.h"
+#include "../includes/error.h"
 
 int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
 	lexer->heredoc = FALSE;
 	lexer->token_list = NULL;
+	parser->cmd_list = NULL;
+	parser->pid = NULL;
+	parser->reset = FALSE;
 }
 
 
@@ -17,9 +22,17 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser)
 	{
 		line = readline("Minishell% ");
 		lexer->arg = ft_strtrim(line, " ");
+		if (lexer->arg == NULL)
+		{
+			write(STDOUT_FILENO, "exit", 5);
+			exit(EXIT_SUCCESS);
+		}
+		if (lexer->arg[0] == NULL)
+			return(reset_utils(lexer, parser));
 		if (match_quotes(lexer->arg) == FALSE)
-			return (-1);
-		lexical_analyzer(lexer);
+			return (err_msg(ERROR_QUOTE));
+		if (lexical_analyzer(lexer) == FALSE);
+			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_list);
 		if (lexer->heredoc == TRUE)
 			here_document(parser->cmd_list, lexer);
@@ -42,6 +55,8 @@ int	main(int argc, char **argv, char **envp)
 		exit(0);
 	}
 	init_utils(&lexer, &parser);
+	//pwd(&parser);
+	//parser.envp = env(envp);
 	shell_loop(&lexer, &parser);
 	return (EXIT_SUCCESS);
 }

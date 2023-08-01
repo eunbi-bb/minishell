@@ -149,7 +149,6 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 	t_cmd		*cmd;
 
 	current = lexer->token_list;
-	parser->cmd_list = NULL;
 	while (current)
 	{
 		if (current->token != PIPE)
