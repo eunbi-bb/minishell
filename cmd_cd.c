@@ -12,15 +12,15 @@
 
 #include "exec.h"
 
-void cmd_cd(int argc, char **path)
+void cmd_cd(int argc, char **path) 
 {
-    if (argc < 2)
-        return ;
     //printf("%s\n", path[2]);
     if (chdir(path[2]) == -1)
     {
         perror("chdir");
         exit(-1);
     }
-    cmd_pwd();
+    //cmd_pwd();
 }
+
+//what does cd with no arg do

@@ -12,22 +12,23 @@
 
 #include "exec.h"
 
-int cmd_echo(int argc, char **argv)
+int cmd_echo(int argc, char **data) // argv = cmd 
 {
     int printNewline = 1;
     int i;
 
-    i = 2;
-    if (argc > 1 && strcmp(argv[2], "-n") == 0) //if option -n exist
+    //i = 2;
+    if (argc > 1 && strcmp(argv[2], "-n") == 0) //if option -n exist - argv[2] = cmd->option
     {
         printNewline = 0;
-        i = 3;
+        //i = 3;
     }
-    while (i < argc) 
+	i = 1;
+    while (data[i]) 
     {
-        printf("%s", argv[i]);
-        if (i < argc - 1)
-            printf(" ");
+        printf("%s", data[i]);
+        // if (i < argc - 1)
+        //     printf(" ");
         i++;
     } 
     if (printNewline)
