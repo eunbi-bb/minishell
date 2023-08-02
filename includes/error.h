@@ -12,6 +12,8 @@
 # define ERROR_LEXER "lexer error"
 # define ERROR_MEM "memory error"
 
+# include <errno.h>
+
 typedef	struct	s_error
 {
 	int	error_status;	

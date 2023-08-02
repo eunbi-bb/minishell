@@ -2,6 +2,8 @@
 #include "../includes/executor.h"
 #include "../includes/error.h"
 
+int	exit_stat;
+
 int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
@@ -58,5 +60,5 @@ int	main(int argc, char **argv, char **envp)
 	//pwd(&parser);
 	//parser.envp = env(envp);
 	shell_loop(&lexer, &parser);
-	return (EXIT_SUCCESS);
+	return (exit_stat);
 }
