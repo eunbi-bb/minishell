@@ -35,7 +35,7 @@ void	create_pipes(int pipe_num, int fds[])
 	}
 }
 
-void	close_pipes(int pipe_num, int fds[])
+void	close_ends(int pipe_num, int fds[])
 {
 	int	i;
 	i = 0;
@@ -142,12 +142,17 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	while (cmd->cmd_list != NULL)
 	{
 		pid = fork();
-		if (pid == 0)
+		if (pid < 0)
+		{
+			perror("child error");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
 		{
 			// Redirect stdout to the write end of the current pipe. If it is not the last command
 			if (cmd->cmd_list->next)
 			{
-				if (dup2(fds[(i * 2) + 1], 1) == -1)
+				if (dup2(fds[i + 1], 1) == -1)
 				{
 					perror("dup2");
 					exit(EXIT_FAILURE);
@@ -156,14 +161,14 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			//Redirect stdin to the read end of the previous pipe. If not first command and i is no 2 * pipe_num
 			if (i > 0)
 			{
-				if (dup2(fds[(i - 1) * 2], 0) == -1)
+				if (dup2(fds[i - 2], 0) == -1)
 				{
 					perror("dup2");
 					exit(EXIT_FAILURE);
 				}
 			}
 			// compare path and given command
-			close_pipes(pipe_num, fds);
+			close_ends(pipe_num, fds);
 			cmd->command = command_check(path, cmd->cmd_list->data);
 			if (execve(cmd->command, cmd->cmd_list) < 0)
 			{
@@ -171,14 +176,12 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if (pid < 0)
-		{
-			perror("child error");
-			exit(EXIT_FAILURE);
-		}
+
 		cmd->cmd_list = cmd->cmd_list->next;
-		i++;
+		i += 2;
 	}
+	// close parent fds
+	close_ends(pipe_num, fds);
 	wait_pipes(&pipes.pid, &pipes.pipes, pipe_num + 1);
 	return (0);
 }
