@@ -2,7 +2,7 @@
 #include "../includes/executor.h"
 #include "../includes/error.h"
 
-int	exit_stat;
+int	g_exit_stat;
 
 int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
@@ -12,6 +12,7 @@ int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	parser->cmd_list = NULL;
 	parser->pid = NULL;
 	parser->reset = FALSE;
+	parser->env = NULL;
 }
 
 
@@ -56,7 +57,9 @@ int	main(int argc, char **argv, char **envp)
 		printf("Invalid argument.\n");
 		exit(0);
 	}
+
 	init_utils(&lexer, &parser);
+	parser.env = createLinkedList(envp);
 	//pwd(&parser);
 	//parser.envp = env(envp);
 	shell_loop(&lexer, &parser);

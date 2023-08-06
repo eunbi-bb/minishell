@@ -25,12 +25,11 @@ typedef struct s_parser_utils
 {
 	t_cmd	*cmd_list;
 	char	*args;
-	char	**envp;
+	char	**env;
 	int		pipes;
 	int		pid;
 	bool	reset;
 	char	*command;
-	char	**path;
 }	t_parser_utils;
 
 #endif

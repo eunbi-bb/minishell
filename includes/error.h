@@ -12,11 +12,15 @@
 # define ERROR_LEXER "lexer error"
 # define ERROR_MEM "memory error"
 
+//child error
+# define ERROR_CHILD "Child error"
+
+//dup2 error
+# define ERROR_DUP2_OUT "failed dup2 for output"
+# define ERROR_DUP2_IN "failed dup2 for input"
+
 # include <errno.h>
 
-typedef	struct	s_error
-{
-	int	error_status;	
-}	t_error;
-
+void	err_msg(char *str);
+void	perror_exit(char *str);
 #endif

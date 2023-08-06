@@ -2,22 +2,6 @@
 #include "../includes/parser.h"
 #include "../includes/error.h"
 
-// t_cmd	*call_expander(t_parser_utils *cmd, t_cmd *cmd_list)
-// {
-// 	t_tokens	*start;
-
-// 	cmd_list->data = expander(cmd, cmd->data);
-// 	start = cmd_list->redir;
-// 	while (cmd_list->redir)
-// 	{
-// 		if (cmd_list->redir->token != HERE_DOC)
-// 			cmd_list->redir->data = expander_data(cmd, cmd_list->redir->data);
-// 		cmd_list->redir = cmd_list->redir->next;
-// 	}
-// 	cmd_list->redir = start;
-// 	return (cmd);
-// }
-
 void	create_pipes(int pipe_num, int fds[])
 {
 	int	i;
@@ -46,13 +30,13 @@ void	close_ends(int pipe_num, int fds[])
 	}
 }
 
-int	wait_pipes(int *pid, t_error *error, int pid_num)
+int	wait_pipes(int *pid, t_error *error, int pipe_num)
 {
 	int	i;
 	int	status;
 
 	i = 0;
-	while (i < pid_num)
+	while (i < pipe_num)
 	{
 		waitpid(pid[i], &status, 0);
 		i++;
@@ -129,8 +113,6 @@ char	*command_check(char **path, char *cmd)
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	t_pipe	pipes;
-	// int		end[2];
-	// int		in;
 	int	fds[lexer->pipe_num * 2];
 	int		pipe_num;
 	pid_t	pid;
@@ -143,40 +125,30 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	{
 		pid = fork();
 		if (pid < 0)
-		{
-			perror("child error");
-			exit(EXIT_FAILURE);
-		}
+			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
 			// Redirect stdout to the write end of the current pipe. If it is not the last command
 			if (cmd->cmd_list->next)
 			{
 				if (dup2(fds[i + 1], 1) == -1)
-				{
-					perror("dup2");
-					exit(EXIT_FAILURE);
-				}
+					perror_exit(ERROR_DUP2_OUT);
 			}
 			//Redirect stdin to the read end of the previous pipe. If not first command and i is no 2 * pipe_num
 			if (i > 0)
 			{
 				if (dup2(fds[i - 2], 0) == -1)
-				{
-					perror("dup2");
-					exit(EXIT_FAILURE);
-				}
+					perror_exit(ERROR_DUP2_IN);
 			}
 			// compare path and given command
 			close_ends(pipe_num, fds);
-			cmd->command = command_check(path, cmd->cmd_list->data);
+			cmd->command = command_check(cmd->env, cmd->cmd_list->data);
 			if (execve(cmd->command, cmd->cmd_list) < 0)
 			{
-				perror("cmd");
-				exit(EXIT_FAILURE);
+				perror("excve error");
+				exit(1);
 			}
 		}
-
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
 	}
@@ -185,27 +157,3 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	wait_pipes(&pipes.pid, &pipes.pipes, pipe_num + 1);
 	return (0);
 }
-
-	// in = STDIN_FILENO;
-	// pid_num = lexer->pipe_num + 2;
-	// if (lexer->pipe_num > 0)
-	// 	cmd->pid = malloc(sizeof(int) * pid_num);
-	// if (!cmd->pid)
-	// 	return (err_msg(ERROR_MEM));
-	// while (cmd->cmd_list)
-	// {
-	// 	if (cmd->cmd_list->next)
-	// 		pipe(end);
-	// 	// send_heredoc(cmd, cmd->cmd_list);
-	// 	forking(&pipe, end, cmd->cmd_list, in);
-	// 	close(end[1]);
-	// 	if (cmd->cmd_list->prev)
-	// 		close(in);
-	// 	in = check_heredoc(cmd, end, cmd->cmd_list);
-	// 	if (cmd->cmd_list->next)
-	// 		cmd->cmd_list = cmd->cmd_list->next;
-	// 	else
-	// 		break ;
-	// }
-	// wait_pipes(&pipes.pid, &pipes.pipes, pid_num);
-	// cmd->cmd_list = simple_cmd(cmd->cmd_list);
