@@ -8,4 +8,6 @@
 int		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
 int		create_heredoc(char *delim, char *filename);
 char	*tmp_filename(int i);
+
+int		g_exit_stat;
 #endif

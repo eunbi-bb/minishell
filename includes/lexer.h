@@ -44,6 +44,8 @@ typedef	struct s_lexer_utils
 	char			*type_arr;
 	unsigned int	pipe_num;
 	bool			heredoc;
+	int				heredoc_in;
+	int				heredoc_out;
 }	t_lexer_utils;
 
 t_tokens	*new_node(char *data);

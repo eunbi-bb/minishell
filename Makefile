@@ -12,7 +12,7 @@ OBJ_DIR		= obj/
 SRC_DIR		= src/
 
 HEADER_DIR	= includes/
-HEADER_SRC	= lexer.h parser.h minishell.h executor.h
+HEADER_SRC	= lexer.h parser.h minishell.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/

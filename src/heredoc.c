@@ -16,23 +16,23 @@ char	*tmp_filename(int i)
 
 int	create_heredoc(char *delim, char *filename)
 {
-	int		file;
+	int		fd;
 	char	*str;
 
-	file = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
-	if (file < 0)
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	if (fd < 0)
 		return(2);
 	while (1)
 	{
 		str = readline("> ");
 		if (!ft_strncmp(delim, str, ft_strlen(delim)))
 			break ;
-		write(file, str, ft_strlen(str));
-		write(file, "\n", 1);
+		write(fd, str, ft_strlen(str));
+		write(fd, "\n", 1);
 		free(str);
 	}
 	free(str);
-	close(file);
+	close(fd);
 	return(1);
 }
 

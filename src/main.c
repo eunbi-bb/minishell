@@ -39,7 +39,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser)
 		parser(lexer, parser_list);
 		if (lexer->heredoc == TRUE)
 			here_document(parser->cmd_list, lexer);
-		status = executer(parser->cmd_list);
+		status = executor(parser->cmd_list);
 		free(line);
 		free(lexer->token_list);
 		free(parser->cmd_list);
