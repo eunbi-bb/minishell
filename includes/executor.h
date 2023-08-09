@@ -11,5 +11,5 @@
 # include <fcntl.h>
 # include "lexer.h"
 
-char	*command_check(char *path, char *cmd);
+char	*command_check(char **path, char *cmd);
 #endif

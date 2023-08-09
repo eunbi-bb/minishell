@@ -13,15 +13,20 @@ char	**get_cmd_dirs(t_env *envp)
 		{
 			tmp = ft_strdup(envp->value + 1);
 			dirs = ft_split(tmp, ':');
+			int i = 0;
+			while (dirs[i])
+			{
+				printf("%s\n", dirs[i]);
+				i++;
+			}
 			return (dirs);
-
 		}
 		envp = envp->next;
 	}
 	return (NULL);
 }
 
-char	*command_check(char *path, char *cmd)
+char	*command_check(char **path, char *cmd)
 {
 	char	*command;
 	char	*tmp;
@@ -30,12 +35,12 @@ char	*command_check(char *path, char *cmd)
 		return (NULL);
 	if ((access(cmd, X_OK) == 0))
 	{
-		command = cmd;
-		return (command);
+		return (cmd);
 	}
 	while (*path)
 	{
-		tmp = ft_strjoin(path, "/");
+		tmp = ft_strjoin(*path, "/");
+		printf("tmp : %s\n", tmp);
 		command = ft_strjoin(tmp, cmd);
 		if (command == NULL)
 		{
