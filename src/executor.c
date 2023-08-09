@@ -96,13 +96,18 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 
 	i = 0;
 	n = 0;
-	pid = NULL;
 	pipe_num = lexer->pipe_num;
+	pid = (pid_t *)malloc(sizeof(pid_t) * (pipe_num + 1));
+    if (pid == NULL)
+	{
+        perror("malloc error");
+        exit(EXIT_FAILURE);
+    }
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
 		pid[n] = fork();
-		if (pid[n] < 0)
+		if (pid[n] == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid[n] == 0)
 		{
@@ -121,7 +126,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			// compare path and given command
 			close_ends(pipe_num, fds);
 			cmd->command = cmd->cmd_list->data[0];
-			cmd->command = command_check(cmd->env->value, *cmd->cmd_list->data);
+			cmd->command = command_check(*cmd->cmd_dirs, *cmd->cmd_list->data);
 			if (execve(cmd->command, cmd->cmd_list->data, &cmd->env->value) < 0)
 			{
 				perror("execve error");
@@ -130,6 +135,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
+		n++;
 	}
 	// close parent fds
 	close_ends(pipe_num, fds);

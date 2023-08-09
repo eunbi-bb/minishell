@@ -1,7 +1,7 @@
 #include "../includes/minishell.h"
 #include "../includes/parser.h"
 
-char	*get_cmd_dirs(t_env *envp)
+char	**get_cmd_dirs(t_env *envp)
 {
 	char	*tmp;
 	char	**dirs;
