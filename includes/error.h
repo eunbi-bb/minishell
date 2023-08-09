@@ -20,6 +20,7 @@
 # define ERROR_DUP2_IN "failed dup2 for input"
 
 # include <errno.h>
+# include <unistd.h>
 
 int		err_msg(char *str);
 void	perror_exit(char *str);

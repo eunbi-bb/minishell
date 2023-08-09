@@ -1,6 +1,7 @@
 #include "../includes/executor.h"
 #include "../includes/parser.h"
 #include "../includes/error.h"
+#include "../includes/minishell.h"
 
 void	create_pipes(int pipe_num, int fds[])
 {
@@ -85,36 +86,6 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 // 	return (fd_in);
 // }
 
-// char	*command_check(char **path, char *cmd)
-// {
-// 	char	*command;
-// 	char	*tmp;
-
-// 	if (path == NULL)
-// 		return (NULL);
-// 	if ((access(cmd, X_OK) == 0))
-// 	{
-// 		command = cmd;
-// 		return (command);
-// 	}
-// 	while (*path)
-// 	{
-// 		tmp = ft_strjoin(*path, "/");
-// 		command = ft_strjoin(tmp, cmd);
-// 		if (command == NULL)
-// 		{
-// 			free(tmp);
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		if (!access(command, F_OK))
-// 			return (command);
-// 		path++;
-// 		free(tmp);
-// 		free(command);
-// 	}
-// 	return (NULL);
-// }
-
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -150,8 +121,8 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			// compare path and given command
 			close_ends(pipe_num, fds);
 			cmd->command = cmd->cmd_list->data[0];
-			//cmd->command = command_check(cmd->env, cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, cmd->env) < 0)
+			cmd->command = command_check(cmd->env->value, *cmd->cmd_list->data);
+			if (execve(cmd->command, cmd->cmd_list->data, &cmd->env->value) < 0)
 			{
 				perror("execve error");
 				exit(1);

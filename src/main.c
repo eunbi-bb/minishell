@@ -1,6 +1,4 @@
 #include "../includes/minishell.h"
-#include "../includes/parser.h"
-#include "../includes/executor.h"
 #include "../includes/error.h"
 
 void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
@@ -12,6 +10,7 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	parser->pid = 0;
 	parser->reset = FALSE;
 	parser->env = NULL;
+	printf("LOL\n");
 }
 
 int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
@@ -38,9 +37,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		parser(lexer, parser_utils);
 		if (lexer->heredoc == TRUE)
 			here_document(parser_utils->cmd_list, lexer);
-		printf("lol\n");
-		status = executor(parser_utils, lexer);
-		printf("lollolol\n");
+		//status = executor(parser_utils, lexer);
 		free(line);
 		free(lexer->token_list);
 		free(parser_utils->cmd_list);
@@ -55,7 +52,6 @@ int	main(int argc, char **argv, char **envp)
 	t_parser_utils	parser;
 
 	argv = NULL;
-	envp = NULL;
 	if (argc != 1)
 	{
 		printf("Invalid argument.\n");
@@ -63,9 +59,9 @@ int	main(int argc, char **argv, char **envp)
 	}
 
 	init_utils(&lexer, &parser);
-	// parser.env = createLinkedList(envp);
+	parser.env = createLinkedList(envp);
+	get_cmd_dirs(parser.env);
 	//pwd(&parser);
-	//parser.envp = env(envp);
 	shell_loop(&lexer, &parser);
 	return (g_global.exit_stat);
 }

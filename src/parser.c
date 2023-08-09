@@ -1,8 +1,5 @@
-#include "../includes/parser.h"
 #include "../includes/minishell.h"
-#include <readline/readline.h>
-#include <stddef.h>
-
+#include "../includes/parser.h"
 
 t_cmd	*cmd_lst_front(t_cmd *lst)
 {

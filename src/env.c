@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/06/28 12:47:48 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/08/09 15:32:03 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "../includes/minishell.h"
 
 t_env* createNode(char* key, char* value) {
     t_env* newNode = (t_env*)malloc(sizeof(t_env));
@@ -21,7 +21,7 @@ t_env* createNode(char* key, char* value) {
     newNode->key = strdup(key);
     newNode->value = strdup(value);
     newNode->next = NULL;
-    printf("%s%s\n", newNode->key, newNode->value);
+    //printf("%s%s\n", newNode->key, newNode->value);
   
     return newNode;
 }

@@ -9,15 +9,7 @@
 # include <string.h>
 # include <limits.h>
 # include <fcntl.h>
-# include "minishell.h"
+# include "lexer.h"
 
-typedef struct s_env
-{
-    char* key;
-    char* value;
-    struct s_env *next;
-}               t_env;
-
-
-int	executor(t_parser_utils *cmd, t_lexer_utils *lexer);
+char	*command_check(char *path, char *cmd);
 #endif
