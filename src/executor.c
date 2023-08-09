@@ -86,7 +86,7 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 // 	return (fd_in);
 // }
 
-int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
+int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
 	int		pipe_num;
@@ -103,14 +103,10 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
         perror("malloc error");
         exit(EXIT_FAILURE);
     }
-	printf("1\n");
 	create_pipes(pipe_num, fds);
-	printf("2\n");
 	while (cmd->cmd_list != NULL)
 	{
-		printf("3\n");
 		pid[n] = fork();
-		printf("4\n");
 		if (pid[n] == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid[n] == 0)
@@ -119,21 +115,19 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			// Redirect stdout to the write end of the current pipe. If it is not the last command
 			if (cmd->cmd_list->next)
 			{
-				printf("dup_out\n");
 				if (dup2(fds[i + 1], 1) == -1)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			//Redirect stdin to the read end of the previous pipe. If not first command and i is no 2 * pipe_num
 			if (i > 0)
 			{
-				printf("dup_in\n");
 				if (dup2(fds[i - 2], 0) == -1)
 					perror_exit(ERROR_DUP2_IN);
 			}
 			// compare path and given command
 			close_ends(pipe_num, fds);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			if (execve(cmd->command, cmd->cmd_list->data, (char *const *)cmd->env) < 0)
 			{
 				perror("execve error");
 				exit(1);

@@ -40,8 +40,8 @@ char	*command_check(char **path, char *cmd)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, "/");
-		printf("tmp : %s\n", tmp);
 		command = ft_strjoin(tmp, cmd);
+		printf("command : %s\n", command);
 		if (command == NULL)
 		{
 			free(tmp);
