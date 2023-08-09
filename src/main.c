@@ -12,6 +12,46 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	parser->env = NULL;
 }
 
+void	free_lexer_nodes(t_tokens *head)
+{
+	t_tokens *current;
+	t_tokens *tmp;
+
+	current = head;
+	while (current != NULL)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+}
+
+void	destroy_lexer_list(t_tokens **head_ref)
+{
+	free_lexer_nodes(*head_ref);
+	*head_ref = NULL;
+}
+
+void	free_parser_nodes(t_cmd *head)
+{
+	t_cmd *current;
+	t_cmd *tmp;
+
+	current = head;
+	while (current != NULL)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+}
+
+void	destroy_parser_list(t_cmd **head_ref)
+{
+	free_parser_nodes(*head_ref);
+	*head_ref = NULL;
+}
+
 int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;
@@ -39,8 +79,11 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		status = executor(parser_utils, lexer);
 		printf("status : %d\n", status);
 		free(line);
-		free(lexer->token_list);
-		free(parser_utils->cmd_list);
+		printf("1\n");
+		destroy_lexer_list(&lexer->token_list);
+		printf("2\n");
+		destroy_parser_list(&parser_utils->cmd_list);
+		printf("3\n");
 	}
 	return (g_global.exit_stat);
 }
