@@ -115,7 +115,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	j = 0;
 	arg_num = count_args(current);
 	if (arg_num > 0)
-		cmd->data = malloc((arg_num + 1) * sizeof(char *));
+		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
 	while (i <= arg_num && current)
 	{
 		if (current->data != NULL && current->token == DEFAULT)
