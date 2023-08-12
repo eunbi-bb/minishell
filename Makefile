@@ -1,43 +1,56 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: ssemanco <ssemanco@student.codam.nl>         +#+                      #
-#                                                    +#+                       #
-#    Created: 2023/06/07 10:16:07 by ssemanco      #+#    #+#                  #
-#    Updated: 2023/06/14 15:38:17 by ssemanco      ########   odam.nl          #
-#                                                                              #
-# **************************************************************************** #
+NAME		= minishell
+CC			= gcc
+ifdef DEBUG
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g
+READLINE	= -lreadline
+else
+CFLAGS		= -Wall -Wextra -Werror
+READLINE	= -lreadline
+endif
+LIBFT		= libft
+OBJ_DIR		= obj/
+SRC_DIR		= src/
 
-NAME = minishell
+HEADER_DIR	= includes/
+HEADER_SRC	= lexer.h parser.h minishell.h executor.h error.h
+HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
-CFLAGS = -Wall -Wextra -Werror
+SRC_DIR		= src/
+SRC_FILE	= main.c lexer.c node_utils.c parser.c executor.c heredoc.c error.c env.c executor_utils.c
 
-SRC =   cmd_echo.c \
-		cmd_pwd.c \
-		env.c \
-		exec.c \
-		cmd_cd.c \
-		cmd_export.c
+OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 
-OBJ = $(SRC:.c=.o)
+OBJF =	.cache_exists
+
+CYAN_B		=	\033[1;96m
+CYAN		=	\033[0;96m
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	cd libft/ && $(MAKE)
-	gcc -o $(NAME) $(OBJ) libft/libft.a 
+$(NAME):	$(OBJ) $(OBJF)
+			@make -C $(LIBFT)
+			@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME) $(READLINE)
+			@echo "$(CYAN_B)- Lexer is compiled -"
 
-%.o:%.c
-	gcc $(CFLAGS) -c -o $@ $<
+$(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
+			@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJF):
+		@mkdir -p $(OBJ_DIR)
+		@mkdir -p $(OBJ_DIR)$(SRC_DIR)
+		@touch $(OBJF)
 
 clean:
-	rm -f $(OBJ)
-	cd libft/ && $(MAKE) clean
+		@rm -rf $(OBJ_DIR)
+		@make clean -C $(LIBFT)
+		@rm -f $(OBJF)
+		@echo "$(CYAN)- Object files are cleaned -"
 
 fclean: clean
-	rm -f $(NAME)
-	cd libft/ && rm -f libft.a
+		@rm -f $(NAME)
+		@make fclean -C $(LIBFT)
+		@echo "$(CYAN)- Executable files are cleaned -"
 
-re: fclean all
+re:	fclean all
+
+.PHONY: all clean fclean re

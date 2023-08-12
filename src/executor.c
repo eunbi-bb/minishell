@@ -53,6 +53,38 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 	return (1);
 }
 
+int cmd_echo(char **cmd)
+{
+    int printNewline = 1;
+    int i;
+	int count;
+
+	i = 1;
+	count = 0;
+	while (cmd[count]!= NULL)
+	{
+		printf("COUNT IS %d\n", count);
+		count++;
+	}
+		
+	printf("COUNT IS -> %d\n", count);
+    if (strcmp(cmd[1], "-n") == 0) //if option -n exist
+    {
+        printNewline = 0;
+        i = 2;
+    }
+    while (i < count) 
+    {
+        printf("%s", cmd[i]);
+		if (i < count - 1)
+            printf(" ");
+        i++;
+    } 
+    if (printNewline)
+        printf("\n");
+    return 0;
+}
+
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -63,6 +95,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 
 	i = 0;
 	n = 0;
+	(void)envp;
 	pipe_num = lexer->pipe_num;
 	pid = (pid_t *)malloc(sizeof(pid_t) * (pipe_num + 1));
     if (pid == NULL)
@@ -78,7 +111,6 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			err_msg(ERROR_CHILD);
 		else if (pid[n] == 0)
 		{
-			printf("5\n");
 			// if (cmd->cmd_list->redir != NULL && lexer->heredoc == TRUE)
 			// 	here_document(cmd, lexer, fds);
 			if (cmd->cmd_list->next)
@@ -92,12 +124,14 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 					perror_exit(ERROR_DUP2_IN);
 			}
 			close_ends(pipe_num, fds);
+			if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
+        		cmd_echo(cmd->cmd_list->data);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
-			{
-				perror("execve error");
-				exit(1);
-			}
+			// if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			// {
+			// 	perror("execve error");
+			// 	exit(1);
+			// }
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
