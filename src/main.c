@@ -96,7 +96,6 @@ int	main(int argc, char **argv, char **envp)
 		printf("Invalid argument.\n");
 		exit(0);
 	}
-
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
