@@ -62,13 +62,8 @@ int cmd_echo(char **cmd)
 	i = 1;
 	count = 0;
 	while (cmd[count]!= NULL)
-	{
-		printf("COUNT IS %d\n", count);
 		count++;
-	}
-		
-	printf("COUNT IS -> %d\n", count);
-    if (strcmp(cmd[1], "-n") == 0) //if option -n exist
+    if (count > 1 && strcmp(cmd[1], "-n") == 0) //if option -n exist
     {
         printNewline = 0;
         i = 2;
