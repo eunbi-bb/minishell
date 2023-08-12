@@ -74,8 +74,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
 		if (lexical_analyzer(lexer) == FALSE)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
-		if (lexer->heredoc == TRUE)
-			here_document(parser_utils->cmd_list, lexer);
+		// if (lexer->heredoc == TRUE)
+		// 	here_document(parser_utils->cmd_list, lexer);
 		status = executor(parser_utils, lexer, envp);
 		free(line);
 		destroy_lexer_list(&lexer->token_list);

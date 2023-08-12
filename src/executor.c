@@ -78,9 +78,8 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			err_msg(ERROR_CHILD);
 		else if (pid[n] == 0)
 		{
-			printf("5\n");
-			// if (cmd->cmd_list->redir != NULL && lexer->heredoc == TRUE)
-			// 	here_document(cmd, lexer, fds);
+			if (cmd->cmd_list->redir != NULL && lexer->heredoc == TRUE)
+				here_document(cmd->cmd_list, lexer);
 			if (cmd->cmd_list->next)
 			{
 				if (dup2(fds[i + 1], 1) == -1)
