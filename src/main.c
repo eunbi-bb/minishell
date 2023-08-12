@@ -52,7 +52,7 @@ void	destroy_parser_list(t_cmd **head_ref)
 	*head_ref = NULL;
 }
 
-int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
+int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
 {
 	char			*line;
 	int				status;
@@ -76,7 +76,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		parser(lexer, parser_utils);
 		if (lexer->heredoc == TRUE)
 			here_document(parser_utils->cmd_list, lexer);
-		status = executor(parser_utils, lexer);
+		status = executor(parser_utils, lexer, envp);
 		free(line);
 		destroy_lexer_list(&lexer->token_list);
 		destroy_parser_list(&parser_utils->cmd_list);
@@ -96,11 +96,10 @@ int	main(int argc, char **argv, char **envp)
 		printf("Invalid argument.\n");
 		exit(0);
 	}
-
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
 	//pwd(&parser);
-	shell_loop(&lexer, &parser);
+	shell_loop(&lexer, &parser, envp);
 	return (g_global.exit_stat);
 }

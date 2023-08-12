@@ -13,12 +13,6 @@ char	**get_cmd_dirs(t_env *envp)
 		{
 			tmp = ft_strdup(envp->value + 1);
 			dirs = ft_split(tmp, ':');
-			int i = 0;
-			while (dirs[i])
-			{
-				printf("%s\n", dirs[i]);
-				i++;
-			}
 			return (dirs);
 		}
 		envp = envp->next;
@@ -41,7 +35,6 @@ char	*command_check(char **path, char *cmd)
 	{
 		tmp = ft_strjoin(*path, "/");
 		command = ft_strjoin(tmp, cmd);
-		printf("command : %s\n", command);
 		if (command == NULL)
 		{
 			free(tmp);
