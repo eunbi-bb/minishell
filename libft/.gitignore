@@ -1,0 +1,6 @@
+.DS_store
+*.a
+*.o
+.vscode
+francinette
+libft.a
