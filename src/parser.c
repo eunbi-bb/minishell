@@ -3,7 +3,6 @@
 #include <readline/readline.h>
 #include <stddef.h>
 
-
 t_cmd	*cmd_lst_front(t_cmd *lst)
 {
 	t_cmd	*tmp;

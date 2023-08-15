@@ -2,8 +2,6 @@
 #include "../includes/executor.h"
 #include "../includes/error.h"
 
-int	g_exit_stat;
-
 int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
