@@ -1,7 +1,7 @@
 #include "../includes/minishell.h"
 #include "../includes/error.h"
 
-void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
+int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
 	lexer->heredoc = FALSE;
