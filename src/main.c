@@ -1,6 +1,8 @@
 #include "../includes/minishell.h"
 #include "../includes/error.h"
 
+t_global	g_global;
+
 int	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;

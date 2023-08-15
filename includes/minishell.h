@@ -77,7 +77,6 @@ typedef struct	s_global
 {
 	int		exit_stat;
 	int		signal;
-
 }				t_global;
 
 t_global	g_global;

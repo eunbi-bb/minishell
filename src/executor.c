@@ -3,6 +3,7 @@
 #include "../includes/error.h"
 #include "../includes/minishell.h"
 
+
 void	create_pipes(int pipe_num, int fds[])
 {
 	int	i;
