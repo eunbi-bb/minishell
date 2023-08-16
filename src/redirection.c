@@ -8,14 +8,14 @@ int	open_infile(char *file)
 
 	fd = open(file, O_RDONLY); 
 	dup2(fd, STDIN_FILENO);
-	close(fd);
+	//close(fd);
 	// if (fd == -1)
 	// 	err_msg(ERROR_INFILE);
 	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
 	// 	err_msg(ERROR_PIPE_IN);
 	// else
 	// 	close(fd);
-	return (EXIT_SUCCESS);
+	return (fd);
 }
 
 int	create_outfile(t_cmd *cmd)
@@ -44,6 +44,7 @@ int	create_outfile(t_cmd *cmd)
 int	redirection(t_cmd *cmd)
 {
 	t_redir	*tmp;
+	int		fd_in;
 
 	tmp = cmd->redir;
 	while (cmd->redir != NULL)
@@ -55,11 +56,12 @@ int	redirection(t_cmd *cmd)
 		}
 		else if (cmd->redir->redir_type == LESSER || cmd->redir->redir_type == HERE_DOC)
 		{
-			if (open_infile(cmd->redir->file_name))
+			fd_in = open_infile(cmd->redir->file_name);
+			if (fd_in == -1)
 				return (EXIT_FAILURE);
 		}
 		cmd->redir = cmd->redir->next;
 	}
 	cmd->redir = tmp;
-	return (EXIT_SUCCESS);
+	return (fd_in);
 }

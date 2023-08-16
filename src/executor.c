@@ -56,6 +56,7 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 {
 	int		fds[lexer->pipe_num * 2];
+	int		fd_in;
 	int		pipe_num;
 	pid_t	*pid;
 	int		i;
@@ -81,7 +82,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
 				here_document(cmd->cmd_list, lexer);
 			if (cmd->cmd_list->redir != NULL)
-				redirection(cmd->cmd_list);
+				fd_in = redirection(cmd->cmd_list);
 			if (cmd->cmd_list->next)
 			{
 				if (dup2(fds[i + 1], 1) == -1)
@@ -104,6 +105,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 		i += 2;
 		n++;
 	}
+	close(fd_in);
 	close_ends(pipe_num, fds);
 	return (wait_pipes(pid, pipe_num));
 }
