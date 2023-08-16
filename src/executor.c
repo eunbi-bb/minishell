@@ -53,7 +53,7 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 	return (1);
 }
 
-int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
+int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
 	int		pipe_num;
@@ -94,7 +94,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			}
 			close_ends(pipe_num, fds);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
 			{
 				perror("execve error");
 				exit(1);
