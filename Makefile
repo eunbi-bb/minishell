@@ -12,11 +12,11 @@ OBJ_DIR		= obj/
 SRC_DIR		= src/
 
 HEADER_DIR	= includes/
-HEADER_SRC	= lexer.h parser.h minishell.h executor.h error.h
+HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/
-SRC_FILE	= lexer.c node_utils.c parser.c heredoc.c executor.c heredoc.c redirection.c error.c
+SRC_FILE	= lexer.c node_utils.c parser.c heredoc.c executor.c executor_utils.c redirection.c error.c main.c env.c
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 
