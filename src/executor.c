@@ -79,7 +79,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 		else if (pid[n] == 0)
 		{
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
-				here_document(cmd->cmd_list, lexer, fds);
+				here_document(cmd->cmd_list, lexer);
 			if (cmd->cmd_list->redir != NULL)
 				redirection(cmd->cmd_list);
 			if (cmd->cmd_list->next)

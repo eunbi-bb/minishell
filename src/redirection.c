@@ -21,7 +21,11 @@ int	create_outfile(t_cmd *cmd)
 	int	fd;
 
 	if (cmd->redir->redir_type == APPEND)
+	{
 		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
+		dup2(fd, 1);
+		close(fd);
+	}
 	else
 		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
 	if (fd == -1)
