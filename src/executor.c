@@ -53,31 +53,15 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 	return (1);
 }
 
-int cmd_echo(char **cmd)
+void cmd_cd( char *path) 
 {
-    int printNewline = 1;
-    int i;
-	int count;
-
-	i = 1;
-	count = 0;
-	while (cmd[count]!= NULL)
-		count++;
-    if (count > 1 && strcmp(cmd[1], "-n") == 0) //if option -n exist
+    printf("%s\n", path);
+    if (chdir(path) == -1)
     {
-        printNewline = 0;
-        i = 2;
+        perror("chdir");
+        exit(-1);
     }
-    while (i < count) 
-    {
-        printf("%s", cmd[i]);
-		if (i < count - 1)
-            printf(" ");
-        i++;
-    } 
-    if (printNewline)
-        printf("\n");
-    return 0;
+    //cmd_pwd();
 }
 
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
@@ -121,12 +105,18 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			close_ends(pipe_num, fds);
 			if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
         		cmd_echo(cmd->cmd_list->data);
+			if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
+        		cmd_pwd();
+			if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
+        		cmd_exit();
+			if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
+        		cmd_cd(cmd->cmd_list->data[1]);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			// if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
-			// {
-			// 	perror("execve error");
-			// 	exit(1);
-			// }
+			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			{
+				perror("execve error");
+				exit(1);
+			}
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
