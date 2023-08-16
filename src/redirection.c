@@ -27,7 +27,11 @@ int	create_outfile(t_cmd *cmd)
 		close(fd);
 	}
 	else
+	{
 		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
+		dup2(fd, 1);
+		close(fd);
+	}
 	if (fd == -1)
 		err_msg(ERROR_OUTFILE);
 	else if (fd == -1 && dup2(fd, STDOUT_FILENO) == -1)
