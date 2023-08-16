@@ -78,10 +78,10 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			err_msg(ERROR_CHILD);
 		else if (pid[n] == 0)
 		{
+			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
+				here_document(cmd->cmd_list, lexer, fds);
 			if (cmd->cmd_list->redir != NULL)
 				redirection(cmd->cmd_list);
-			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
-				here_document(cmd->cmd_list, lexer);
 			if (cmd->cmd_list->next)
 			{
 				if (dup2(fds[i + 1], 1) == -1)

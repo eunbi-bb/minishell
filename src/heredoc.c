@@ -32,7 +32,8 @@ int	create_heredoc(char *delim, char *filename)
 		free(str);
 	}
 	free(str);
-	close(fd);
+	// dup2(fd, 0);
+	// close(fd);
 	return(fd);
 }
 
