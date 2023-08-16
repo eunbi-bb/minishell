@@ -98,5 +98,6 @@ char		*tmp_filename(int i);
 char		**get_cmd_dirs(t_env *envp);
 void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp);
+int			redirection(t_cmd *cmd);
 
 #endif
