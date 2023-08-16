@@ -6,13 +6,15 @@ int	open_infile(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		err_msg(ERROR_INFILE);
-	else if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
-		err_msg(ERROR_PIPE_IN);
-	else
-		close(fd);
+	fd = open(file, O_RDONLY); 
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	// if (fd == -1)
+	// 	err_msg(ERROR_INFILE);
+	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
+	// 	err_msg(ERROR_PIPE_IN);
+	// else
+	// 	close(fd);
 	return (EXIT_SUCCESS);
 }
 
@@ -23,21 +25,19 @@ int	create_outfile(t_cmd *cmd)
 	if (cmd->redir->redir_type == APPEND)
 	{
 		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
-		dup2(fd, 1);
+		if (fd == -1)
+			err_msg(ERROR_OUTFILE);
+		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
 	else
 	{
 		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
-		dup2(fd, 1);
+		if (fd == -1)
+			err_msg(ERROR_OUTFILE);
+		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	if (fd == -1)
-		err_msg(ERROR_OUTFILE);
-	else if (fd == -1 && dup2(fd, STDOUT_FILENO) == -1)
-		err_msg(ERROR_PIPE_IN);
-	else
-		close(fd);
 	return (EXIT_SUCCESS);
 }
 
