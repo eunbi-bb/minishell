@@ -6,3 +6,4 @@ build/
 minishell.pdf
 minishell
 *.pdf
+.vscode

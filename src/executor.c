@@ -71,19 +71,17 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		{
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
 				here_document(cmd->cmd_list, lexer);
-			if (cmd->cmd_list->redir != NULL)
+			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type >= 1)
 				fd_in = redirection(cmd->cmd_list);
-			if (cmd->cmd_list->next)
-			{
-				printf("out = %d\n", i + 1);
-				if (dup2(fds[i + 1], 1) == -1)
-					perror_exit(ERROR_DUP2_OUT);
-			}
 			if (i != 0)
 			{
-				printf("in = %d\n", i - 2);
 				if (dup2(fds[i - 2], 0) == -1)
 					perror_exit(ERROR_DUP2_IN);
+			}
+			if (cmd->cmd_list->next)
+			{
+				if (dup2(fds[i + 1], 1) == -1)
+					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
@@ -95,7 +93,6 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
-		printf("i = %d\n", i);
 		n++;
 	}
 	close(fd_in);
