@@ -73,13 +73,13 @@ typedef struct	s_parser_utils
 	char	*command;
 }	t_parser_utils;
 
-typedef struct	s_global
-{
-	int		exit_stat;
-	int		signal;
-}				t_global;
+// typedef struct	s_global
+// {
+// 	int		exit_stat;
+// 	int		signal;
+// }				t_global;
 
-t_global	g_global;
+// t_global	g_global;
 
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);

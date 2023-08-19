@@ -2,8 +2,6 @@
 #include "../includes/executor.h"
 #include "../includes/error.h"
 
-t_global	g_global;
-
 void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
@@ -60,8 +58,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
 	char			*line;
 	int				status;
 
-	status = 1;
-	while (status)
+	status = 0;
+	while (status == 0)
 	{
 		line = readline("Minishell% ");
 		lexer->arg = ft_strtrim(line, " ");
@@ -83,8 +81,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
 		free(line);
 		destroy_lexer_list(&lexer->token_list);
 		destroy_parser_list(&parser_utils->cmd_list);
+		lexer->pipe_num = 0;
 	}
-	return (g_global.exit_stat);
+	return status;
 }
 
 
@@ -92,9 +91,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_lexer_utils	lexer;
 	t_parser_utils	parser;
+	int				exit_code;
 
 	argv = NULL;
-	if (argc != 1)
+	if (argc != 1 && argv[0] != NULL)
 	{
 		printf("Invalid argument.\n");
 		exit(0);
@@ -102,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	//pwd(&parser);
-	shell_loop(&lexer, &parser, envp);
-	return (g_global.exit_stat);
+	//pwd(&parser);status
+	exit_code = shell_loop(&lexer, &parser, envp);
+	return (exit_code);
 }

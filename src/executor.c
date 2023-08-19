@@ -44,13 +44,12 @@ int	wait_pipes(pid_t *pid, int pipe_num)
 		waitpid(pid[n], &status, 0);
 		if (WIFEXITED(status) == 0)
 		{
-			g_global.exit_stat = WEXITSTATUS(status);
-			return (0);
+			return (WEXITSTATUS(status));
 		}
 		i++;
 		n++;
 	}
-	return (1);
+	return (0);
 }
 
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
@@ -71,6 +70,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
         perror("malloc error");
         exit(EXIT_FAILURE);
     }
+	printf("pipe_num = %d\n", pipe_num);
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
@@ -85,11 +85,13 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 				fd_in = redirection(cmd->cmd_list);
 			if (cmd->cmd_list->next)
 			{
+				printf("out = %d\n", i + 1);
 				if (dup2(fds[i + 1], 1) == -1)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			if (i > 0)
 			{
+				printf("in = %d\n", i - 2);
 				if (dup2(fds[i - 2], 0) == -1)
 					perror_exit(ERROR_DUP2_IN);
 			}
