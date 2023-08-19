@@ -13,7 +13,6 @@ void	create_pipes(int pipe_num, int fds[])
 		if (pipe(fds + (i * 2)) == -1)
 		{
 			perror("pipe error");
-			printf("%d", errno);
 			exit(EXIT_FAILURE);
 		}
 		i++;
@@ -31,53 +30,44 @@ void	close_ends(int pipe_num, int fds[])
 	}
 }
 
-int	wait_pipes(pid_t *pid, int pipe_num)
+int	wait_pipes(pid_t pid, int pipe_num)
 {
 	int	i;
-	int	n;
 	int	status;
 
 	i = 0;
-	n = 0;
 	while (i < pipe_num + 1)
 	{
-		waitpid(pid[n], &status, 0);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status) == 0)
 		{
 			return (WEXITSTATUS(status));
 		}
 		i++;
-		n++;
 	}
 	return (0);
 }
 
-int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
+int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
 	int		fd_in;
 	int		pipe_num;
-	pid_t	*pid;
+	pid_t	pid;
 	int		i;
 	int		n;
 
 	i = 0;
 	n = 0;
 	pipe_num = lexer->pipe_num;
-	pid = (pid_t *)malloc(sizeof(pid_t) * (pipe_num + 1));
-    if (pid == NULL)
-	{
-        perror("malloc error");
-        exit(EXIT_FAILURE);
-    }
 	printf("pipe_num = %d\n", pipe_num);
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
-		pid[n] = fork();
-		if (pid[n] == -1)
+		pid = fork();
+		if (pid == -1)
 			err_msg(ERROR_CHILD);
-		else if (pid[n] == 0)
+		else if (pid == 0)
 		{
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
 				here_document(cmd->cmd_list, lexer);
@@ -89,7 +79,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 				if (dup2(fds[i + 1], 1) == -1)
 					perror_exit(ERROR_DUP2_OUT);
 			}
-			if (i > 0)
+			if (i != 0)
 			{
 				printf("in = %d\n", i - 2);
 				if (dup2(fds[i - 2], 0) == -1)
@@ -97,7 +87,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 			}
 			close_ends(pipe_num, fds);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
 			{
 				perror("execve error");
 				exit(1);
@@ -105,6 +95,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp)
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
+		printf("i = %d\n", i);
 		n++;
 	}
 	close(fd_in);
