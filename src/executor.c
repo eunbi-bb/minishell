@@ -60,7 +60,6 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	i = 0;
 	n = 0;
 	pipe_num = lexer->pipe_num;
-	printf("pipe_num = %d\n", pipe_num);
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
@@ -95,7 +94,8 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		i += 2;
 		n++;
 	}
-	close(fd_in);
+	if (fd_in > 0)
+		close(fd_in);
 	close_ends(pipe_num, fds);
 	return (wait_pipes(pid, pipe_num));
 }
