@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	t_lexer_utils	lexer;
 	t_parser_utils	parser;
 
-	argv = NULL;
+	(void)argv;
 	if (argc != 1)
 	{
 		printf("Invalid argument.\n");

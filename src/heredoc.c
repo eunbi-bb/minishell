@@ -55,7 +55,6 @@ int	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 	static int	i;
 	char		*delim;
 	t_redir		*start;
-	int			fd;
 	
 	start = cmd->redir;
 	while (cmd->redir)
@@ -65,7 +64,7 @@ int	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 			delim = cmd->redir->file_name;
 			cmd->redir->file_name = tmp_filename(i);
 			i++;
-			fd = create_heredoc(delim, cmd->redir->file_name);
+			create_heredoc(delim, cmd->redir->file_name);
 		}
 		cmd->redir = cmd->redir->next;
 	}
