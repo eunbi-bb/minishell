@@ -89,13 +89,13 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 				perror("execve error");
 				exit(1);
 			}
+			if (fd_in > 0)
+				close(fd_in);
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
 		n++;
 	}
-	if (fd_in > 0)
-		close(fd_in);
 	close_ends(pipe_num, fds);
 	return (wait_pipes(pid, pipe_num));
 }
