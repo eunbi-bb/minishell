@@ -102,5 +102,7 @@ char		**get_cmd_dirs(t_env **envp);
 void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 int			redirection(t_cmd *cmd);
+void find_usd(char **data,  t_env *env);
+void cmd_env(t_env *env);
 
 #endif

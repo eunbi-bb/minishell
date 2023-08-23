@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/19 21:37:37 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/08/23 17:40:29 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,17 @@ t_env* createNode(char* key, char* value) {
     newNode->key = strdup(key);
     newNode->value = strdup(value);
     newNode->next = NULL;
-    //printf("%s%s\n", newNode->key, newNode->value);
-  
     return newNode;
+}
+
+void cmd_env(t_env *env)
+{
+    while(env)
+    {
+        printf("%s=%s\n", env->key, env->value);
+        env = env->next;
+    }
+    
 }
 
 t_env **createLinkedList(char** envp) {

@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/03 11:06:15 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/16 12:40:10 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/08/23 18:57:41 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int cmd_echo(char **cmd)
     }
     while (i < count) 
     {
+        if (ft_strncmp(cmd[i], "", 1) == 0)
+            i++;
         printf("%s", cmd[i]);
 		if (i < count - 1)
             printf(" ");
