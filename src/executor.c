@@ -63,15 +63,22 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
+		printf("exec\n");
 		pid = fork();
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
+			{
+				printf("heredoc\n");
 				here_document(cmd->cmd_list, lexer);
+			}
 			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type >= 1)
+			{
+				printf("redir\n");
 				fd_in = redirection(cmd->cmd_list);
+			}
 			if (i != 0)
 			{
 				if (dup2(fds[i - 2], 0) == -1)
@@ -83,7 +90,21 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
+
+			// int i = 0;
+			// while (cmd->cmd_list->data[i])
+			// {
+			// 	printf("cmd->cmd_list->data[%d] = %s\n", i , cmd->cmd_list->data[i]);
+			// 	i++;
+			// }
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
+			// printf("command : %s\n", cmd->command);
+			// int i = 0;
+			// while (cmd->cmd_list->data[i])
+			// {
+			// 	printf("cmd->cmd_list->data[%d] = %s\n", i , cmd->cmd_list->data[i]);
+			// 	i++;
+			// }
 			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
 			{
 				perror("execve error");

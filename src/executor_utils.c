@@ -26,6 +26,7 @@ char	*command_check(char **path, char *cmd)
 	char	*command;
 	char	*tmp;
 
+	
 	if (path == NULL)
 		return (NULL);
 	if ((access(cmd, X_OK) == 0))

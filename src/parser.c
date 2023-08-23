@@ -58,7 +58,7 @@ t_redir	*create_redir_node(void)
 {
 	t_redir	*redir;
 
-	redir = (t_redir *)ft_calloc(1, sizeof(t_redir));
+	redir = ft_calloc(1, sizeof(t_redir));
 	redir->file_name = NULL;
 	redir->redir_type = DEFAULT;
 	redir->next = NULL;
@@ -72,7 +72,7 @@ void	add_after_redir(t_redir **before, t_redir *new_node)
 	head = *before;
 	if (head == NULL)
 	{
-		before = &new_node;
+		*before = new_node;
 	}
 	else
 	{
@@ -86,7 +86,7 @@ t_cmd	*create_cmd_node(void)
 {
 	t_cmd	*new;
 
-	new = (t_cmd *)ft_calloc(1, sizeof(t_cmd));
+	new = ft_calloc(1, sizeof(t_cmd));
 	new->data = NULL;
 	new->prev = NULL;
 	new->next = NULL;
@@ -115,20 +115,20 @@ int	count_args(t_tokens	*lexer)
 void	generate_redir(t_tokens *current, t_cmd *cmd)
 {
 	t_tokens	*tmp;
-	t_redir		*redir;
+	t_redir		*new;
 
 	tmp = current;
 	while (tmp && tmp->token != PIPE)
 	{
-		redir = create_redir_node();
+		new = create_redir_node();
 		if (cmd->redir == NULL)
-			cmd->redir = redir;
+			cmd->redir = new;
 		else
-			add_after_redir(&cmd->redir, redir);
-		redir->redir_type = tmp->token;
+			add_after_redir(&cmd->redir, new);
+		new->redir_type = tmp->token;
 		if (tmp->next && tmp->next->token == DEFAULT)
 		{
-			redir->file_name = ft_strdup(tmp->next->data);
+			new->file_name = ft_strdup(tmp->next->data);
 			tmp = tmp->next;
 		}
 		tmp = tmp->next;
@@ -157,10 +157,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
     		ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
 		}
-		if (current->token != DEFAULT && current->token != PIPE)
-		{
-			generate_redir(current, cmd);
-		}
+		generate_redir(current, cmd);
 		i++;
 		current = current->next;
 	}
