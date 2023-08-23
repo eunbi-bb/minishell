@@ -1,4 +1,5 @@
 #include "../includes/minishell.h"
+#include "../includes/executor.h"
 #include "../includes/error.h"
 
 void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
@@ -52,13 +53,13 @@ void	destroy_parser_list(t_cmd **head_ref)
 	*head_ref = NULL;
 }
 
-int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
+int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;
 	int				status;
 
-	status = 1;
-	while (status)
+	status = 0;
+	while (status == 0)
 	{
 		line = readline("Minishell% ");
 		if(*line)
@@ -78,12 +79,13 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, char **envp)
 		parser(lexer, parser_utils);
 		// if (lexer->heredoc == TRUE)
 		// 	here_document(parser_utils->cmd_list, lexer);
-		status = executor(parser_utils, lexer, envp);
+		status = executor(parser_utils, lexer);
 		free(line);
 		destroy_lexer_list(&lexer->token_list);
 		destroy_parser_list(&parser_utils->cmd_list);
+		lexer->pipe_num = 0;
 	}
-	return (g_global.exit_stat);
+	return status;
 }
 
 
@@ -91,9 +93,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_lexer_utils	lexer;
 	t_parser_utils	parser;
+	int				exit_code;
 
-	(void)argv;
-	if (argc != 1)
+	argv = NULL;
+	if (argc != 1 && argv[0] != NULL)
 	{
 		printf("Invalid argument.\n");
 		exit(0);
@@ -101,7 +104,8 @@ int	main(int argc, char **argv, char **envp)
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	//pwd(&parser);
-	shell_loop(&lexer, &parser, envp);
-	return (g_global.exit_stat);
+	//pwd(&parser);status
+	exit_code = shell_loop(&lexer, &parser);
+	printf("exit code : %d\n", exit_code);
+	return (exit_code);
 }

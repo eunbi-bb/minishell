@@ -41,8 +41,7 @@ typedef	struct s_lexer_utils
 	char			*type_arr;
 	unsigned int	pipe_num;
 	bool			heredoc;
-	int				heredoc_in;
-	int				heredoc_out;
+	char*			heredoc_filename;
 }	t_lexer_utils;
 
 typedef struct s_redir
@@ -65,7 +64,7 @@ typedef struct	s_parser_utils
 {
 	t_cmd	*cmd_list;
 	char	*args;
-	t_env	*env;
+	t_env	**env;
 	char	**cmd_dirs;
 	int		pipes;
 	int		pid;
@@ -73,14 +72,13 @@ typedef struct	s_parser_utils
 	char	*command;
 }	t_parser_utils;
 
-typedef struct	s_global
-{
-	int		exit_stat;
-	int		signal;
+// typedef struct	s_global
+// {
+// 	int		exit_stat;
+// 	int		signal;
+// }				t_global;
 
-}				t_global;
-
-t_global	g_global;
+// t_global	g_global;
 
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
@@ -90,18 +88,19 @@ bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i);
 int			quotes(char *str, int i);
 int			take_tokens(t_lexer_utils *lexer, char *str, int i);
-t_env* 	createLinkedList(char** envp);
-int		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
-int		create_heredoc(char *delim, char *filename);
-char	*tmp_filename(int i);
-
-
-char	**get_cmd_dirs(t_env *envp);
-void	parser(t_lexer_utils *lexer, t_parser_utils *parser);
-int		executor(t_parser_utils *cmd, t_lexer_utils *lexer, char **envp);
+t_env		**createLinkedList(char** envp);
+int			here_document(t_cmd	*cmd, t_lexer_utils *lexer);
+int			create_heredoc(char *delim, char *filename);
+char		*tmp_filename(int i);
 
 int		cmd_echo(char **cmd);
 void	cmd_pwd();
 void	cmd_exit();
+
+
+char		**get_cmd_dirs(t_env **envp);
+void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
+int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
+int			redirection(t_cmd *cmd);
 
 #endif

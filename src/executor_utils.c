@@ -1,7 +1,8 @@
 #include "../includes/minishell.h"
 #include "../includes/parser.h"
+#include "../includes/executor.h"
 
-char	**get_cmd_dirs(t_env *envp)
+char	**get_cmd_dirs(t_env **envp)
 {
 	char	*tmp;
 	char	**dirs;
@@ -9,13 +10,13 @@ char	**get_cmd_dirs(t_env *envp)
 	dirs = NULL;
 	while (envp)
 	{
-		if (ft_strncmp(envp->key, "PATH", 4) == 0)
+		if (ft_strncmp((*envp)->key, "PATH", 4) == 0)
 		{
-			tmp = ft_strdup(envp->value + 1);
+			tmp = ft_strdup((*envp)->value + 1);
 			dirs = ft_split(tmp, ':');
 			return (dirs);
 		}
-		envp = envp->next;
+		(*envp) = (*envp)->next;
 	}
 	return (NULL);
 }
