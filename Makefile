@@ -16,7 +16,7 @@ HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/
-SRC_FILE	= lexer.c node_utils.c parser.c heredoc.c executor.c executor_utils.c redirection.c error.c main.c env.c
+SRC_FILE	= lexer.c parser.c heredoc.c executor.c executor_utils.c redirection.c error.c main.c env.c free_llist.c node_utils.c
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 

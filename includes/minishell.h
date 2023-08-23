@@ -89,6 +89,8 @@ int			arg_divider(t_lexer_utils *lexer, char *str, int i);
 int			quotes(char *str, int i);
 int			take_tokens(t_lexer_utils *lexer, char *str, int i);
 t_env		**createLinkedList(char** envp);
+void		free_tokens_list(t_tokens *head);
+
 void		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
 int			create_heredoc(char *delim, char *filename);
 int			create_heredoc_pipes(char *delim);

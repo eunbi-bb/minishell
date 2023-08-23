@@ -112,18 +112,29 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-// t_redir	*generate_redir(t_tokens *current, t_cmd *cmd, t_redir *redir)
-// {
-// 	printf("redir->redir_type = %d\n", redir->redir_type);
-// 	printf("current->token = %d\n", current->token);
-// 	redir->redir_type = current->token;
-// 	if (current->next && current->next->token == DEFAULT)
-// 	{
-// 		cmd->redir->file_name = ft_strdup(current->next->data);
-// 		current = current->next;
-// 	}
-// 	return (redir);
-// }
+void	generate_redir(t_tokens *current, t_cmd *cmd)
+{
+	t_tokens	*tmp;
+	t_redir		*redir;
+
+	tmp = current;
+	while (tmp && tmp->token != PIPE)
+	{
+		redir = create_redir_node();
+		if (cmd->redir == NULL)
+			cmd->redir = redir;
+		else
+			add_after_redir(&cmd->redir, redir);
+		redir->redir_type = tmp->token;
+		if (tmp->next && tmp->next->token == DEFAULT)
+		{
+			redir->file_name = ft_strdup(tmp->next->data);
+			tmp = tmp->next;
+		}
+		tmp = tmp->next;
+	}
+	//free_tokens_list(tmp);
+}
 
 t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 {
@@ -131,8 +142,6 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	int			i;
 	int			j;
 	size_t		len;
-	t_redir		*redir;
-	t_tokens	*tmp;
 
 	i = 0;
 	j = 0;
@@ -150,23 +159,7 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 		}
 		if (current->token != DEFAULT && current->token != PIPE)
 		{
-			tmp = current;
-			while (tmp && tmp->token != PIPE)
-			{
-				redir = create_redir_node();
-				if (cmd->redir == NULL)
-					cmd->redir = redir;
-				else
-					add_after_redir(&cmd->redir, redir);
-				redir->redir_type = tmp->token;
-				if (tmp->next && tmp->next->token == DEFAULT)
-				{
-					redir->file_name = ft_strdup(tmp->next->data);
-					tmp = tmp->next;
-				}
-				// generate_redir(current, cmd, cmd->redir);
-				tmp = tmp->next;
-			}
+			generate_redir(current, cmd);
 		}
 		i++;
 		current = current->next;
