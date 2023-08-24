@@ -97,7 +97,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			// int i = 0;
 			// while (cmd->cmd_list->data[i])
 			// {
-			// 	printf("cmd->cmd_list->data[%d] = %s\n", i , cmd->cmd_list->data[i]);
+			// 	printf("\ncmd->cmd_list->data[%d] = %s\n\n", i , cmd->cmd_list->data[i]);
 			// 	i++;
 			// }
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
