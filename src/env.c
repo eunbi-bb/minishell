@@ -6,14 +6,14 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/19 21:37:37 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/08/24 15:55:10 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 t_env* createNode(char* key, char* value) {
-    t_env* newNode = (t_env*)malloc(sizeof(t_env));
+    t_env* newNode = ft_calloc(1, sizeof(t_env));
     if (newNode == NULL) {
         perror("malloc");
         exit(1);

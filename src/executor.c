@@ -63,21 +63,24 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
 	{
-		printf("exec\n");
 		pid = fork();
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
-			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
+			while (cmd->cmd_list->redir)
 			{
-				printf("heredoc\n");
-				here_document(cmd->cmd_list, lexer);
-			}
-			if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type >= 1)
-			{
-				printf("redir\n");
-				fd_in = redirection(cmd->cmd_list);
+				if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
+				{
+					printf("heredoc\n");
+					here_document(cmd->cmd_list, lexer);
+				}
+				if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type != DEFAULT)
+				{
+					printf("redir\n");
+					fd_in = redirection(cmd->cmd_list);
+				}
+				cmd->cmd_list->redir = cmd->cmd_list->redir->next;
 			}
 			if (i != 0)
 			{

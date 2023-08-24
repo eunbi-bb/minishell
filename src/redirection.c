@@ -7,7 +7,7 @@ int	open_infile(char *file, t_cmd *cmd)
 	int	fd;
 
 	fd = open(file, O_RDONLY); 
-	dup2(fd, STDIN_FILENO);
+	// dup2(fd, STDIN_FILENO);
 	if (cmd->redir->redir_type == HERE_DOC)
 		unlink(file);
 	// close(fd);
@@ -51,7 +51,7 @@ int	redirection(t_cmd *cmd)
 	tmp = cmd->redir;
 	while (cmd->redir != NULL)
 	{
-		printf("%d\n", cmd->redir->redir_type);
+		//printf("%d\n", cmd->redir->redir_type);
 		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
 		{
 			if (create_outfile(cmd))
