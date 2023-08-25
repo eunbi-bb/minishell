@@ -112,32 +112,27 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-int	generate_redir(t_tokens *current, t_cmd *cmd)
+void	generate_redir(t_tokens *current, t_cmd *cmd)
 {
 	t_tokens	*tmp;
 	t_redir		*new;
-	int			skip;
 
-	skip = 0;
 	tmp = current;
 	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
 		if (cmd->redir == NULL)
 			cmd->redir = new;
-		else
+		else if (cmd->redir != NULL && tmp->token >= 1)
 			add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
-		if (tmp->next && tmp->next->token == DEFAULT)
+		if (tmp->token >= 1)
 		{
 			new->file_name = ft_strdup(tmp->next->data);
 			tmp = tmp->next;
-			skip++;
 		}
 		tmp = tmp->next;
-		skip++;
 	}
-	return skip;
 	//free_tokens_list(tmp);
 }
 
@@ -146,34 +141,25 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	int			arg_num;
 	int			i;
 	int			j;
-	int 		skip;
 	size_t		len;
 
 	i = 0;
 	j = 0;
-	skip = 0;
 	arg_num = count_args(current);
 	if (arg_num > 0)
 		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
+	generate_redir(current, cmd);
 	while (i <= arg_num && current)
 	{
-		if (skip > 0)
+		if (current->data != NULL && current->token == DEFAULT)
 		{
-			current = current->next;
-			skip--;
+			len = ft_strlen(current->data) + 1;
+			cmd->data[j] = ft_calloc(len, sizeof(char));
+			ft_strlcpy(cmd->data[j], current->data, len);
+			j++;
 		}
-		else
-		{
-			if (current->data != NULL && current->token == DEFAULT)
-			{
-				len = ft_strlen(current->data) + 1;
-				cmd->data[j] = ft_calloc(len, sizeof(char));
-				ft_strlcpy(cmd->data[j], current->data, len);
-				j++;
-			}
-			skip = generate_redir(current, cmd);
-			i++;
-		}
+		i++;
+		current = current->next;
 	}
 	return (cmd);
 }
