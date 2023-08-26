@@ -1,0 +1,9 @@
+*.o
+test
+tmp_0
+build/
+*.json
+minishell.pdf
+minishell
+*.pdf
+.vscode

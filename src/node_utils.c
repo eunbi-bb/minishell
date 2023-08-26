@@ -6,11 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/07/06 13:26:29 by eucho         ########   odam.nl         */
+/*   Updated: 2023/08/26 19:52:09 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lexer.h"
+#include "../includes/minishell.h"
 #include <string.h>
 
 t_tokens	*lst_last(t_tokens *lst)
@@ -29,7 +29,7 @@ t_tokens	*new_node(char *data)
 {
 	t_tokens	*new_node;
 
-	new_node = (t_tokens *)malloc(sizeof(t_tokens));
+	new_node = ft_calloc(1, sizeof(t_tokens));
 	if (!new_node)
 		return (NULL);
 	new_node->data = ft_strdup(data);
@@ -42,7 +42,7 @@ t_tokens	*new_token_node(t_types token)
 {
 	t_tokens	*new;
 
-	new = (t_tokens *)malloc(sizeof(t_tokens));
+	new = ft_calloc(1, sizeof(t_tokens));
 	if (new == NULL)
 	{
 		perror("malloc");
