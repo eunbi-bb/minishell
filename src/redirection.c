@@ -7,16 +7,16 @@ int	open_infile(char *file, t_cmd *cmd)
 	int	fd;
 
 	fd = open(file, O_RDONLY); 
-	// dup2(fd, STDIN_FILENO);
+	dup2(fd, STDIN_FILENO);
 	if (cmd->redir->redir_type == HERE_DOC)
 		unlink(file);
-	// close(fd);
-	if (fd == -1)
-		err_msg(ERROR_INFILE);
-	if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
-		err_msg(ERROR_PIPE_IN);
-	else
-		close(fd);
+	close(fd);
+	// if (fd == -1)
+	// 	err_msg(ERROR_INFILE);
+	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
+	// 	err_msg(ERROR_PIPE_IN);
+	// else
+	// 	close(fd);
 	return (fd);
 }
 
