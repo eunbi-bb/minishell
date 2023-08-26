@@ -123,13 +123,15 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 		new = create_redir_node();
 		if (cmd->redir == NULL)
 			cmd->redir = new;
-		else if (cmd->redir != NULL && tmp->token >= 1)
+		else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
 			add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
 		if (tmp->token >= 1)
 		{
+			current = current->next;
 			new->file_name = ft_strdup(tmp->next->data);
 			tmp = tmp->next;
+			current = current->next;
 		}
 		tmp = tmp->next;
 	}
@@ -159,6 +161,8 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 			j++;
 		}
 		i++;
+		if (current->token != DEFAULT && current->token != PIPE)
+			current = current->next;
 		current = current->next;
 	}
 	return (cmd);
