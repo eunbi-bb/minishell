@@ -1,5 +1,6 @@
 *.o
 test
+test_cmd.txt
 tmp_0
 build/
 *.json
