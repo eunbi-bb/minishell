@@ -24,7 +24,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	while (status == 0)
 	{
 		line = readline("Minishell% ");
-		rl_replace_line("", 0);
+		if(*line)
+            add_history(line);
 		lexer->arg = ft_strtrim(line, " ");
 		if (lexer->arg == NULL)
 		{
@@ -84,6 +85,7 @@ int	main(int argc, char **argv, char **envp)
 	t_parser_utils	parser;
 	int				exit_code;
 
+	//system ("leaks minishell -q");
 	argv = NULL;
 	if (argc != 1 && argv[0] != NULL)
 	{
