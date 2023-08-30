@@ -3,6 +3,8 @@
 
 # include "../libft/libft.h"
 # include "parser.h"
+# include <readline/readline.h>
+
 
 typedef struct s_env
 {
