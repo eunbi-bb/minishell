@@ -1,7 +1,7 @@
-#include "../includes/executor.h"
-#include "../includes/parser.h"
-#include "../includes/error.h"
-#include "../includes/minishell.h"
+#include "../../includes/executor.h"
+#include "../../includes/parser.h"
+#include "../../includes/error.h"
+#include "../../includes/minishell.h"
 
 void	create_pipes(int pipe_num, int fds[])
 {

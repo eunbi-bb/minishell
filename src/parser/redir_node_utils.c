@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	add_after_redir(t_redir **before, t_redir *new_node)
 {

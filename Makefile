@@ -16,24 +16,18 @@ HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/
-LEXER_DIR	= lexer/
-PARSER_DIR	= parser/
-EXECUTOR_DIR	= executor/ 
+SRC_FILE	= main.c env.c free_llist.c error.c \
+				lexer/lexer.c \
+				lexer/node_utils.c \
+				parser/parser.c \
+				parser/cmd_node_utils.c \
+				parser/redir_node_utils.c \
+				executor/executor.c \
+				executor/executor_utils.c \
+				executor/heredoc.c \
+				executor/redirection.c \
 
-LEXER		= lexer node_utils
-PARSER		= parser cmd_node_utils redir_node_utils
-EXECUTOR	= redirection executor heredoc executor_utils redirection
-
-SRC_FILE	= main.c \
-			env.c \
-			free_llist.c error.c free_llist.c
-
-SRC			= 	$(addsuffix .c, $(addprefix src/lexer/, $(LEXER))) \
-				$(addsuffix .c, $(addprefix src/parser/, $(PARSER))) \
-				$(addsuffix .c, $(addprefix src/executor/, $(EXECUTOR))) \
-
-OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o)) \
-				$(SRC:c=o) \
+OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 
 OBJF =	.cache_exists
 
@@ -48,14 +42,12 @@ $(NAME):	$(OBJ) $(OBJF)
 			@echo "$(CYAN_B)- Lexer is compiled -"
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
+			@mkdir -p $(@D)
 			@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJF):
 		@mkdir -p $(OBJ_DIR)
-		@mkdir -p $(OBJ_DIR)$(SRC_DIR)
-		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(LEXER_DIR)
-		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(PARSER_DIR)
-		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(EXECUTOR_DIR)
+# @mkdir -p $(OBJ_DIR)$(SRC_DIR)
 		@touch $(OBJF)
 
 clean:

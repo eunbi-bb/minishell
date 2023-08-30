@@ -13,20 +13,6 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	parser->env = NULL;
 }
 
-void	free_lexer_nodes(t_tokens *head)
-{
-	t_tokens *current;
-	t_tokens *tmp;
-
-	current = head;
-	while (current != NULL)
-	{
-		tmp = current;
-		current = current->next;
-		free(tmp);
-	}
-}
-
 int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;

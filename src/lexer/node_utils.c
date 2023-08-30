@@ -6,11 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/08/26 22:04:27 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/08/30 19:11:44 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 #include <string.h>
 
 t_tokens	*lst_last(t_tokens *lst)

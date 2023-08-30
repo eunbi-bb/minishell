@@ -1,5 +1,5 @@
-#include "../includes/minishell.h"
-#include "../includes/lexer.h"
+#include "../../includes/minishell.h"
+#include "../../includes/lexer.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
