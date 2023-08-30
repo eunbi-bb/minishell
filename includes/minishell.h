@@ -80,6 +80,13 @@ typedef struct	s_parser_utils
 
 // t_global	g_global;
 
+//free_llist.c
+void		free_tokens_list(t_tokens *head);
+void		free_lexer_nodes(t_tokens *head);
+void		destroy_lexer_list(t_tokens **head_ref);
+void		free_parser_nodes(t_cmd *head);
+void		destroy_parser_list(t_cmd **head_ref);
+	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
 void		add_after(t_tokens **before, t_tokens *new_node);
@@ -88,19 +95,31 @@ bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i);
 int			quotes(char *str, int i);
 int			take_tokens(t_lexer_utils *lexer, char *str, int i);
-t_env		**createLinkedList(char** envp);
-void		free_tokens_list(t_tokens *head);
 
+	/** parser **/
+//parser.c
+void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
+int			count_args(t_tokens	*lexer);
+//cmd_node_utils.c
+t_cmd		*create_cmd_node(void);
+void		add_after_cmd(t_cmd *before, t_cmd *new_node);
+//redir_node_utils.c
+t_redir		*create_redir_node(void);
+void		add_after_redir(t_redir **before, t_redir *new_node);
+
+	/** executor **/
+//executor.c
+int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
+//executor_utils.c
+char		**get_cmd_dirs(t_env **envp);
+//redirection.c
+int			redirection(t_cmd *cmd);
+//heredoc.c
 void		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
 int			create_heredoc(char *delim, char *filename);
-int			create_heredoc_pipes(char *delim);
 char		*tmp_filename(int i);
 
-char		**get_cmd_dirs(t_env **envp);
-void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
-int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
-int			redirection(t_cmd *cmd);
+//env.c
+t_env		**createLinkedList(char** envp);
 
-
-int	count_args(t_tokens	*lexer);
 #endif

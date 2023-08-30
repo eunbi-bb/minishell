@@ -16,9 +16,24 @@ HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 SRC_DIR		= src/
-SRC_FILE	= lexer.c parser.c heredoc.c executor.c executor_utils.c redirection.c error.c main.c env.c free_llist.c node_utils.c
+LEXER_DIR	= lexer/
+PARSER_DIR	= parser/
+EXECUTOR_DIR	= executor/ 
 
-OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
+LEXER		= lexer node_utils
+PARSER		= parser cmd_node_utils redir_node_utils
+EXECUTOR	= redirection executor heredoc executor_utils redirection
+
+SRC_FILE	= main.c \
+			env.c \
+			free_llist.c error.c free_llist.c
+
+SRC			= 	$(addsuffix .c, $(addprefix src/lexer/, $(LEXER))) \
+				$(addsuffix .c, $(addprefix src/parser/, $(PARSER))) \
+				$(addsuffix .c, $(addprefix src/executor/, $(EXECUTOR))) \
+
+OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o)) \
+				$(SRC:c=o) \
 
 OBJF =	.cache_exists
 
@@ -38,6 +53,9 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 $(OBJF):
 		@mkdir -p $(OBJ_DIR)
 		@mkdir -p $(OBJ_DIR)$(SRC_DIR)
+		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(LEXER_DIR)
+		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(PARSER_DIR)
+		@mkdir -p $(OBJ_DIR)$(SRC_DIR)$(EXECUTOR_DIR)
 		@touch $(OBJF)
 
 clean:
