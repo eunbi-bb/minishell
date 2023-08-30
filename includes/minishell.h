@@ -3,6 +3,11 @@
 
 # include "../libft/libft.h"
 # include "parser.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+
+extern int sigint_received;
 
 typedef struct s_env
 {
@@ -104,5 +109,6 @@ int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 int			redirection(t_cmd *cmd);
 void find_usd(char **data,  t_env *env);
 void cmd_env(t_env *env);
+void sigint_handler(int signal);
 
 #endif

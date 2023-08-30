@@ -2,6 +2,8 @@
 #include "../includes/executor.h"
 #include "../includes/error.h"
 
+int sigint_received;
+
 void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
@@ -59,9 +61,18 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	int				status;
 
 	status = 0;
+	 if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+        perror("signal");
+        exit(EXIT_FAILURE);
+    }
 	while (status == 0)
 	{
-		line = readline("Minishell% ");
+		 if (sigint_received) {
+            sigint_received = 0; // Reset the flag
+            line = readline("Minishell% ");
+        } else {
+            line = readline("Minishell% ");
+        }
 		if(*line)
 			add_history(line);
 		lexer->arg = ft_strtrim(line, " ");
@@ -101,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 		printf("Invalid argument.\n");
 		exit(0);
 	}
+	rl_initialize();
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
