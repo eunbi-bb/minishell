@@ -24,14 +24,14 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	while (status == 0)
 	{
 		line = readline("Minishell% ");
-		if(*line)
-            add_history(line);
 		lexer->arg = ft_strtrim(line, " ");
 		if (lexer->arg == NULL)
 		{
-			write(STDOUT_FILENO, "exit", 5);
+			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
+		if(*line)
+            add_history(line);
 		// if (lexer->arg[0] == '\0')
 		// 	return(reset_utils(lexer, parser_utils));
 		if (match_quotes(lexer->arg) == FALSE)

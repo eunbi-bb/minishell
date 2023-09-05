@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 16:12:24 by eucho         #+#    #+#                 */
-/*   Updated: 2022/12/21 14:04:06 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/05 09:33:57 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*str;
 
 	str = 0;
+	if (!s1)
+		return (NULL);
 	if (!set)
 		return (ft_strdup(s1));
 	front = 0;
