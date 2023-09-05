@@ -6,13 +6,13 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/05 12:50:26 by eucho         ########   odam.nl         */
+/*   Updated: 2023/09/05 13:31:43 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-const char	**free_array(const char **str, int count)
+char	**free_array(char **str, int count)
 {
 	int	i;
 
@@ -41,14 +41,14 @@ int	count_env_llist(t_env **head)
 	return (i);
 }
 
-const char	**join_key_value(t_env **head)
+char	**join_key_value(t_env **head)
 {
-	const char	**str;
+	char	**str;
 	const char	*key_is;
 	int		i;
 	t_env	*current;
 
-	str = (const char **)ft_calloc(count_env_llist(head), sizeof(char *));
+	str = (char **)ft_calloc(count_env_llist(head), sizeof(char *));
 	current = *head;
 	i = 0;
 	while (current)
@@ -59,7 +59,6 @@ const char	**join_key_value(t_env **head)
 		str[i] = ft_strjoin(key_is, (char *)current->value);
 		if (!str[i])
 			return (free_array(str, i + 1));
-		printf("%s\n", str[i]);
 		i++;
 		current = current->next;
 		free((void *)key_is);
@@ -109,6 +108,6 @@ t_env **createLinkedList(char** envp) {
             current = newNode;
         }
     }
-	join_key_value(head);
+	// join_key_value(head);
     return head;
 }

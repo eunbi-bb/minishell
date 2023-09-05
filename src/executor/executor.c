@@ -56,7 +56,9 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	pid_t	pid;
 	int		i;
 	int		n;
-
+	char	**envp;
+	
+	envp = join_key_value(cmd->env);
 	i = 0;
 	n = 0;
 	pipe_num = lexer->pipe_num;
@@ -88,9 +90,9 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			}
 			close_ends(pipe_num, fds);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
+			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
 			{
-				printf("%s, %s, %s\n", cmd->command, (*(cmd->env))->value, (*(cmd->env))->key);
+				// printf("%s, %s, %s\n", cmd->command, (*(cmd->env))->value, (*(cmd->env))->key);
 				perror("execve error");
 				exit(1);
 			}

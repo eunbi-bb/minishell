@@ -123,5 +123,6 @@ char		*tmp_filename(int i);
 
 //env.c
 t_env		**createLinkedList(char** envp);
+char	**join_key_value(t_env **head);
 
 #endif
