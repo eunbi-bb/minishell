@@ -6,11 +6,67 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/05 10:15:44 by eucho         ########   odam.nl         */
+/*   Updated: 2023/09/05 12:50:26 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+const char	**free_array(const char **str, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		free((void *)str[i]);
+		i++;
+	}
+	free(str);
+	return (NULL);
+}
+
+int	count_env_llist(t_env **head)
+{
+	int	i;
+	t_env	*current;
+
+	i = 0;
+	current = *head;
+    while (current)
+    {
+        i++;
+        current = current->next;
+    }
+	return (i);
+}
+
+const char	**join_key_value(t_env **head)
+{
+	const char	**str;
+	const char	*key_is;
+	int		i;
+	t_env	*current;
+
+	str = (const char **)ft_calloc(count_env_llist(head), sizeof(char *));
+	current = *head;
+	i = 0;
+	while (current)
+	{
+		key_is = ft_strjoin((char *)current->key, "=");
+		if (!key_is)
+			return (free_array(str, i));
+		str[i] = ft_strjoin(key_is, (char *)current->value);
+		if (!str[i])
+			return (free_array(str, i + 1));
+		printf("%s\n", str[i]);
+		i++;
+		current = current->next;
+		free((void *)key_is);
+	}
+	str[i] = NULL;
+	return str;
+}
 
 t_env* createNode(char* key, char* value) {
     t_env* newNode = ft_calloc(1, sizeof(t_env));
@@ -53,11 +109,6 @@ t_env **createLinkedList(char** envp) {
             current = newNode;
         }
     }
-
+	join_key_value(head);
     return head;
 }
-
-// char	**join_key_value()
-// {
-	
-// }
