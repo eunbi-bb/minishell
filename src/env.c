@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/05 13:31:43 by eucho         ########   odam.nl         */
+/*   Updated: 2023/09/05 13:36:31 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	count_env_llist(t_env **head)
         i++;
         current = current->next;
     }
-	return (i);
+	return (i + 1);
 }
 
 char	**join_key_value(t_env **head)
@@ -108,6 +108,5 @@ t_env **createLinkedList(char** envp) {
             current = newNode;
         }
     }
-	// join_key_value(head);
     return head;
 }

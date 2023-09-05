@@ -92,7 +92,6 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
 			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
 			{
-				// printf("%s, %s, %s\n", cmd->command, (*(cmd->env))->value, (*(cmd->env))->key);
 				perror("execve error");
 				exit(1);
 			}
