@@ -10,3 +10,6 @@ minishell
 .vscode
 out
 outfile
+infile
+.cache_exists
+obj
