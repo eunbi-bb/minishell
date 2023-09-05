@@ -89,7 +89,8 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
-			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
+			generate_command(cmd);
+			// cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
 			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
 			{
 				perror("execve error");

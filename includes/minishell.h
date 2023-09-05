@@ -5,7 +5,6 @@
 # include "parser.h"
 # include <readline/readline.h>
 
-
 typedef struct s_env
 {
     char	*key;
@@ -114,6 +113,7 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 //executor_utils.c
 char		**get_cmd_dirs(t_env **envp);
+void		generate_command(t_parser_utils *cmd);
 //redirection.c
 int			redirection(t_cmd *cmd);
 //heredoc.c
