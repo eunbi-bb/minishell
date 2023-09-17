@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/19 21:37:37 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/17 12:07:40 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,21 @@ t_env* createNode(char* key, char* value) {
         exit(1);
     }
     newNode->key = strdup(key);
+	free(key);
     newNode->value = strdup(value);
+	free(value);
     newNode->next = NULL;
-    //printf("%s%s\n", newNode->key, newNode->value);
-  
     return newNode;
+}
+
+void cmd_env(t_env *env)
+{
+    while(env)
+    {
+        printf("%s%s\n", env->key, env->value);
+        env = env->next;
+    }
+    
 }
 
 t_env **createLinkedList(char** envp) {
@@ -37,7 +47,7 @@ t_env **createLinkedList(char** envp) {
             // Skip environment variables without an equal sign
             continue;
         }
-        size_t keyLength = equalSign - env;
+        size_t keyLength = equalSign - env + 1;
         char* key = strndup(env, keyLength);
         char* value = strdup(equalSign + 1);
 

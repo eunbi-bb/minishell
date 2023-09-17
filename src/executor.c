@@ -48,6 +48,39 @@ int	wait_pipes(pid_t pid, int pipe_num)
 	return (0);
 }
 
+int is_builtin(t_parser_utils *cmd)
+{
+	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
+		strcmp(cmd->cmd_list->data[0], "pwd") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "exit") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "env") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "cd") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "export") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "unset") == 0)
+		return (0);
+	else
+		return (1);
+
+}
+
+void execute_builtin(t_parser_utils *cmd)
+{
+	if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
+		cmd_echo(cmd->cmd_list->data);
+	else if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
+		cmd_pwd();
+	else if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
+		cmd_exit();
+	else if (strcmp(cmd->cmd_list->data[0], "env") == 0)
+		cmd_env(*cmd->env);
+	else if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
+		cmd_cd(cmd->cmd_list->data, *cmd->env);
+	else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
+		cmd_export(cmd->env, cmd->cmd_list->data[1]);
+	else if (strcmp(cmd->cmd_list->data[0], "unset") == 0)
+		cmd_unset(cmd->env, cmd->cmd_list->data[1]);
+}
+
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -55,10 +88,10 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	int		pipe_num;
 	pid_t	pid;
 	int		i;
-	int		n;
+	//int		n;
 
 	i = 0;
-	n = 0;
+	//n = 0;
 	pipe_num = lexer->pipe_num;
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
@@ -83,8 +116,11 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
+			find_usd(cmd->cmd_list->data, *cmd->env);
 			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
+			if(is_builtin(cmd) == 0)
+				execute_builtin(cmd);
+			else if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
 			{
 				perror("execve error");
 				exit(1);
@@ -92,7 +128,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
-		n++;
+		//n++;
 	}
 	if (fd_in > 0)
 		close(fd_in);

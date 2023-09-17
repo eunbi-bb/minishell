@@ -3,6 +3,11 @@
 
 # include "../libft/libft.h"
 # include "parser.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+
+extern int sigint_received;
 
 typedef struct s_env
 {
@@ -93,10 +98,21 @@ int			here_document(t_cmd	*cmd, t_lexer_utils *lexer);
 int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 
+int		cmd_echo(char **cmd);
+void	cmd_pwd();
+void	cmd_exit();
+int		cmd_cd(char **path, t_env *env);
+void	cmd_export(t_env **head, char *str);
+
 
 char		**get_cmd_dirs(t_env **envp);
 void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 int			redirection(t_cmd *cmd);
+void find_usd(char **data,  t_env *env);
+void cmd_env(t_env *env);
+void sigint_handler(int signal);
+char *search_value(char *key, t_env *env);
+void cmd_unset(t_env** head,char* key);
 
 #endif

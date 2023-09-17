@@ -44,7 +44,6 @@ int	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 	int			fd;
 	char		*delim;
 	t_redir		*start;
-
 	start = cmd->redir;
 	while (cmd->redir)
 	{
