@@ -101,6 +101,8 @@ char		*tmp_filename(int i);
 int		cmd_echo(char **cmd);
 void	cmd_pwd();
 void	cmd_exit();
+int		cmd_cd(char **path, t_env *env);
+void	cmd_export(t_env **head, char *str);
 
 
 char		**get_cmd_dirs(t_env **envp);
@@ -110,5 +112,7 @@ int			redirection(t_cmd *cmd);
 void find_usd(char **data,  t_env *env);
 void cmd_env(t_env *env);
 void sigint_handler(int signal);
+char *search_value(char *key, t_env *env);
+void cmd_unset(t_env** head,char* key);
 
 #endif

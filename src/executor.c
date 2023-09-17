@@ -84,18 +84,22 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			}
 			close_ends(pipe_num, fds);
 			find_usd(cmd->cmd_list->data, *cmd->env);
+			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
 			if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
         		cmd_echo(cmd->cmd_list->data);
-			if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
+			else if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
         		cmd_pwd();
-			if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
+			else if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
         		cmd_exit();
-			if (strcmp(cmd->cmd_list->data[0], "env") == 0)
+			else if (strcmp(cmd->cmd_list->data[0], "env") == 0)
         		cmd_env(*cmd->env);
-			// if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
-        	// 	cmd_cd(cmd->cmd_list->data[1]);
-			cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
+			else if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
+        		cmd_cd(cmd->cmd_list->data, *cmd->env);
+			else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
+        		cmd_export(cmd->env, cmd->cmd_list->data[1]);
+			else if (strcmp(cmd->cmd_list->data[0], "unset") == 0)
+        		cmd_unset(cmd->env, cmd->cmd_list->data[1]);
+			else if (execve(cmd->command, cmd->cmd_list->data, (char* const*)cmd->env) < 0)
 			{
 				perror("execve error");
 				exit(1);

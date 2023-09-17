@@ -19,7 +19,9 @@ t_env* createNode(char* key, char* value) {
         exit(1);
     }
     newNode->key = strdup(key);
+	free(key);
     newNode->value = strdup(value);
+	free(value);
     newNode->next = NULL;
     return newNode;
 }

@@ -10,17 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "../includes/minishell.h"
 
 void cmd_export(t_env **head, char *str)
 {
+	printf("GOT HERE\n");
     t_env* newNode = (t_env*)malloc(sizeof(t_env));
+	printf("here\n");
     char* equalSign = ft_strchr(str, '=');
     size_t keyLength = equalSign - str;
+	printf("hi\n");
     newNode->key = ft_substr(str, 0, keyLength);;
-    newNode->value = ft_strdup(equalSign);
+    newNode->value = ft_strdup(equalSign + 1);
     newNode->next = NULL;
-
+	printf("GOT HERE lol\n");
     if (*head == NULL) {
         *head = newNode;
     } else {

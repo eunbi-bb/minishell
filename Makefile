@@ -15,11 +15,14 @@ HEADER_DIR	= includes/
 HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
-READLINE_FLAGS  = -lreadline -L${HOME}/.brew/opt/readline/lib
-OBJ_FLAGS       = -I${HOME}/.brew/opt/readline/include
+# READLINE_FLAGS  = -lreadline -L${HOME}/.brew/opt/readline/lib
+# OBJ_FLAGS       = -I${HOME}/.brew/opt/readline/include
+
+READLINE_FLAGS  = -lreadline -L/usr/local/opt/readline/lib
+OBJ_FLAGS       = -I/usr/local/opt/readline/include
 
 SRC_DIR		= src/
-SRC_FILE	= main.c lexer.c node_utils.c parser.c executor.c heredoc.c error.c env.c executor_utils.c cmd_echo.c cmd_pwd.c cmd_exit.c redirection.c expand.c signals.c
+SRC_FILE	= main.c lexer.c node_utils.c parser.c executor.c heredoc.c error.c env.c executor_utils.c cmd_echo.c cmd_pwd.c cmd_exit.c redirection.c expand.c signals.c cmd_cd.c cmd_export.c cmd_unset.c
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 

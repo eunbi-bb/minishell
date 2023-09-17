@@ -14,7 +14,8 @@
 
 void sigint_handler(int signal) 
 {
-    signal = 0;
+	if(signal == 5)
+		printf("LOL");
     sigint_received = 1;
     rl_on_new_line();
 	rl_replace_line("", 0);

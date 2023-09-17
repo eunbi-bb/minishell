@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "../includes/minishell.h"
 
-void unnset_cmd(t_env** head,char* key) {
+void cmd_unset(t_env** head,char* key) {
     t_env* current = *head;
     t_env* previous = NULL;
 
     while (current != NULL) {
-        if (ft_strcmp(current->key, key) == 0) {
+        if (strcmp(current->key, key) == 0) {
             if (previous == NULL) {
                 *head = current->next;
             } else {
