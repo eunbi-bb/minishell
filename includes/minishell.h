@@ -4,6 +4,7 @@
 # include "../libft/libft.h"
 # include "parser.h"
 # include <readline/readline.h>
+# include "stdbool.h"
 
 typedef struct s_env
 {
@@ -11,12 +12,6 @@ typedef struct s_env
     char	*value;
     struct s_env *next;
 }               t_env;
-
-typedef enum boolean
-{
-	FALSE = 0,
-	TRUE
-}	t_boolean;
 
 typedef enum types
 {
