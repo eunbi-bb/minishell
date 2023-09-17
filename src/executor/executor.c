@@ -121,14 +121,19 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
-			generate_command(cmd);
+			find_usd(cmd->cmd_list->data, *cmd->env);
 			if(is_builtin(cmd) == 0)
 				execute_builtin(cmd);
 			// cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			else if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			
+			else  
 			{
-				perror("execve error");
-				exit(1);
+				generate_command(cmd);
+				if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+				{
+					perror("execve error");
+					exit(1);
+				}	
 			}
 			if (fd_in > 0)
 				close(fd_in);

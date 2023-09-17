@@ -36,7 +36,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
             line = readline("Minishell% ");
         }
 		lexer->arg = ft_strtrim(line, " ");
-		if (lexer->arg == NULL)
+		if (lexer->arg == NULL || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
@@ -85,6 +85,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		destroy_lexer_list(&lexer->token_list);
 		destroy_parser_list(&parser_utils->cmd_list);
 		lexer->pipe_num = 0;
+		if (sigint_received == 2)
+			exit(0) ;
 	}
 	return (status);
 }
@@ -109,6 +111,8 @@ int	main(int argc, char **argv, char **envp)
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
 	//pwd(&parser);status
 	exit_code = shell_loop(&lexer, &parser);
+	if (sigint_received == 2)
+		exit(0);
 	printf("exit code : %d\n", exit_code);
 	// free (str);
 	return (exit_code);
