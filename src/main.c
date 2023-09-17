@@ -35,8 +35,6 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
         } else {
             line = readline("Minishell% ");
         }
-		if(*line)
-			add_history(line);
 		lexer->arg = ft_strtrim(line, " ");
 		if (lexer->arg == NULL)
 		{
