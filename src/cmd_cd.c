@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/02 16:37:35 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/17 12:01:23 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void env_replace_var(char *key, t_env *env, char *path)
     len = ft_strlen(key);
     while (env)
     {
-		size_t envkeylen = ft_strlen(env->key);
-        if(envkeylen == len && ft_strncmp(key, env->key, len) == 0)
+
+        if(ft_strncmp(key, env->key, len) == 0)
         {
 			free(env->value);
 			env->value = ft_strdup(path);
@@ -38,7 +38,7 @@ int cmd_cd(char **path, t_env *env)
 
 	if (!path[1])
 	{
-		home = search_value("HOME", env);
+		home = search_value("HOME=", env);
 		printf("%s\n", home);
 		if (chdir(home) == -1) {
 			printf("erorr cd invalid\n");

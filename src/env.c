@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/23 17:40:29 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/17 12:07:40 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void cmd_env(t_env *env)
 {
     while(env)
     {
-        printf("%s=%s\n", env->key, env->value);
+        printf("%s%s\n", env->key, env->value);
         env = env->next;
     }
     
@@ -47,7 +47,7 @@ t_env **createLinkedList(char** envp) {
             // Skip environment variables without an equal sign
             continue;
         }
-        size_t keyLength = equalSign - env;
+        size_t keyLength = equalSign - env + 1;
         char* key = strndup(env, keyLength);
         char* value = strdup(equalSign + 1);
 
