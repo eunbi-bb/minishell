@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 13:02:26 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/17 17:51:10 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void cmd_unset(t_env** head,char* key) {
     t_env* current = *head;
     t_env* previous = NULL;
-
+    char *key_eq;
     while (current != NULL) {
-        if (strcmp(current->key, key) == 0) {
+        key_eq = ft_strjoin(key, "=");
+        if (strcmp(current->key, key_eq) == 0) {
             if (previous == NULL) {
                 *head = current->next;
             } else {
@@ -26,6 +27,7 @@ void cmd_unset(t_env** head,char* key) {
             free(current->key);
             free(current->value);
             free(current);
+            free(key_eq);
             return;
         }
         previous = current;

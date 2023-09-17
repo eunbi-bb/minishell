@@ -101,7 +101,7 @@ int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 
 int		cmd_echo(char **cmd);
-void	cmd_pwd();
+int		cmd_pwd();
 void	cmd_exit();
 int		cmd_cd(char **path, t_env *env);
 void	cmd_export(t_env **head, char *str);

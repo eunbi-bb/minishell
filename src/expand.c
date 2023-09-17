@@ -39,7 +39,7 @@ char *search_value(char *key, t_env *env)
             return(env->value);
         env = env->next;
     }
-    return ("");
+    return (ft_strdup(""));
 }
 
 void find_usd(char **data,  t_env *env)
@@ -48,16 +48,19 @@ void find_usd(char **data,  t_env *env)
     char *start;
     char *val;
     size_t len;
+    char *key;
  
-    i = 0;
+    i = 1;
     while (data[i])
     {   
-        len = ft_strlen(data[i]);
-        start = ft_strchr(data[i], '$');
+        key = ft_strjoin(data[i], "=");
+        len = ft_strlen(key);
+        start = ft_strchr(key, '$');
         if (start != NULL && len > 1)
         {
             start++;
             val = search_value(start, env);
+            free(key);
             free(data[i]);
             data[i] = ft_strdup(val);
         }
