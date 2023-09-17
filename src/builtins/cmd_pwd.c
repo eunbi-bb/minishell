@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cmd_exit.c                                         :+:    :+:            */
+/*   cmd_pwd.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/08/16 13:03:25 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/08/16 13:09:42 by ssemanco      ########   odam.nl         */
+/*   Created: 2023/05/24 15:35:55 by ssemanco      #+#    #+#                 */
+/*   Updated: 2023/09/17 13:02:22 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-void cmd_exit()
+void cmd_pwd()
 {
-    //free if necessary
-    printf("got here \n");
-    exit(1); //exit with status
+    char pwd[PATH_MAX];
+
+    if (getcwd(pwd, sizeof(pwd)) == NULL)
+    {
+        perror("getcwd");
+        exit(-1);
+    }
+    else
+        printf("%s\n", pwd);
 }

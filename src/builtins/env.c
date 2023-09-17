@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 12:48:16 by eucho         ########   odam.nl         */
+/*   Updated: 2023/09/17 13:06:30 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	**free_array(char **str, int count)
 {
@@ -44,7 +44,7 @@ int	count_env_llist(t_env **head)
 char	**join_key_value(t_env **head)
 {
 	char	**str;
-	const char	*key_is;
+	//const char	*key_is;
 	int		i;
 	t_env	*current;
 
@@ -53,15 +53,15 @@ char	**join_key_value(t_env **head)
 	i = 0;
 	while (current)
 	{
-		key_is = ft_strjoin((char *)current->key, "=");
-		if (!key_is)
-			return (free_array(str, i));
-		str[i] = ft_strjoin(key_is, (char *)current->value);
+		//key_is = ft_strjoin((char *)current->key, "=");
+		// if (!key_is)
+		// 	return (free_array(str, i));
+		str[i] = ft_strjoin((char *)current->key, (char *)current->value);
 		if (!str[i])
 			return (free_array(str, i + 1));
 		i++;
 		current = current->next;
-		free((void *)key_is);
+		//free((void *)key_is);
 	}
 	str[i] = NULL;
 	return str;

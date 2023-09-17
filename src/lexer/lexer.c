@@ -38,7 +38,7 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
 	{
 		add_after(&lexer->token_list, new_token_node(HERE_DOC));
-		lexer->heredoc = TRUE;
+		lexer->heredoc = true;
 		return (2);
 	}
 	else if (is_token(str[i]) == GREATER)
@@ -110,10 +110,10 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 		else
 			j = arg_divider(lexer, lexer->arg, i);
 		if (j < 0)
-			return (FALSE);
+			return (false);
 		i = i + j;
 	}
-	return (TRUE);
+	return (true);
 }
 
 //Checking if quotes are in a pair.
@@ -154,6 +154,6 @@ bool	match_quotes(char *str)
 		i++;
 	}
 	if ((num_s % 2) != 0 || (num_d % 2) != 0)
-		return (FALSE);
-	return (TRUE);
+		return (false);
+	return (true);
 }

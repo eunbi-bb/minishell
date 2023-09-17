@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 12:01:23 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/17 13:02:04 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void env_replace_var(char *key, t_env *env, char *path)
 {

@@ -48,6 +48,38 @@ int	wait_pipes(pid_t pid, int pipe_num)
 	return (0);
 }
 
+int is_builtin(t_parser_utils *cmd)
+{
+	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
+		strcmp(cmd->cmd_list->data[0], "pwd") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "exit") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "env") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "cd") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "export") == 0 ||
+        strcmp(cmd->cmd_list->data[0], "unset") == 0)
+		return (0);
+	else
+		return (1);
+}
+
+void execute_builtin(t_parser_utils *cmd)
+{
+	if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
+		cmd_echo(cmd->cmd_list->data);
+	else if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
+		cmd_pwd();
+	else if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
+		cmd_exit();
+	else if (strcmp(cmd->cmd_list->data[0], "env") == 0)
+		cmd_env(*cmd->env);
+	else if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
+		cmd_cd(cmd->cmd_list->data, *cmd->env);
+	else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
+		cmd_export(cmd->env, cmd->cmd_list->data[1]);
+	else if (strcmp(cmd->cmd_list->data[0], "unset") == 0)
+		cmd_unset(cmd->env, cmd->cmd_list->data[1]);
+}
+
 int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -90,8 +122,10 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			}
 			close_ends(pipe_num, fds);
 			generate_command(cmd);
+			if(is_builtin(cmd) == 0)
+				execute_builtin(cmd);
 			// cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+			else if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
 			{
 				perror("execve error");
 				exit(1);

@@ -9,11 +9,11 @@ int sigint_received;
 void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 {
 	lexer->pipe_num = 0;
-	lexer->heredoc = FALSE;
+	lexer->heredoc = false;
 	lexer->token_list = NULL;
 	parser->cmd_list = NULL;
 	parser->pid = 0;
-	parser->reset = FALSE;
+	parser->reset = false;
 	parser->env = NULL;
 }
 
@@ -47,9 +47,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
             add_history(line);
 		// if (lexer->arg[0] == '\0')
 		// 	return(reset_utils(lexer, parser_utils));
-		if (match_quotes(lexer->arg) == FALSE)
+		if (match_quotes(lexer->arg) == false)
 			return (err_msg(ERROR_QUOTE));
-		if (lexical_analyzer(lexer) == FALSE)
+		if (lexical_analyzer(lexer) == false)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
 		// if (lexer->heredoc == TRUE)
