@@ -48,8 +48,7 @@ Depending on a return value of **Executor**, looping will be decided.
 ### *Lexer, Parser and Executor*
 ![Minishell](https://github.com/eunbi-bb/minishell/assets/80834766/e0db69ab-bb64-4854-9257-a7397e47a200)
 ![Minishell(1)](https://github.com/eunbi-bb/minishell/assets/80834766/ccfe4e7f-f520-46d0-b631-14bdf5a9df2b)
-![Minishell(2)](https://github.com/eunbi-bb/minishell/assets/80834766/4094a97b-8482-4c0d-9f4a-c4b77c219a0d)
-
+![Minishell(2)](https://github.com/eunbi-bb/minishell/assets/80834766/372d0d35-17dc-44a1-9479-de008c24cae1)
 
 
 *More information about each program is below.*
