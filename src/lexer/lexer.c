@@ -55,43 +55,101 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	return (1);
 }
 
-int	quotes(char *str, int i)
-{
-	int	j;
+// int	quotes(char *str, int i)
+// {
+// 	int	j;
 
-	j = 1;
-	while (str[i + j] && str[i + j] != str[i])
-		j++;
-	return (++j);
-}
+// 	j = 1;
+// 	while (str[i + j] && str[i + j] != str[i])
+// 		j++;
+// 	return (++j);
+// }
 
 //Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
+// int	arg_divider(t_lexer_utils *lexer, char *str, int i)
+// {
+// 	int		j;
+// 	char	*tmp;
+// 	char	quote;
+
+// 	j = 0;
+// 	while (str[i + j] && (is_token(str[i + j]) == -1))
+// 	{
+// 		if (str[i + j] == '\'' || str[i + j] == '\"')
+// 		{
+// 			quote = str[i + j];
+// 			j += quotes(str, i + j);
+// 			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
+// 		}
+// 		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
+// 			break ;
+// 		else
+// 		{
+// 			j++;
+// 			if (is_token(str[i + j]) == -1)
+// 				tmp = ft_substr(str, i, j);
+// 		}
+// 	}
+// 	//printf("tmp = %s\n", tmp);
+// 	add_after(&lexer->token_list, new_node(tmp));
+// 	return (j);
+// }
+
 int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
 	int		j;
-	char	*tmp;
-	char	quote;
+	char	*result;
+	bool	s_quote;
+	bool	d_quote;
+	int		start;
+	int		len;
 
+	s_quote = false;
+	d_quote = false;
+	start = 0;
 	j = 0;
-	while (str[i + j] && (is_token(str[i + j]) == -1))
+	while (str[i + j])
 	{
-		if (str[i + j] == '\'' || str[i + j] == '\"')
+		if (str[i + j] == '\'')
 		{
-			quote = str[i + j];
-			j += quotes(str, i + j);
-			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
+			if (s_quote == true)
+			{
+				s_quote = false;
+				if (start != 0)
+				{
+					len = j - start;
+					result = ft_substr(str, start, len);
+					printf("result = %s\n", result);
+				}
+			}
+			else
+			{
+				s_quote = true;
+				start = ++j;
+			}
 		}
-		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
-			break ;
-		else
+		else if (str[i + j] == '\"')
 		{
-			j++;
-			if (is_token(str[i + j]) == -1)
-				tmp = ft_substr(str, i, j);
+			if (d_quote == true)
+			{
+				d_quote = false;
+				if (start != 0)
+				{
+					len = j - start;
+					result = ft_substr(str, start, len);
+					printf("result = %s\n", result);
+				}
+			}
+			else
+			{
+				d_quote = true;
+				start = ++j;
+			}
 		}
+		j++;
 	}
-	//printf("tmp = %s\n", tmp);
-	add_after(&lexer->token_list, new_node(tmp));
+	// printf("result = %s\n", result);
+	add_after(&lexer->token_list, new_node(result));
 	return (j);
 }
 
