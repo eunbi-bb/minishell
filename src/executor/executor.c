@@ -3,51 +3,6 @@
 #include "../../includes/error.h"
 #include "../../includes/minishell.h"
 
-void	create_pipes(int pipe_num, int fds[])
-{
-	int	i;
-
-	i = 0;
-	while (i < pipe_num)
-	{
-		if (pipe(fds + (i * 2)) == -1)
-		{
-			perror("pipe error");
-			exit(EXIT_FAILURE);
-		}
-		i++;
-	}
-}
-
-void	close_ends(int pipe_num, int fds[])
-{
-	int	i;
-	i = 0;
-	while (i < pipe_num * 2)
-	{
-		close(fds[i]);
-		i++;
-	}
-}
-
-int	wait_pipes(pid_t pid, int pipe_num)
-{
-	int	i;
-	int	status;
-
-	i = 0;
-	while (i < pipe_num + 1)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status) == 0)
-		{
-			return (WEXITSTATUS(status));
-		}
-		i++;
-	}
-	return (0);
-}
-
 int is_builtin(t_parser_utils *cmd)
 {
 	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
@@ -87,12 +42,10 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	int		pipe_num;
 	pid_t	pid;
 	int		i;
-	int		n;
 	char	**envp;
 	
 	envp = join_key_value(cmd->env);
 	i = 0;
-	n = 0;
 	pipe_num = lexer->pipe_num;
 	create_pipes(pipe_num, fds);
 	while (cmd->cmd_list != NULL)
@@ -140,7 +93,6 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 		}
 		cmd->cmd_list = cmd->cmd_list->next;
 		i += 2;
-		n++;
 	}
 	close_ends(pipe_num, fds);
 	return (wait_pipes(pid, pipe_num));
