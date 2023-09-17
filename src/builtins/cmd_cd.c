@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 13:02:04 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/17 18:21:08 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void env_replace_var(char *key, t_env *env, char *path)
         {
 			free(env->value);
 			env->value = ft_strdup(path);
-			// if fail
+			if (!env->value)
+				perror_exit("malloc fail");
 		}
         env = env->next;
     }
@@ -43,7 +44,6 @@ int cmd_cd(char **path, t_env *env)
 		if (chdir(home) == -1) {
 			printf("erorr cd invalid\n");
 		}
-			// error
 		pwd = search_value("PWD", env);
 		env_replace_var("OLDPWD", env, pwd);
 		new_pwd = getcwd(NULL, 0);
