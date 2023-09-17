@@ -13,3 +13,4 @@ outfile
 infile
 .cache_exists
 obj
+.DS_store
