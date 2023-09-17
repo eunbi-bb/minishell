@@ -1,90 +1,6 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 #include <readline/readline.h>
 #include <stddef.h>
-
-t_cmd	*cmd_lst_front(t_cmd *lst)
-{
-	t_cmd	*tmp;
-
-	tmp = lst;
-	if (!tmp)
-		return (tmp);
-	while (tmp->prev)
-		tmp = tmp->prev;
-	return (tmp);
-}
-
-t_cmd	*cmd_lst_last(t_cmd *lst)
-{
-	t_cmd	*tmp;
-
-	tmp = lst;
-	if (!tmp)
-		return (tmp);
-	while (tmp->next)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-void	add_after_cmd(t_cmd *before, t_cmd *new_node)
-{
-	t_cmd	*head;
-	t_cmd	*tail;
-
-	head = cmd_lst_front(before);
-	tail = cmd_lst_last(before);
-	if (before == NULL)
-	{
-		new_node->next = head;
-		if (head)
-			head->prev = new_node;
-	}
-	else if (before == tail)
-	{
-		new_node->prev = tail;
-		tail->next = new_node;
-		tail = new_node;
-	}
-	else
-	{
-		new_node->prev = before;
-		new_node->next = before->next;
-		before->next->prev = new_node;
-		before->next = new_node;
-	}
-}
-
-void	add_after_redir(t_redir **before, t_redir *new_node)
-{
-	t_redir	*head;
-
-	head = *before;//lst_front(before);
-	if (head == NULL)
-	{
-		*before = new_node;
-	}
-	else
-	{
-		while (head->next != NULL)
-			head = head->next;
-		head->next = new_node;
-	}
-}
-
-t_cmd	*create_cmd_node(void)
-{
-	t_cmd	*new;
-
-	new = (t_cmd *)malloc(sizeof(t_cmd));
-	new->redir = (t_redir *)malloc(sizeof(t_redir));
-	new->data = NULL;
-	new->redir->file_name = NULL;
-	new->redir->redir_type = DEFAULT;
-	new->redir->next = NULL;
-	new->prev = NULL;
-	new->next = NULL;
-	return (new); 
-}
 
 int	count_args(t_tokens	*lexer)
 {
@@ -105,6 +21,32 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
+void	generate_redir(t_tokens *current, t_cmd *cmd)
+{
+	t_tokens	*tmp;
+	t_redir		*new;
+
+	tmp = current;
+	while (tmp && tmp->token != PIPE)
+	{
+		new = create_redir_node();
+		if (cmd->redir == NULL)
+			cmd->redir = new;
+		else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
+			add_after_redir(&cmd->redir, new);
+		new->redir_type = tmp->token;
+		if (tmp->token >= 1)
+		{
+			current = current->next;
+			new->file_name = ft_strdup(tmp->next->data);
+			tmp = tmp->next;
+			current = current->next;
+		}
+		tmp = tmp->next;
+	}
+	//free_tokens_list(tmp);
+}
+
 t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 {
 	int			arg_num;
@@ -117,25 +59,19 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 	arg_num = count_args(current);
 	if (arg_num > 0)
 		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
+	generate_redir(current, cmd);
 	while (i <= arg_num && current)
 	{
 		if (current->data != NULL && current->token == DEFAULT)
 		{
 			len = ft_strlen(current->data) + 1;
-    		cmd->data[j] = malloc(len * sizeof(char));
-    		ft_strlcpy(cmd->data[j], current->data, len);
+			cmd->data[j] = ft_calloc(len, sizeof(char));
+			ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
 		}
-		if (current->token != DEFAULT && current->token != PIPE)
-		{
-			cmd->redir->redir_type = current->token;
-			if (current->next && current->next->token == DEFAULT)
-			{
-				cmd->redir->file_name = ft_strdup(current->next->data);
-				current = current->next;
-			}
-		}
 		i++;
+		if (current->token != DEFAULT && current->token != PIPE)
+			current = current->next;
 		current = current->next;
 	}
 	return (cmd);
@@ -162,7 +98,9 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 			}
 			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
+			{
 				current = current->next;
+			}
 		}
 		current = current->next;
 	}

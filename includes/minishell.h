@@ -8,6 +8,8 @@
 # include <signal.h>
 
 extern int sigint_received;
+# include <readline/readline.h>
+# include "stdbool.h"
 
 typedef struct s_env
 {
@@ -15,12 +17,6 @@ typedef struct s_env
     char	*value;
     struct s_env *next;
 }               t_env;
-
-typedef enum boolean
-{
-	FALSE = 0,
-	TRUE
-}	t_boolean;
 
 typedef enum types
 {
@@ -85,6 +81,13 @@ typedef struct	s_parser_utils
 
 // t_global	g_global;
 
+//free_llist.c
+void		free_tokens_list(t_tokens *head);
+void		free_lexer_nodes(t_tokens *head);
+void		destroy_lexer_list(t_tokens **head_ref);
+void		free_parser_nodes(t_cmd *head);
+void		destroy_parser_list(t_cmd **head_ref);
+	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
 void		add_after(t_tokens **before, t_tokens *new_node);
@@ -104,11 +107,33 @@ void	cmd_exit();
 int		cmd_cd(char **path, t_env *env);
 void	cmd_export(t_env **head, char *str);
 
-
-char		**get_cmd_dirs(t_env **envp);
+	/** parser **/
+//parser.c
 void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
+int			count_args(t_tokens	*lexer);
+//cmd_node_utils.c
+t_cmd		*create_cmd_node(void);
+void		add_after_cmd(t_cmd *before, t_cmd *new_node);
+//redir_node_utils.c
+t_redir		*create_redir_node(void);
+void		add_after_redir(t_redir **before, t_redir *new_node);
+
+	/** executor **/
+//executor.c
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
+//executor_utils.c
+char		**get_cmd_dirs(t_env **envp);
+void		generate_command(t_parser_utils *cmd);
+//redirection.c
 int			redirection(t_cmd *cmd);
+//heredoc.c
+void		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
+int			create_heredoc(char *delim, char *filename);
+char		*tmp_filename(int i);
+
+//env.c
+t_env		**createLinkedList(char** envp);
+char	**join_key_value(t_env **head);
 void find_usd(char **data,  t_env *env);
 void cmd_env(t_env *env);
 void sigint_handler(int signal);

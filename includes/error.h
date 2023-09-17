@@ -19,9 +19,13 @@
 # define ERROR_DUP2_OUT "failed dup2 for output"
 # define ERROR_DUP2_IN "failed dup2 for input"
 
+//Command error
+# define ERROR_CMD "command not found"
+# define EXIT_CMD 127
 # include <errno.h>
 # include <unistd.h>
 
 int		err_msg(char *str);
 void	perror_exit(char *str);
+void	cmd_error(char *cmd);
 #endif

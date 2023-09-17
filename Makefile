@@ -2,11 +2,12 @@ NAME		= minishell
 CC			= gcc
 ifdef DEBUG
 CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g
-READLINE	= -lreadline
 else
 CFLAGS		= -Wall -Wextra -Werror
-READLINE	= -lreadline
 endif
+
+READLINE_FLAGS	= -lreadline -L${HOME}/.brew/opt/readline/lib
+OBJ_FLAGS		= -I${HOME}/.brew/opt/readline/include
 LIBFT		= libft
 OBJ_DIR		= obj/
 SRC_DIR		= src/
@@ -22,6 +23,16 @@ READLINE_FLAGS  = -lreadline -L/usr/local/opt/readline/lib
 OBJ_FLAGS       = -I/usr/local/opt/readline/include
 
 SRC_DIR		= src/
+SRC_FILE	= main.c env.c free_llist.c error.c \
+				lexer/lexer.c \
+				lexer/node_utils.c \
+				parser/parser.c \
+				parser/cmd_node_utils.c \
+				parser/redir_node_utils.c \
+				executor/executor.c \
+				executor/executor_utils.c \
+				executor/heredoc.c \
+				executor/redirection.c \
 SRC_FILE	= main.c lexer.c node_utils.c parser.c executor.c heredoc.c error.c env.c executor_utils.c cmd_echo.c cmd_pwd.c cmd_exit.c redirection.c expand.c signals.c cmd_cd.c cmd_export.c cmd_unset.c
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
@@ -34,6 +45,12 @@ CYAN		=	\033[0;96m
 all: $(NAME)
 
 $(NAME): $(OBJ) $(OBJF)
+		@make -C $(LIBFT)
+	@$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJ) libft/libft.a -o $(NAME)
+	@echo "$(CYAN_B)- Lexer is compiled -"
+
+$(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
+			@mkdir -p $(@D)
 			@make -C $(LIBFT)
 			@$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJ) libft/libft.a -o $(NAME)
 			@echo "$(CYAN_B)- Lexer is compiled -"
@@ -43,7 +60,7 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 
 $(OBJF):
 		@mkdir -p $(OBJ_DIR)
-		@mkdir -p $(OBJ_DIR)$(SRC_DIR)
+# @mkdir -p $(OBJ_DIR)$(SRC_DIR)
 		@touch $(OBJF)
 
 clean:

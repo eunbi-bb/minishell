@@ -1,5 +1,6 @@
 *.o
 test
+test_cmd.txt
 tmp_0
 build/
 *.json
@@ -7,3 +8,9 @@ minishell.pdf
 minishell
 *.pdf
 .vscode
+out
+outfile
+infile
+.cache_exists
+obj
+.DS_store
