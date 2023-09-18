@@ -90,66 +90,9 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 				tmp = ft_substr(str, i, j);
 		}
 	}
-	//printf("tmp = %s\n", tmp);
 	add_after(&lexer->token_list, new_node(tmp));
 	return (j);
 }
-
-// int	arg_divider(t_lexer_utils *lexer, char *str, int i)
-// {
-// 	int		j;
-// 	char	*result;
-// 	bool	s_quote;
-// 	bool	d_quote;
-// 	int		start;
-// 	int		len;
-
-// 	s_quote = false;
-// 	d_quote = false;
-// 	start = 0;
-// 	j = 0;
-// 	while (str[i + j])
-// 	{
-// 		if (str[i + j] == '\'')
-// 		{
-// 			if (s_quote == true)
-// 			{
-// 				s_quote = false;
-// 				if (start != 0)
-// 				{
-// 					len = j - start;
-// 					result = ft_substr(str, start, len);
-// 				}
-// 			}
-// 			else
-// 			{
-// 				s_quote = true;
-// 				start = ++j;
-// 			}
-// 		}
-// 		else if (str[i + j] == '\"')
-// 		{
-// 			if (d_quote == true)
-// 			{
-// 				d_quote = false;
-// 				if (start != 0)
-// 				{
-// 					len = j - start;
-// 					result = ft_substr(str, start, len);
-// 				}
-// 			}
-// 			else
-// 			{
-// 				d_quote = true;
-// 				start = ++j;
-// 			}
-// 		}
-// 		j++;
-// 	}
-// 	// printf("result = %s\n", result);
-// 	add_after(&lexer->token_list, new_node(result));
-// 	return (j);
-// }
 
 bool	lexical_analyzer(t_lexer_utils *lexer)
 {
@@ -173,65 +116,66 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 }
 
 //Checking if quotes are in a pair.
-bool	match_quotes(char *str)
-{
-	// int	i;
-	// int	j;
-	// int	num_s;
-	// int	num_d;
+// bool	match_quotes(char *str)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	num_s;
+// 	int	num_d;
 
-	// i = 0;
-	// num_s = 0;
-	// num_d = 0;
-	// while (str[i])
-	// {
-	// 	if (str[i] == '\'')
-	// 	{
-	// 		num_s++;
-	// 		j = i + 1;
-	// 		while (str[j] != '\'' && str[j])
-	// 		{
-	// 			if (str[j] == '\'')
-	// 				num_s++;
-	// 			j++;
-	// 		}
-	// 	}
-	// 	else if (str[i] == '\"')
-	// 	{
-	// 		num_d++;
-	// 		j = i + 1;
-	// 		while (str[j] != '\"' && str[j])
-	// 		{
-	// 			if (str[j] == '\"')
-	// 				num_d++;
-	// 			j++;
-	// 		}
-	// 	}
-	// 	i++;
-	// }
-	// if ((num_s % 2) != 0 || (num_d % 2) != 0)
-	// 	return (false);
-	// return (true);
-	int singleQuoteCount = 0;
-    int doubleQuoteCount = 0;
-    bool singleQuoteOpen = false;
+// 	i = 0;
+// 	num_s = 0;
+// 	num_d = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '\'')
+// 		{
+// 			num_s++;
+// 			j = i + 1;
+// 			while (str[j] != '\'' && str[j])
+// 			{
+// 				if (str[j] == '\'')
+// 					num_s++;
+// 				j++;
+// 			}
+// 		}
+// 		else if (str[i] == '\"')
+// 		{
+// 			num_d++;
+// 			j = i + 1;
+// 			while (str[j] != '\"' && str[j])
+// 			{
+// 				if (str[j] == '\"')
+// 					num_d++;
+// 				j++;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	if ((num_s % 2) != 0 || (num_d % 2) != 0)
+// 		return (false);
+// 	return (true);
+// 	// int	s_quote = 0;
+//     // int d_quote = 0;
+//     // bool s_quote_open = false;
+// 	// bool d_quote_open = false;
 
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '\'') {
-            if (singleQuoteOpen) {
-                singleQuoteOpen = false;
-            } else {
-                singleQuoteOpen = true;
-            }
-            singleQuoteCount++;
-        } else if (str[i] == '"') {
-            doubleQuoteCount++;
-        }
-    }
+//     // for (int i = 0; str[i] != '\0'; i++) {
+//     //     if (str[i] == '\'') {
+//     //         if (s_quote_open ) {
+//     //             s_quote_open  = false;
+//     //         } else {
+//     //             s_quote_open  = true;
+//     //         }
+//     //         s_quote++;
+//     //     } else if (str[i] == '"') {
+//     //         d_quote++;
+//     //     }
+//     // }
 
-    if ((singleQuoteOpen || singleQuoteCount % 2 != 0) || doubleQuoteCount % 2 != 0) {
-        return false; // Unbalanced quotes
-    }
+//     // if ((s_quote_open ||	s_quote % 2 != 0) || d_quote % 2 != 0) {
+//     //     return false; // Unbalanced quotes
+//     // }
 
-    return true; // Balanced quotes
-}
+//     // return true; // Balanced quotes
+// }
