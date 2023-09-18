@@ -45,13 +45,11 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
             add_history(line);
 		// if (lexer->arg[0] == '\0')
 		// 	return(reset_utils(lexer, parser_utils));
-		if (match_quotes(lexer->arg) == false)
-			return (err_msg(ERROR_QUOTE));
+		// if (match_quotes(lexer->arg) == false)
+		// 	return (err_msg(ERROR_QUOTE));
 		if (lexical_analyzer(lexer) == false)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
-		// if (lexer->heredoc == TRUE)
-		// 	here_document(parser_utils->cmd_list, lexer);
 		// int n = 1;
 
 		// while (parser_utils->cmd_list)
