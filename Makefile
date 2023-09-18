@@ -6,8 +6,14 @@ else
 CFLAGS		= -Wall -Wextra -Werror
 endif
 
+ifdef LINUX
+READLINE_FLAGS = -lreadline -lhistory -lncurses
+OBJ_FLAGS		= -I${HOME}/.brew/opt/readline/include
+else
 READLINE_FLAGS	= -lreadline -L${HOME}/.brew/opt/readline/lib
 OBJ_FLAGS		= -I${HOME}/.brew/opt/readline/include
+endif
+
 LIBFT		= libft
 OBJ_DIR		= obj/
 SRC_DIR		= src/
@@ -50,8 +56,8 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(OBJF)
 		@make -C $(LIBFT)
-	@$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJ) libft/libft.a -o $(NAME)
-	@echo "$(CYAN_B)- Lexer is compiled -"
+		@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME) $(READLINE_FLAGS)
+		@echo "$(CYAN_B)- Minishell is compiled -"
 
 # $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 # 			@mkdir -p $(@D)

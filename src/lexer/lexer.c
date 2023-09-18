@@ -177,41 +177,63 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 //Checking if quotes are in a pair.
 bool	match_quotes(char *str)
 {
-	int	i;
-	int	j;
-	int	num_s;
-	int	num_d;
+	// int	i;
+	// int	j;
+	// int	num_s;
+	// int	num_d;
 
-	i = 0;
-	num_s = 0;
-	num_d = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			num_s++;
-			j = i + 1;
-			while (str[j] != '\'' && str[j])
-			{
-				if (str[j] == '\'')
-					num_s++;
-				j++;
-			}
-		}
-		else if (str[i] == '\"')
-		{
-			num_d++;
-			j = i + 1;
-			while (str[j] != '\"' && str[j])
-			{
-				if (str[j] == '\"')
-					num_d++;
-				j++;
-			}
-		}
-		i++;
-	}
-	if ((num_s % 2) != 0 || (num_d % 2) != 0)
-		return (false);
-	return (true);
+	// i = 0;
+	// num_s = 0;
+	// num_d = 0;
+	// while (str[i])
+	// {
+	// 	if (str[i] == '\'')
+	// 	{
+	// 		num_s++;
+	// 		j = i + 1;
+	// 		while (str[j] != '\'' && str[j])
+	// 		{
+	// 			if (str[j] == '\'')
+	// 				num_s++;
+	// 			j++;
+	// 		}
+	// 	}
+	// 	else if (str[i] == '\"')
+	// 	{
+	// 		num_d++;
+	// 		j = i + 1;
+	// 		while (str[j] != '\"' && str[j])
+	// 		{
+	// 			if (str[j] == '\"')
+	// 				num_d++;
+	// 			j++;
+	// 		}
+	// 	}
+	// 	i++;
+	// }
+	// if ((num_s % 2) != 0 || (num_d % 2) != 0)
+	// 	return (false);
+	// return (true);
+	int singleQuoteCount = 0;
+    int doubleQuoteCount = 0;
+    bool singleQuoteOpen = false;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '\'') {
+            if (singleQuoteOpen) {
+                singleQuoteOpen = false;
+            } else {
+                singleQuoteOpen = true;
+            }
+            singleQuoteCount++;
+        } else if (str[i] == '"') {
+            doubleQuoteCount++;
+        }
+    }
+
+    if ((singleQuoteOpen || singleQuoteCount % 2 != 0) || doubleQuoteCount % 2 != 0) {
+        return false; // Unbalanced quotes
+    }
+
+    return true; // Balanced quotes
 }
