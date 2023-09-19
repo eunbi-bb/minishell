@@ -137,7 +137,8 @@ eunbi
 When **heredoc** is executed in **Executor**, the **file_name** is stored as a delimiter. And replace the **file_name** to a temporary file name. The temporary file name will be used to write the input to. Afterwards, in the redirection function, the temporary file is redirected and unlink after finishing heredoc.
 ```
 Minishell% << delimiter
-hi	//writing inputs into the temporary heredoc file until delimiter is typed.
+hi	//Writing inputs into the temporary heredoc file until delimiter is typed.
 hello
 delimiter
+Minishell%
 ```
