@@ -4,8 +4,13 @@
 
 
 ## Usage
+*In MacOS*
 ```
 $ make
+```
+*In Linux*
+```
+$ make LINUX=1
 ```
 ```
 Minishell% ls -l
@@ -119,7 +124,11 @@ Execept **builtins**, the commands that returns from **Parser** are executed in 
 ---
 
 ### *Expander*
-
+*Expander takes variables, identified by `$`, and replaces them with their value from environment.*
+```
+Minishell% echo "$USER"
+eunbi
+```
 ---
 
 ### *Heredoc*
