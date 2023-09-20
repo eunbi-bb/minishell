@@ -4,8 +4,13 @@
 
 
 ## Usage
+*In MacOS*
 ```
 $ make
+```
+*In Linux*
+```
+$ make LINUX=1
 ```
 ```
 Minishell% ls -l
@@ -119,7 +124,11 @@ Execept **builtins**, the commands that returns from **Parser** are executed in 
 ---
 
 ### *Expander*
-
+*Expander takes variables, identified by `$`, and replaces them with their value from environment.*
+```
+Minishell% echo "$USER"
+eunbi
+```
 ---
 
 ### *Heredoc*
@@ -127,4 +136,9 @@ Execept **builtins**, the commands that returns from **Parser** are executed in 
 \
 When **heredoc** is executed in **Executor**, the **file_name** is stored as a delimiter. And replace the **file_name** to a temporary file name. The temporary file name will be used to write the input to. Afterwards, in the redirection function, the temporary file is redirected and unlink after finishing heredoc.
 ```
+Minishell% << delimiter
+hi	//Writing inputs into the temporary heredoc file until delimiter is typed.
+hello
+delimiter
+Minishell%
 ```
