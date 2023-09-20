@@ -51,7 +51,6 @@ int	redirection(t_cmd *cmd)
 	tmp = cmd->redir;
 	while (cmd->redir != NULL)
 	{
-		//printf("%d\n", cmd->redir->redir_type);
 		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
 		{
 			if (create_outfile(cmd))

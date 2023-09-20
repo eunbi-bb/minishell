@@ -155,27 +155,4 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 // 	if ((num_s % 2) != 0 || (num_d % 2) != 0)
 // 		return (false);
 // 	return (true);
-// 	// int	s_quote = 0;
-//     // int d_quote = 0;
-//     // bool s_quote_open = false;
-// 	// bool d_quote_open = false;
-
-//     // for (int i = 0; str[i] != '\0'; i++) {
-//     //     if (str[i] == '\'') {
-//     //         if (s_quote_open ) {
-//     //             s_quote_open  = false;
-//     //         } else {
-//     //             s_quote_open  = true;
-//     //         }
-//     //         s_quote++;
-//     //     } else if (str[i] == '"') {
-//     //         d_quote++;
-//     //     }
-//     // }
-
-//     // if ((s_quote_open ||	s_quote % 2 != 0) || d_quote % 2 != 0) {
-//     //     return false; // Unbalanced quotes
-//     // }
-
-//     // return true; // Balanced quotes
 // }
