@@ -50,10 +50,9 @@ Depending on the return value of **Executor**, the loop's behavior will be deter
 ---
 
 ### *Lexer, Parser and Executor*
-![Minishell](https://github.com/eunbi-bb/minishell/assets/80834766/e0db69ab-bb64-4854-9257-a7397e47a200)
-![Minishell(1)](https://github.com/eunbi-bb/minishell/assets/80834766/ccfe4e7f-f520-46d0-b631-14bdf5a9df2b)
-![Minishell(2)](https://github.com/eunbi-bb/minishell/assets/80834766/372d0d35-17dc-44a1-9479-de008c24cae1)
-
+![Minishell](https://github.com/eunbi-bb/minishell/assets/80834766/ff57e94c-c462-4bac-aaf2-b8b4c0364caa)
+![Minishell(1)](https://github.com/eunbi-bb/minishell/assets/80834766/1ba69bb6-e66e-4ffa-b05b-2413a311b2db)
+![Minishell(2)](https://github.com/eunbi-bb/minishell/assets/80834766/0db05778-acd6-414b-bacd-c1d17cd9af71)
 
 *More information about each program is below.*
 
