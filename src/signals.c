@@ -13,11 +13,28 @@
 #include "../includes/minishell.h"
 
 void sigint_handler(int signal) 
-{
-	if(signal == 5)
-		printf("LOL");
-    sigint_received = 1;
+{	
+	sigint_received = 1;
+	if (child == 1) //in cmd
+	{
+		child = 0;
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_redisplay();
+		rl_done = 1;
+		return ;
+	}
     rl_on_new_line();
+	printf("\n");
 	rl_replace_line("", 0);
 	rl_redisplay();
+	(void)signal;
 }
+
+void	sigquit_handler(int sig)
+{
+	ft_putstr_fd("Quit: ", STDERR_FILENO);
+	ft_putnbr_fd(sig, STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+}
+

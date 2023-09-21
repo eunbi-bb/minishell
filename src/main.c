@@ -23,18 +23,17 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	int				status;
 
 	status = 0;
-	 if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+	rl_catch_signals = 0;
+	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
         perror("signal");
         exit(EXIT_FAILURE);
     }
+	signal(SIGQUIT, SIG_IGN);
 	while (status == 0)
 	{
-		 if (sigint_received) {
+		if (sigint_received)
             sigint_received = 0; // Reset the flag
-            line = readline("Minishell% ");
-        } else {
-            line = readline("Minishell% ");
-        }
+		line = readline("Minishell% ");
 		lexer->arg = ft_strtrim(line, " ");
 		if (lexer->arg == NULL || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{

@@ -6,8 +6,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <termios.h>
 
 extern int sigint_received;
+extern int child;
 # include <readline/readline.h>
 # include "stdbool.h"
 
@@ -138,5 +140,7 @@ void cmd_env(t_env *env);
 void sigint_handler(int signal);
 char *search_value(char *key, t_env *env);
 void cmd_unset(t_env** head,char* key);
+void child_sigint_handler(int signal);
+void	sigquit_handler(int sig);
 
 #endif

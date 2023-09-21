@@ -3,6 +3,8 @@
 #include "../../includes/error.h"
 #include "../../includes/minishell.h"
 
+int child;
+
 int is_builtin(t_parser_utils *cmd)
 {
 	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
@@ -51,6 +53,9 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	while (cmd->cmd_list != NULL)
 	{
 		pid = fork();
+		child = 1;
+		signal(SIGQUIT, sigquit_handler);
+		//printf("child is %d\n", child);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
