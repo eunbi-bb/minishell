@@ -37,6 +37,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		lexer->arg = ft_strtrim(line, " ");
 		if (lexer->arg == NULL || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
+			free(line);
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}

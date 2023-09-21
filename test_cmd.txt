@@ -1,1 +1,0 @@
-< out grep "hi" | wc -l > outfile
