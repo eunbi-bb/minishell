@@ -22,6 +22,8 @@ HEADER_DIR	= includes/
 HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
 HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
+INCLUDES	= -I$(HEADER_DIR)
+
 # READLINE_FLAGS  = -lreadline -L/usr/local/opt/readline/lib
 # OBJ_FLAGS       = -I/usr/local/opt/readline/include
 
@@ -67,7 +69,7 @@ $(NAME): $(OBJ) $(OBJF)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 			@mkdir -p $(@D)
-			@$(CC) $(CFLAGS) $(OBJ_FLAGS) -c $< -o $@
+			@$(CC) $(CFLAGS) $(OBJ_FLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJF):
 		@mkdir -p $(OBJ_DIR)

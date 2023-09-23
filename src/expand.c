@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 // void *custom_realloc(void *ptr, size_t new_size) 
 // {

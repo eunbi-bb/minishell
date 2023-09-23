@@ -1,6 +1,6 @@
 #include <unistd.h>
-#include "../includes/error.h"
-#include "../includes/minishell.h"
+#include "error.h"
+#include "minishell.h"
 
 void	cmd_error(char *cmd)
 {

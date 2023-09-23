@@ -1,5 +1,5 @@
-#include "../../includes/minishell.h"
-#include "../../includes/executor.h"
+#include "minishell.h"
+#include "executor.h"
 
 void	create_pipes(int pipe_num, int fds[])
 {

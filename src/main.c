@@ -1,6 +1,6 @@
-#include "../includes/minishell.h"
-#include "../includes/executor.h"
-#include "../includes/error.h"
+#include "minishell.h"
+#include "executor.h"
+#include "error.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -41,7 +41,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
-		if(*line)
+		if (*line)
             add_history(line);
 		// if (lexer->arg[0] == '\0')
 		// 	return(reset_utils(lexer, parser_utils));
@@ -112,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	if (sigint_received == 2)
 		exit(0);
 	printf("exit code : %d\n", exit_code);
-	// free (str);
+	destroy_lexer_list(&lexer.token_list);
+	destroy_parser_list(&parser.cmd_list);
 	return (exit_code);
 }

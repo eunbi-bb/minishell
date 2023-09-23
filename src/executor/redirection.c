@@ -1,5 +1,5 @@
-#include "../../includes/minishell.h"
-#include "../../includes/error.h"
+#include "minishell.h"
+#include "error.h"
 #include <fcntl.h>
 
 int	open_infile(char *file, t_cmd *cmd)

@@ -1,5 +1,5 @@
-#include "../../includes/minishell.h"
-#include "../../includes/lexer.h"
+#include "minishell.h"
+#include "lexer.h"
 
 int	skip_whitespace(char *s, int i)
 {

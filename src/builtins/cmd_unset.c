@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 17:51:10 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/23 18:13:32 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void cmd_unset(t_env** head,char* key) {
     t_env* current = *head;

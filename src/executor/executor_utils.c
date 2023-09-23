@@ -1,7 +1,7 @@
-#include "../../includes/minishell.h"
-#include "../../includes/parser.h"
-#include "../../includes/executor.h"
-#include "../../includes/error.h"
+#include "minishell.h"
+#include "parser.h"
+#include "executor.h"
+#include "error.h"
 
 char	**get_cmd_dirs(t_env **envp)
 {

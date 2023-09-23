@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 // void free_tokens_list(t_tokens *head)
 // {

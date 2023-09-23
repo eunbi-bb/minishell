@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 t_cmd	*cmd_lst_front(t_cmd *lst)
 {

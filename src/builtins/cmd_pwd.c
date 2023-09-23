@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/24 15:35:55 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 13:29:31 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/23 18:13:41 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int cmd_pwd()
 {

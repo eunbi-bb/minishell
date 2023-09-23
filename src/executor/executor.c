@@ -1,7 +1,7 @@
-#include "../../includes/executor.h"
-#include "../../includes/parser.h"
-#include "../../includes/error.h"
-#include "../../includes/minishell.h"
+#include "executor.h"
+#include "parser.h"
+#include "error.h"
+#include "minishell.h"
 
 int child;
 

@@ -6,11 +6,11 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 18:01:38 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/09/23 18:13:46 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 int var_exist(char *key, t_env *env)
 {

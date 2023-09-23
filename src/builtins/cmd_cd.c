@@ -6,12 +6,12 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 23:32:00 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/23 18:14:02 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../includes/error.h"
+#include "minishell.h"
+#include "error.h"
 
 void env_replace_var(char *key, t_env *env, char *path)
 {
