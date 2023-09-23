@@ -112,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	if (sigint_received == 2)
 		exit(0);
 	printf("exit code : %d\n", exit_code);
+	destroy_env_list(parser.env);
 	destroy_lexer_list(&lexer.token_list);
 	destroy_parser_list(&parser.cmd_list);
 	return (exit_code);

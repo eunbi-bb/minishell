@@ -80,10 +80,8 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			}
 			close_ends(pipe_num, fds);
 			find_usd(cmd->cmd_list->data, *cmd->env);
-			if(is_builtin(cmd) == 0)
+			if (is_builtin(cmd) == 0)
 				execute_builtin(cmd);
-			// cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			
 			else  
 			{
 				generate_command(cmd);
