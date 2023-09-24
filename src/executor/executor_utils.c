@@ -7,17 +7,19 @@ char	**get_cmd_dirs(t_env **envp)
 {
 	char	*tmp;
 	char	**dirs;
+	t_env	*head;
 
+	head = *envp;
 	dirs = NULL;
-	while (envp)
+	while (head)
 	{
-		if (ft_strncmp((*envp)->key, "PATH", 4) == 0)
+		if (ft_strncmp(head->key, "PATH", 4) == 0)
 		{
-			tmp = ft_strdup((*envp)->value + 1);
+			tmp = ft_strdup(head->value + 1);
 			dirs = ft_split(tmp, ':');
 			return (dirs);
 		}
-		(*envp) = (*envp)->next;
+		head = head->next;
 	}
 	return (NULL);
 }

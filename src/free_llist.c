@@ -1,18 +1,19 @@
 #include <stdlib.h>
 #include "minishell.h"
 
-// void free_tokens_list(t_tokens *head)
-// {
-// 	t_tokens	*tmp;
 
-//     while (head)
-//     {
-//         tmp = head;
-//         head = head->next;
-//         if (tmp->data)
-//             free(tmp->data);
-//         free(tmp);
-//     }
+// void	reset_lexer_parser(s_lexer_utils *lexer, s_parser_utils *parser)
+// {
+// 	destroy_lexer_list();
+// 	destroy_parser_list();
+// 	destroy_env_list();
+// 	if (lexer->arg != NULL)
+// 		free(lexer->arg);
+// 	if (lexer->type_arr != NULL)
+// 		free(lexer->type_arr);
+// 	if (lexer->heredoc_filename != NULL)
+// 		free(lexer->heredoc_filename);
+
 // }
 
 void	destroy_lexer_list(t_tokens **head_ref)

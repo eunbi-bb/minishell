@@ -106,6 +106,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_initialize();
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
+	printf("%s%s\n", (*parser.env)->key, (*parser.env)->value);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
 	//pwd(&parser);status
 	exit_code = shell_loop(&lexer, &parser);
