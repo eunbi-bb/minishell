@@ -17,6 +17,27 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	parser->env = NULL;
 }
 
+char	*readline_loop(void)
+{
+	char 	*line;
+
+	rl_on_new_line();
+	line = readline("Minishell% ");
+	if (!line)
+	{
+		rl_clear_history();
+		return (0);
+	}
+	if (!*line)
+	{
+		free(line);
+		return (readline_loop());
+	}
+	if (*line)
+		add_history(line);
+	return (line);
+}
+
 int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;
@@ -33,18 +54,14 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	{
 		if (sigint_received)
             sigint_received = 0; // Reset the flag
-		line = readline("Minishell% ");
+		line = readline_loop();
 		lexer->arg = ft_strtrim(line, " ");
-		if (lexer->arg == NULL || ft_strncmp(lexer->arg, "exit", 4) == 0)
+		if (!lexer->arg|| ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			free(line);
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
-		if (*line)
-            add_history(line);
-		// if (lexer->arg[0] == '\0')
-		// 	return(reset_utils(lexer, parser_utils));
 		// if (match_quotes(lexer->arg) == false)
 		// 	return (err_msg(ERROR_QUOTE));
 		if (lexical_analyzer(lexer) == false)
