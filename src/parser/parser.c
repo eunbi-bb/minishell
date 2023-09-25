@@ -104,6 +104,7 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		}
 		current = current->next;
 	}
+	destroy_lexer_list(&lexer->token_list);
 }
 
 // int	main(void)

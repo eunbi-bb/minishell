@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/25 21:55:17 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/25 22:45:36 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ t_env* createNode(char* key, char* value) {
         exit(1);
     }
     newNode->key = strdup(key);
-	// free(key);
+	free(key);
     newNode->value = strdup(value);
-	// free(value);
+	free(value);
     newNode->next = NULL;
     return newNode;
 }
@@ -106,7 +106,6 @@ t_env **createLinkedList(char** envp) {
         t_env* newNode = createNode(key, value);
 
         if (head == NULL) {
-			// head = (t_env**)malloc(sizeof(t_env*));
 			head = ft_calloc(1, sizeof(t_env*));
             *head = newNode;
             current = newNode;

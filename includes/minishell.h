@@ -43,7 +43,7 @@ typedef	struct s_lexer_utils
 	char			*type_arr;
 	unsigned int	pipe_num;
 	bool			heredoc;
-	char*			heredoc_filename;
+	// char*			heredoc_filename;
 }	t_lexer_utils;
 
 typedef struct s_redir

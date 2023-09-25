@@ -6,8 +6,8 @@ void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
 {
 	destroy_lexer_list(&(lexer->token_list));
 	destroy_parser_list(&(parser->cmd_list));
-	if (lexer->arg)
-		free(lexer->arg);
+	// if (lexer->arg)
+	// 	free(lexer->arg);
 	lexer->pipe_num = 0;
 	lexer->heredoc = false;
 	// if (lexer->type_arr)
@@ -21,6 +21,7 @@ void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
 void	destory_utils(t_lexer_utils *lexer, t_parser_utils *parser)
 {
 	int	i;
+	(void)lexer;
 
 	reset_lexer_parser(lexer, parser);
 	destroy_env_list(parser->env);
@@ -35,6 +36,17 @@ void	destory_utils(t_lexer_utils *lexer, t_parser_utils *parser)
 		free(parser->cmd_dirs);
 		parser->cmd_dirs = NULL;
 	}
+	i = 0;
+	if (parser->envp)
+	{
+		while (parser->envp[i])
+		{
+			free(parser->envp[i]);
+			i++;
+		}
+		free(parser->envp);
+		parser->envp = NULL;
+	}
 }
 
 void	destroy_lexer_list(t_tokens **head_ref)
@@ -46,7 +58,7 @@ void	destroy_lexer_list(t_tokens **head_ref)
     while (current != NULL)
     {
         tmp = current;
-		if (current->data != NULL)
+		if (current->data)
 			free(current->data);
         current = current->next;
         free(tmp);
@@ -98,9 +110,9 @@ void destroy_env_list(t_env **head_ref)
     while (current != NULL)
     {
         tmp = current;
-		if (current->key != NULL)
+		if (current->key)
         	free(current->key);
-		if (current->value != NULL)
+		if (current->value)
         	free(current->value);
 		current = current->next;
         free(tmp);
