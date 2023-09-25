@@ -17,6 +17,7 @@ char	**get_cmd_dirs(t_env **envp)
 		{
 			tmp = ft_strdup(head->value + 1);
 			dirs = ft_split(tmp, ':');
+			free(tmp);
 			return (dirs);
 		}
 		head = head->next;

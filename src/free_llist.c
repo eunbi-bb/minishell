@@ -2,19 +2,40 @@
 #include "minishell.h"
 
 
-// void	reset_lexer_parser(s_lexer_utils *lexer, s_parser_utils *parser)
-// {
-// 	destroy_lexer_list();
-// 	destroy_parser_list();
-// 	destroy_env_list();
-// 	if (lexer->arg != NULL)
-// 		free(lexer->arg);
-// 	if (lexer->type_arr != NULL)
-// 		free(lexer->type_arr);
-// 	if (lexer->heredoc_filename != NULL)
-// 		free(lexer->heredoc_filename);
+void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
+{
+	destroy_lexer_list(&(lexer->token_list));
+	destroy_parser_list(&(parser->cmd_list));
+	if (lexer->arg)
+		free(lexer->arg);
+	// if (lexer->type_arr)
+	// 	free(lexer->type_arr);
+	// if (lexer->heredoc_filename)
+	// 	free(lexer->heredoc_filename);
+	// if (parser->args)
+	// 	free(parser->args);
+	// if (parser->command)
+	// 	free(parser->command);
+}
 
-// }
+void	destory_utils(t_lexer_utils *lexer, t_parser_utils *parser)
+{
+	int	i;
+
+	reset_lexer_parser(lexer, parser);
+	destroy_env_list(parser->env);
+	i = 0;
+	if (parser->cmd_dirs)
+	{
+		while (parser->cmd_dirs[i])
+		{
+			free(parser->cmd_dirs[i]);
+			i++;
+		}
+		free(parser->cmd_dirs);
+		parser->cmd_dirs = NULL;
+	}
+}
 
 void	destroy_lexer_list(t_tokens **head_ref)
 {

@@ -10,7 +10,6 @@
 
 extern int sigint_received;
 extern int child;
-# include <readline/readline.h>
 # include "stdbool.h"
 
 typedef struct s_env
@@ -86,6 +85,8 @@ typedef struct	s_parser_utils
 void		destroy_lexer_list(t_tokens **head_ref);
 void		destroy_parser_list(t_cmd **head_ref);
 void 		destroy_env_list(t_env **head_ref);
+void	destory_utils(t_lexer_utils *lexer, t_parser_utils *parser);
+void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser);
 	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
