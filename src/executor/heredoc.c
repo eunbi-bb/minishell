@@ -47,6 +47,7 @@ void	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 	char		*delim;
 	t_redir		*start;
 
+	(void)lexer;
 	start = cmd->redir;
 	while (cmd->redir)
 	{
@@ -54,7 +55,7 @@ void	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 		{
 			delim = cmd->redir->file_name;
 			cmd->redir->file_name = tmp_filename(i);
-			lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
+			// lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
 			i++;
 			// if (cmd->redir->next->redir_type == HERE_DOC)
 			// 	pipefd = create_heredoc_pipe(delim);

@@ -91,6 +91,7 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 		}
 	}
 	add_after(&lexer->token_list, new_node(tmp));
+	free(tmp);
 	return (j);
 }
 

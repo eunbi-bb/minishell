@@ -8,10 +8,10 @@ void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
 	destroy_parser_list(&(parser->cmd_list));
 	if (lexer->arg)
 		free(lexer->arg);
+	lexer->pipe_num = 0;
+	lexer->heredoc = false;
 	// if (lexer->type_arr)
 	// 	free(lexer->type_arr);
-	// if (lexer->heredoc_filename)
-	// 	free(lexer->heredoc_filename);
 	// if (parser->args)
 	// 	free(parser->args);
 	// if (parser->command)

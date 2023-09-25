@@ -44,9 +44,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 	int		pipe_num;
 	pid_t	pid;
 	int		i;
-	char	**envp;
-	
-	envp = join_key_value(cmd->env);
+
 	i = 0;
 	pipe_num = lexer->pipe_num;
 	create_pipes(pipe_num, fds);
@@ -85,7 +83,7 @@ int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
 			else  
 			{
 				generate_command(cmd);
-				if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
+				if (execve(cmd->command, cmd->cmd_list->data, cmd->envp) < 0)
 				{
 					perror("execve error");
 					exit(1);

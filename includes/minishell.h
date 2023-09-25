@@ -66,6 +66,7 @@ typedef struct	s_parser_utils
 	t_cmd	*cmd_list;
 	char	*args;
 	t_env	**env;
+	char	**envp;
 	char	**cmd_dirs;
 	int		pipes;
 	int		pid;

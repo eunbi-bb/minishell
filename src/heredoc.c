@@ -45,14 +45,16 @@ int	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 	char		*delim;
 	t_redir		*start;
 	start = cmd->redir;
+
+	(void)lexer;
 	while (cmd->redir)
 	{
-		if (lexer->heredoc == TRUE && cmd->redir)
+		if (lexer->heredoc == true && cmd->redir)
 		{
 			delim = cmd->redir->file_name;
 			cmd->redir->file_name = tmp_filename(i);
-			lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
-			printf("%s\n", lexer->heredoc_filename);
+			// lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
+			// printf("%s\n", lexer->heredoc_filename);
 			i++;
 			fd = create_heredoc(delim, cmd->redir->file_name);
 		}

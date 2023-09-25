@@ -96,9 +96,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
 		status = executor(parser_utils, lexer);
-		free(line);
 		reset_lexer_parser(lexer, parser_utils);
-		lexer->pipe_num = 0;
+		free(line);
 		if (sigint_received == 2)
 			exit(0) ;
 	}
@@ -122,7 +121,8 @@ int	main(int argc, char **argv, char **envp)
 	rl_initialize();
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
-	printf("%s%s\n", (*parser.env)->key, (*parser.env)->value);
+	parser.envp = join_key_value(parser.env);
+	// printf("%s%s\n", (*parser.env)->key, (*parser.env)->value);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
 	//pwd(&parser);status
 	exit_code = shell_loop(&lexer, &parser);

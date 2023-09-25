@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/23 22:51:10 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/25 21:55:17 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	**free_array(char **str, int count)
 	i = 0;
 	while (i < count)
 	{
-		free((void *)str[i]);
+		free(str[i]);
 		i++;
 	}
 	free(str);
@@ -52,7 +52,7 @@ char	**join_key_value(t_env **head)
 	i = 0;
 	while (current)
 	{
-		str[i] = ft_strjoin((char *)current->key, (char *)current->value);
+		str[i] = ft_strjoin(current->key, current->value);
 		if (!str[i])
 			return (free_array(str, i + 1));
 		i++;
@@ -63,6 +63,7 @@ char	**join_key_value(t_env **head)
 	return (str);
 }
 
+
 t_env* createNode(char* key, char* value) {
     t_env* newNode = ft_calloc(1, sizeof(t_env));
     if (newNode == NULL) {
@@ -70,9 +71,9 @@ t_env* createNode(char* key, char* value) {
         exit(1);
     }
     newNode->key = strdup(key);
-	free(key);
+	// free(key);
     newNode->value = strdup(value);
-	free(value);
+	// free(value);
     newNode->next = NULL;
     return newNode;
 }
