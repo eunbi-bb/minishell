@@ -53,11 +53,13 @@ char	*readline_loop(void)
 	line = readline("Minishell% ");
 	if (!line)
 	{
+		printf("HERE 3\n");
 		rl_clear_history();
 		return (0);
 	}
 	if (!*line)
 	{
+		printf("HERE 4\n");
 		free(line);
 		return (readline_loop());
 	}
@@ -86,8 +88,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		lexer->arg = ft_strtrim(line, " ");
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
+			printf("HERE 1\n");
 			free(line);
-			free(lexer->arg);
 			// free_token_list(lexer);
 			// free_cmd_list(parser_utils);
 			write(STDOUT_FILENO, "exit\n", 6);
@@ -99,9 +101,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
 		status = executor(parser_utils, lexer);
-		free(line);
 		free_token_list(lexer);
 		free_cmd_list(parser_utils);
+		free(line);
 		lexer->pipe_num = 0;
 		if (sigint_received == 2)
 			exit(0) ;
@@ -133,7 +135,7 @@ int	main(int argc, char **argv, char **envp)
 	exit_code = shell_loop(&lexer, &parser);
 	if (sigint_received == 2)
 		exit(0);
-	printf("exit code : %d\n", exit_code);
+	// printf("exit code : %d\n", exit_code);
 	destroy_lexer_utils(&lexer);
 	destroy_parser_utils(&parser);
 	return (exit_code);

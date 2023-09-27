@@ -124,7 +124,7 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 //executor_utils.c
 char		**get_cmd_dirs(t_env **envp);
-void		generate_command(t_parser_utils *cmd);
+int			generate_command(t_parser_utils *parser);
 //redirection.c
 int			redirection(t_cmd *cmd);
 //heredoc.c

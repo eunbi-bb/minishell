@@ -68,6 +68,7 @@ void	free_env_list(t_parser_utils *parser)
 void	destroy_parser_utils(t_parser_utils *parser)
 {
 	int	i;
+
 	free_cmd_list(parser);
 	free(parser->args);
 	free_env_list(parser);
@@ -80,7 +81,6 @@ void	destroy_parser_utils(t_parser_utils *parser)
 	free(parser->cmd_dirs);
 	free(parser->command);
 }
-
 
 void	destroy_lexer_utils(t_lexer_utils *lexer)
 {

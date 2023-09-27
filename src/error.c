@@ -8,7 +8,6 @@ void	cmd_error(char *cmd)
 	write(STDERR_FILENO, cmd, ft_strlen(cmd));
 	write(STDERR_FILENO, ": ", 2);
 	write(STDERR_FILENO, ERROR_CMD"\n", ft_strlen(ERROR_CMD) + 1);
-	exit(1);
 }
 
 int	err_msg(char *str)

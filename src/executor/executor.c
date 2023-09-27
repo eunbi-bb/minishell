@@ -86,13 +86,16 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 				execute_builtin(parser);
 			else  
 			{
-				generate_command(parser);
+				if (generate_command(parser) == EXIT_CMD)
+					return (EXIT_CMD);
 				if (execve(parser->command, parser->cmd_list->data, envp) < 0)
 				{
+					printf("1\n");
 					perror("execve error");
 					exit(1);
 				}	
 			}
+			printf("2\n");
 			if (fd_in > 0)
 				close(fd_in);
 		}

@@ -55,15 +55,18 @@ char	*command_check(char **path, char *cmd)
 	return (NULL);
 }
 
-void	generate_command(t_parser_utils *cmd)
+int	generate_command(t_parser_utils *parser)
 {
-	cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-	if (cmd->cmd_dirs == NULL && access(*cmd->cmd_list->data, X_OK) == 0)
-		cmd->command = *cmd->cmd_list->data;
-	if (cmd->command == NULL)
+	t_cmd	*cmd;
+
+	cmd = parser->cmd_list;
+	parser->command = command_check(parser->cmd_dirs, *cmd->data);
+	if (parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
+		parser->command = *cmd->data;
+	if (parser->command == NULL)
 	{
-		cmd_error(*cmd->cmd_list->data);
-		// free_child(pipex);
-		exit(EXIT_CMD);
+		cmd_error(*cmd->data);
+		return (EXIT_CMD);
 	}
+	return (EXIT_SUCCESS);
 }
