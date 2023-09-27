@@ -89,14 +89,14 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		{
 			cmd = create_cmd_node();
 			generate_cmd(current, cmd);
-			if (parser->cmd_list == NULL)
-			{
+			// if (parser->cmd_list == NULL)
+			// {
+			// 	add_after_cmd(&parser->cmd_list, cmd);
+			// }
+			// else
+			// {
 				add_after_cmd(&parser->cmd_list, cmd);
-			}
-			else
-			{
-				add_after_cmd(&parser->cmd_list, cmd);
-			}
+			// }
 			while (current->token != PIPE && current->next)
 			{
 				current = current->next;
