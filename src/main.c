@@ -87,6 +87,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			free(line);
+			free(lexer->arg);
+			free_token_list(lexer);
+			free_cmd_list(parser_utils);
 			write(STDOUT_FILENO, "exit\n", 6);
 			// destory_utils(lexer, parser_utils);
 			exit(EXIT_SUCCESS);

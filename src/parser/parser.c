@@ -47,7 +47,7 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	//free_tokens_list(tmp);
 }
 
-t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
+t_cmd *generate_cmd(t_tokens *current, t_cmd *cmd)
 {
 	int			arg_num;
 	int			i;
@@ -68,12 +68,15 @@ t_cmd	*generate_cmd(t_tokens *current, t_cmd *cmd)
 			cmd->data[j] = ft_calloc(len, sizeof(char));
 			ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
+			// printf("init cmd data %s\n", cmd->data[j]);
 		}
+		// printf("added %d cmd data items\n", j);
 		i++;
 		if (current->token != DEFAULT && current->token != PIPE)
 			current = current->next;
 		current = current->next;
 	}
+
 	return (cmd);
 }
 

@@ -113,7 +113,7 @@ void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
 int			count_args(t_tokens	*lexer);
 //cmd_node_utils.c
 t_cmd		*create_cmd_node(void);
-void		add_after_cmd(t_cmd *before, t_cmd *new_node);
+void	add_after_cmd(t_cmd **before, t_cmd *new_node);
 //redir_node_utils.c
 t_redir		*create_redir_node(void);
 void		add_after_redir(t_redir **before, t_redir *new_node);

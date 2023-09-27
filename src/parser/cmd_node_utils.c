@@ -24,31 +24,20 @@ t_cmd	*cmd_lst_last(t_cmd *lst)
 	return (tmp);
 }
 
-void	add_after_cmd(t_cmd *before, t_cmd *new_node)
+void	add_after_cmd(t_cmd **before, t_cmd *new_node)
 {
 	t_cmd	*head;
-	t_cmd	*tail;
 
-	head = cmd_lst_front(before);
-	tail = cmd_lst_last(before);
-	if (before == NULL)
+	head = *before;
+	if (head == NULL)
 	{
-		new_node->next = head;
-		if (head)
-			head->prev = new_node;
-	}
-	else if (before == tail)
-	{
-		new_node->prev = tail;
-		tail->next = new_node;
-		tail = new_node;
+		*before = new_node;
 	}
 	else
 	{
-		new_node->prev = before;
-		new_node->next = before->next;
-		before->next->prev = new_node;
-		before->next = new_node;
+		while (head->next != NULL)
+			head = head->next;
+		head->next = new_node;
 	}
 }
 
@@ -57,6 +46,8 @@ t_cmd	*create_cmd_node(void)
 	t_cmd	*new;
 
 	new = ft_calloc(1, sizeof(t_cmd));
+	if (!new)
+		return (NULL);
 	new->data = NULL;
 	new->prev = NULL;
 	new->next = NULL;

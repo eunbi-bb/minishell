@@ -69,30 +69,41 @@ int	quotes(char *str, int i)
 int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
     int j;
-    char *tmp;
+    char *tmp = NULL;
     char quote;
 
-    j = 0;
-    while (str[i + j] && (is_token(str[i + j]) == -1))
-    {
-        if (str[i + j] == '\'' || str[i + j] == '\"')
-        {
-            quote = str[i + j];
-            j += quotes(str, i + j);
-            tmp = ft_strtrim(ft_substr(str, i, j), &quote);
-        }
-        else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
-            break;
-        else
-        {
-            j++;
-            if (is_token(str[i + j]) == -1)
-                tmp = ft_substr(str, i, j);
-        }
-    }
-    add_after(&lexer->token_list, new_node(tmp));
-    free(tmp);
-    return (j);
+	j = 0;
+	while (str[i + j] && (is_token(str[i + j]) == -1))
+	{
+		if (str[i + j] == '\'' || str[i + j] == '\"')
+		{
+			if (tmp != NULL)
+				free(tmp);
+			quote = str[i + j];
+			j += quotes(str, i + j);
+			char *tmp2 = ft_substr(str, i, j);
+			tmp = ft_strtrim(tmp2, &quote);
+			free(tmp2);
+		}
+		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
+			break ;
+		else
+		{
+			j++;
+			if (is_token(str[i + j]) == -1)
+			{
+				if (tmp != NULL)
+					free(tmp);
+				tmp = ft_substr(str, i, j);
+			}
+		}
+	}
+	if (tmp != NULL)
+	{
+		add_after(&lexer->token_list, new_node(tmp));
+		free(tmp);
+	}
+	return (j);
 }
 
 bool	lexical_analyzer(t_lexer_utils *lexer)
