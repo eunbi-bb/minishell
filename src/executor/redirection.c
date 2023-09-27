@@ -45,10 +45,10 @@ int	create_outfile(t_cmd *cmd)
 
 int	redirection(t_cmd *cmd)
 {
-	t_redir	*tmp;
+	t_redir	*head;
 	int		fd_in;
 
-	tmp = cmd->redir;
+	head = cmd->redir;
 	while (cmd->redir != NULL)
 	{
 		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
@@ -64,6 +64,6 @@ int	redirection(t_cmd *cmd)
 		}
 		cmd->redir = cmd->redir->next;
 	}
-	cmd->redir = tmp;
+	cmd->redir = head;
 	return (fd_in);
 }

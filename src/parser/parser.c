@@ -47,15 +47,17 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	//free_tokens_list(tmp);
 }
 
-t_cmd *generate_cmd(t_tokens *current, t_cmd *cmd)
+t_cmd *generate_cmd(t_tokens *tokens, t_cmd *cmd)
 {
 	int			arg_num;
 	int			i;
 	int			j;
 	size_t		len;
+	t_tokens	*current;
 
 	i = 0;
 	j = 0;
+	current = tokens;
 	arg_num = count_args(current);
 	if (arg_num > 0)
 		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
@@ -107,7 +109,7 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		}
 		current = current->next;
 	}
-	destroy_lexer_list(&lexer->token_list);
+	// destroy_lexer_list(&lexer->token_list);
 }
 
 // int	main(void)

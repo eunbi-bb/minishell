@@ -1,29 +1,5 @@
 #include "minishell.h"
 
-t_cmd	*cmd_lst_front(t_cmd *lst)
-{
-	t_cmd	*tmp;
-
-	tmp = lst;
-	if (!tmp)
-		return (tmp);
-	while (tmp->prev)
-		tmp = tmp->prev;
-	return (tmp);
-}
-
-t_cmd	*cmd_lst_last(t_cmd *lst)
-{
-	t_cmd	*tmp;
-
-	tmp = lst;
-	if (!tmp)
-		return (tmp);
-	while (tmp->next)
-		tmp = tmp->next;
-	return (tmp);
-}
-
 void	add_after_cmd(t_cmd **before, t_cmd *new_node)
 {
 	t_cmd	*head;
@@ -49,7 +25,7 @@ t_cmd	*create_cmd_node(void)
 	if (!new)
 		return (NULL);
 	new->data = NULL;
-	new->prev = NULL;
+	new->redir = NULL;
 	new->next = NULL;
 	return (new); 
 }

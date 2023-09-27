@@ -75,14 +75,6 @@ void	free_cmd_list(t_parser_utils *parser)
 {
 	int	i;
 
-	if (parser->cmd_list)
-	{
-		printf("parser has cmd list\n");
-	}
-	else
-	{
-		printf("parser has no cmd list\n");
-	}
 	while (parser->cmd_list)
 	{
 		printf("parser->cmd_list\n");
@@ -92,11 +84,9 @@ void	free_cmd_list(t_parser_utils *parser)
 		i = 0;
 		while (tmp->data[i])
 		{
-			printf("remove cmd data %s\n", tmp->data[i]);
 			free(tmp->data[i]);
 			i++;
 		}
-		printf("removed %d cmd data items\n", i);
 		free(tmp->data);
 		free(tmp);
 	}
