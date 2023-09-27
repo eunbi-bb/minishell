@@ -81,7 +81,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 					perror_exit(ERROR_DUP2_OUT);
 			}
 			close_ends(pipe_num, fds);
-			find_usd(parser->cmd_list->data, *parser->env);
+			// find_usd(parser->cmd_list->data, *parser->env);
 			if (is_builtin(parser) == 0)
 				execute_builtin(parser);
 			else  

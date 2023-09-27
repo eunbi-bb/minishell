@@ -77,7 +77,6 @@ void	free_cmd_list(t_parser_utils *parser)
 
 	while (parser->cmd_list)
 	{
-		printf("parser->cmd_list\n");
 		t_cmd *tmp = parser->cmd_list;
 		parser->cmd_list = parser->cmd_list->next;
 		free_redir_list(tmp);

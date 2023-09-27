@@ -88,10 +88,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		{
 			free(line);
 			free(lexer->arg);
-			free_token_list(lexer);
-			free_cmd_list(parser_utils);
+			// free_token_list(lexer);
+			// free_cmd_list(parser_utils);
 			write(STDOUT_FILENO, "exit\n", 6);
-			// destory_utils(lexer, parser_utils);
 			exit(EXIT_SUCCESS);
 		}
 		// if (match_quotes(lexer->arg) == false)
@@ -100,8 +99,10 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
 		status = executor(parser_utils, lexer);
-		reset_lexer_parser(lexer, parser_utils);
 		free(line);
+		free_token_list(lexer);
+		free_cmd_list(parser_utils);
+		lexer->pipe_num = 0;
 		if (sigint_received == 2)
 			exit(0) ;
 	}
