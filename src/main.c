@@ -134,6 +134,7 @@ int	main(int argc, char **argv, char **envp)
 	if (sigint_received == 2)
 		exit(0);
 	printf("exit code : %d\n", exit_code);
-	destory_utils(&lexer, &parser);
+	destroy_lexer_utils(&lexer);
+	destroy_parser_utils(&parser);
 	return (exit_code);
 }

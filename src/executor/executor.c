@@ -101,5 +101,6 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	}
 	parser->cmd_list = head;
 	close_ends(pipe_num, fds);
+	free_envp(envp);
 	return (wait_pipes(pid, pipe_num));
 }

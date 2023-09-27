@@ -83,11 +83,12 @@ typedef struct	s_parser_utils
 // t_global	g_global;
 
 //free_llist.c
-void		destroy_lexer_list(t_tokens **head_ref);
-void		destroy_parser_list(t_cmd **head_ref);
-void 		destroy_env_list(t_env **head_ref);
-void	destory_utils(t_lexer_utils *lexer, t_parser_utils *parser);
-void	reset_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser);
+void	free_token_list(t_lexer_utils *lexer);
+void	free_cmd_list(t_parser_utils *parser);
+void	free_env_list(t_parser_utils *parser);
+void	destroy_lexer_utils(t_lexer_utils *lexer);
+void	destroy_parser_utils(t_parser_utils *parser);
+void	free_envp(char **envp);
 	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
