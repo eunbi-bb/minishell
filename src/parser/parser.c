@@ -30,9 +30,9 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
-		if (cmd->redir == NULL)
-			cmd->redir = new;
-		else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
+		// if (cmd->redir == NULL)
+		// 	cmd->redir = new;
+		// else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
 			add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
 		if (tmp->token >= 1)
@@ -88,15 +88,15 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		if (current->token != PIPE)
 		{
 			cmd = create_cmd_node();
+			generate_cmd(current, cmd);
 			if (parser->cmd_list == NULL)
 			{
-				parser->cmd_list = cmd;
+				add_after_cmd(&parser->cmd_list, cmd);
 			}
 			else
 			{
-				add_after_cmd(parser->cmd_list, cmd);
+				add_after_cmd(&parser->cmd_list, cmd);
 			}
-			generate_cmd(current, cmd);
 			while (current->token != PIPE && current->next)
 			{
 				current = current->next;
