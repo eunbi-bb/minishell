@@ -53,13 +53,11 @@ char	*readline_loop(void)
 	line = readline("Minishell% ");
 	if (!line)
 	{
-		printf("HERE 2\n");
 		rl_clear_history();
 		return (0);
 	}
 	if (!*line)
 	{
-		printf("HERE 3\n");
 		free(line);
 		return (readline_loop());
 	}
@@ -88,10 +86,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		lexer->arg = ft_strtrim(line, " ");
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
-			printf("HERE 1\n");
 			free(line);
-			// free_token_list(lexer);
-			// free_cmd_list(parser_utils);
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
@@ -136,8 +131,7 @@ int	main(int argc, char **argv, char **envp)
 	if (sigint_received == 2)
 		exit(0);
 	// printf("exit code : %d\n", exit_code);
-	printf("HERE 8\n");
-	// destroy_lexer_utils(&lexer);
+	destroy_lexer_utils(&lexer);
 	destroy_parser_utils(&parser);
 	return (exit_code);
 }

@@ -86,7 +86,11 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			close_ends(pipe_num, fds);
 			// find_usd(parser->cmd_list->data, *parser->env);
 			if (is_builtin(parser) == 0)
+			{
 				execute_builtin(parser);
+				free_envp(envp);
+				return (0);
+			}
 			else  
 			{
 				if (generate_command(parser) == EXIT_CMD)
