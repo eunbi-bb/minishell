@@ -46,6 +46,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	int		i;
 	char	**envp;
 	t_cmd	*head;
+	t_redir *redir_head;
 	
 	head = parser->cmd_list;
 	i = 0;
@@ -62,6 +63,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
+			redir_head = parser->cmd_list->redir;
 			while (parser->cmd_list->redir)
 			{
 				if (parser->cmd_list->redir != NULL && parser->cmd_list->redir->redir_type == HERE_DOC)
@@ -70,6 +72,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 					fd_in = redirection(parser->cmd_list);
 				parser->cmd_list->redir = parser->cmd_list->redir->next;
 			}
+			parser->cmd_list->redir = redir_head;
 			if (i != 0)
 			{
 				if (dup2(fds[i - 2], 0) == -1)
@@ -87,7 +90,10 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			else  
 			{
 				if (generate_command(parser) == EXIT_CMD)
+				{
+					free_envp(envp);
 					return (EXIT_CMD);
+				}
 				if (execve(parser->command, parser->cmd_list->data, envp) < 0)
 				{
 					printf("1\n");

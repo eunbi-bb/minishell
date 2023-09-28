@@ -82,6 +82,7 @@ void	destroy_parser_utils(t_parser_utils *parser)
 	free(parser->command);
 }
 
+
 void	destroy_lexer_utils(t_lexer_utils *lexer)
 {
 	free_token_list(lexer);
