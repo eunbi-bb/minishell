@@ -56,6 +56,25 @@ int	execute_redir(t_parser_utils *parser, t_lexer_utils *lexer, t_redir *redir)
 	return (fd_in);
 }
 
+int	execute_command(t_parser_utils *parser)
+{
+	if (is_builtin(parser) == 0)
+	{
+		execute_builtin(parser);
+		return (0);
+	}
+	else  
+	{
+		if (generate_command(parser) == EXIT_CMD)
+			return (EXIT_CMD);
+		if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+		{
+			perror_exit(ERROR_EXECVE);
+		}
+	}
+	return (1);
+}
+
 int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -63,6 +82,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
+	int		value;
 	
 	head = parser->cmd_list;
 	i = 0;
@@ -89,21 +109,9 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			}
 			close_ends(lexer->pipe_num, fds);
 			// find_usd(parser->cmd_list->data, *parser->env);
-			if (is_builtin(parser) == 0)
-			{
-				execute_builtin(parser);
-				return (0);
-			}
-			else  
-			{
-				if (generate_command(parser) == EXIT_CMD)
-					return (EXIT_CMD);
-				if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
-				{
-					perror("execve error");
-					exit(1);
-				}	
-			}
+			value = execute_command(parser);
+			if (value != 1)
+				return (value);
 			if (fd_in > 0)
 				close(fd_in);
 		}

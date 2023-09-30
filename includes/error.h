@@ -22,6 +22,8 @@
 //Command error
 # define ERROR_CMD "command not found"
 # define EXIT_CMD 127
+# define ERROR_EXECVE "execve error"
+
 # include <errno.h>
 # include <unistd.h>
 
