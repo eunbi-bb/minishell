@@ -60,15 +60,13 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
 	int		fd_in;
-	int		pipe_num;
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
 	
 	head = parser->cmd_list;
 	i = 0;
-	pipe_num = lexer->pipe_num;
-	create_pipes(pipe_num, fds);
+	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
 		pid = fork();
@@ -89,7 +87,7 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 				if (dup2(fds[i + 1], 1) == -1)
 					perror_exit(ERROR_DUP2_OUT);
 			}
-			close_ends(pipe_num, fds);
+			close_ends(lexer->pipe_num, fds);
 			// find_usd(parser->cmd_list->data, *parser->env);
 			if (is_builtin(parser) == 0)
 			{
@@ -113,6 +111,6 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 		i += 2;
 	}
 	parser->cmd_list = head;
-	close_ends(pipe_num, fds);
-	return (wait_pipes(pid, pipe_num));
+	close_ends(lexer->pipe_num, fds);
+	return (wait_pipes(pid, lexer->pipe_num));
 }
