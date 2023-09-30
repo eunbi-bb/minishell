@@ -36,9 +36,9 @@ SRC_FILE	= main.c free_llist.c error.c expand.c signals.c \
 				parser/redir_node_utils.c \
 				executor/executor.c \
 				executor/executor_utils.c \
-				executor/heredoc.c \
 				executor/redirection.c \
 				executor/pipe_utils.c \
+				executor/heredoc.c \
 				builtins/cmd_cd.c \
 				builtins/cmd_echo.c \
 				builtins/cmd_exit.c \

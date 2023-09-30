@@ -45,29 +45,20 @@ void	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 	// int			fd;
 	// int			*pipefd;
 	char		*delim;
-	t_redir		*start;
+	t_redir		*head;
 
-	(void)lexer;
-	start = cmd->redir;
+	head = cmd->redir;
 	while (cmd->redir)
 	{
 		if (cmd->redir->redir_type == HERE_DOC && cmd->redir)
 		{
 			delim = cmd->redir->file_name;
 			cmd->redir->file_name = tmp_filename(i);
-			// lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
+			lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
 			i++;
-			// if (cmd->redir->next->redir_type == HERE_DOC)
-			// 	pipefd = create_heredoc_pipe(delim);
-			// else
-			// {
-			// 	pipefd = 0;
 			create_heredoc(delim, cmd->redir->file_name);
-			// }
-			// if (pipefd != 0)
-			// 	multiple_heredocs(&pipefd, cmd->redir);
 		}
 		cmd->redir = cmd->redir->next;
 	}
-	cmd->redir = start;
+	cmd->redir = head;
 }
