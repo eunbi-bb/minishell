@@ -65,6 +65,19 @@ void	free_env_list(t_parser_utils *parser)
 	free(parser->env);
 }
 
+void	free_envp(char **envp)
+{
+	int i;
+
+	i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
+}
+
 void	destroy_parser_utils(t_parser_utils *parser)
 {
 	int	i;
@@ -72,6 +85,7 @@ void	destroy_parser_utils(t_parser_utils *parser)
 	free_cmd_list(parser);
 	free(parser->args);
 	free_env_list(parser);
+	free_envp(parser->envp);
 	i = 0;
 	while (parser->cmd_dirs[i])
 	{
@@ -89,16 +103,4 @@ void	destroy_lexer_utils(t_lexer_utils *lexer)
 	free(lexer->type_arr);
 }
 
-void	free_envp(char **envp)
-{
-	int i;
-
-	i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
-}
 

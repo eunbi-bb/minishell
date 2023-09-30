@@ -63,20 +63,17 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	int		pipe_num;
 	pid_t	pid;
 	int		i;
-	char	**envp;
 	t_cmd	*head;
 	
 	head = parser->cmd_list;
 	i = 0;
 	pipe_num = lexer->pipe_num;
-	envp = join_key_value(parser->env);
 	create_pipes(pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
 		pid = fork();
 		child = 1;
 		signal(SIGQUIT, sigquit_handler);
-		//printf("child is %d\n", child);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
@@ -97,17 +94,13 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			if (is_builtin(parser) == 0)
 			{
 				execute_builtin(parser);
-				free_envp(envp);
 				return (0);
 			}
 			else  
 			{
 				if (generate_command(parser) == EXIT_CMD)
-				{
-					free_envp(envp);
 					return (EXIT_CMD);
-				}
-				if (execve(parser->command, parser->cmd_list->data, envp) < 0)
+				if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
 				{
 					perror("execve error");
 					exit(1);
@@ -121,6 +114,5 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	}
 	parser->cmd_list = head;
 	close_ends(pipe_num, fds);
-	free_envp(envp);
 	return (wait_pipes(pid, pipe_num));
 }
