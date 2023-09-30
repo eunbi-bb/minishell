@@ -89,6 +89,7 @@ void	free_env_list(t_parser_utils *parser);
 void	destroy_lexer_utils(t_lexer_utils *lexer);
 void	destroy_parser_utils(t_parser_utils *parser);
 void	free_envp(char **envp);
+
 	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
@@ -102,11 +103,11 @@ t_env		**createLinkedList(char** envp);
 int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 
-int		cmd_echo(char **cmd);
-int		cmd_pwd();
-void	cmd_exit();
-int		cmd_cd(char **path, t_env *env);
-void	cmd_export(t_env **head, char *str);
+int			cmd_echo(char **cmd);
+int			cmd_pwd();
+void		cmd_exit();
+int			cmd_cd(char **path, t_env *env);
+void		cmd_export(t_env **head, char *str);
 
 	/** parser **/
 //parser.c
@@ -114,7 +115,7 @@ void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
 int			count_args(t_tokens	*lexer);
 //cmd_node_utils.c
 t_cmd		*create_cmd_node(void);
-void	add_after_cmd(t_cmd **before, t_cmd *new_node);
+void		add_after_cmd(t_cmd **before, t_cmd *new_node);
 //redir_node_utils.c
 t_redir		*create_redir_node(void);
 void		add_after_redir(t_redir **before, t_redir *new_node);
@@ -131,6 +132,10 @@ int			redirection(t_cmd *cmd);
 void		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
 int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
+//execute_builtins.c
+int			is_builtin(t_parser_utils *cmd);
+void		execute_builtin(t_parser_utils *cmd);
+
 
 //env.c
 t_env		**createLinkedList(char** envp);

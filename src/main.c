@@ -1,31 +1,3 @@
-		// int n = 1;
-
-		// while (parser_utils->cmd_list)
-		// {
-		// 	printf("\n--------Number of command : %d---------\n", n);
-		// 	int	arg_num = count_args(lexer->token_list);
-		// 	int i = 0;
-		// 	if (parser_utils->cmd_list->data && parser_utils->cmd_list->data[i] != NULL)
-		// 	{
-		// 		while (parser_utils->cmd_list->data[i] && i <= arg_num)
-		// 		{
-		// 			printf("cmd->data[%d] : %s\n", i,parser_utils->cmd_list->data[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	if (parser_utils->cmd_list->redir)
-		// 	{
-		// 		t_redir *cmd_redir = parser_utils->cmd_list->redir;
-		// 		while (cmd_redir)
-		// 		{
-		// 			printf("cmd->redir_type : %d\n", cmd_redir->redir_type);
-		// 			printf("cmd->filename : %s\n\n", cmd_redir->file_name);
-		// 			cmd_redir = cmd_redir->next;
-		// 		}
-		// 	}
-		// 	parser_utils->cmd_list = parser_utils->cmd_list->next;
-		// 	n++;
-		// }
 #include "minishell.h"
 #include "executor.h"
 #include "error.h"
@@ -73,10 +45,8 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 
 	status = 0;
 	rl_catch_signals = 0;
-	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
-        perror("signal");
-        exit(EXIT_FAILURE);
-    }
+	if (signal(SIGINT, sigint_handler) == SIG_ERR)
+		perror_exit(ERROR_SIG);
 	signal(SIGQUIT, SIG_IGN);
 	while (status == 0 || status == 127)
 	{
@@ -106,7 +76,6 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	return (status);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_lexer_utils	lexer;
@@ -124,9 +93,7 @@ int	main(int argc, char **argv, char **envp)
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
 	parser.envp = join_key_value(parser.env);
-	// printf("%s%s\n", (*parser.env)->key, (*parser.env)->value);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	//pwd(&parser);status
 	exit_code = shell_loop(&lexer, &parser);
 	if (sigint_received == 2)
 		exit(0);

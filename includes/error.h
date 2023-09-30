@@ -24,6 +24,9 @@
 # define EXIT_CMD 127
 # define ERROR_EXECVE "execve error"
 
+//Signal error
+# define ERROR_SIG "signal error" 
+
 # include <errno.h>
 # include <unistd.h>
 
