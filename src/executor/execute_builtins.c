@@ -11,12 +11,10 @@ int is_builtin(t_parser_utils *cmd)
         strcmp(cmd->cmd_list->data[0], "export") == 0 ||
         strcmp(cmd->cmd_list->data[0], "unset") == 0)
 	{
-		printf("BUILT\n");
 		return (0);
 	}
 	else
 	{
-		printf("NOT BUILT\n");
 		return (1);
 	}
 }

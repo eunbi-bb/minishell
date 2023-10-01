@@ -5,7 +5,7 @@
 
 int child;
 
-int	execute_redir(t_parser_utils *parser, t_lexer_utils *lexer, t_redir *redir)
+int	execute_redir(t_parser_utils *parser, t_redir *redir)
 {
 	int	fd_in;
 	t_redir	*head;
@@ -15,13 +15,12 @@ int	execute_redir(t_parser_utils *parser, t_lexer_utils *lexer, t_redir *redir)
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
-			here_document(parser->cmd_list, lexer);
+			here_document(parser->cmd_list);
 		if (redir != NULL && redir->redir_type != DEFAULT)
 			fd_in = redirection(parser->cmd_list);
 		redir = redir->next;
 	}
 	redir = head;
-	printf("fd_in: %d\n", fd_in);
 	return (fd_in);
 }
 
@@ -40,7 +39,7 @@ int	execute_command(t_parser_utils *parser)
 		{
 			perror_exit(ERROR_EXECVE);
 		}
-	}
+	}	
 	return (1);
 }
 
@@ -49,7 +48,7 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	int	fd_in;
 	int	value;
 
-	fd_in = execute_redir(parser, lexer, parser->cmd_list->redir);
+	fd_in = execute_redir(parser, parser->cmd_list->redir);
 	if (i != 0)
 	{
 		if (dup2(fds[i - 2], 0) == -1)
@@ -61,7 +60,8 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 			perror_exit(ERROR_DUP2_OUT);
 	}
 	close_ends(lexer->pipe_num, fds);
-	find_usd(parser->cmd_list->data, *parser->env);
+	if (parser->cmd_list->data)
+		find_usd(parser->cmd_list->data, *parser->env);
 	value = execute_command(parser);
 	if (fd_in > 0)
 		close(fd_in);

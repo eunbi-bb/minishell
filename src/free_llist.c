@@ -15,31 +15,43 @@ void	free_token_list(t_lexer_utils *lexer)
 
 void	free_redir_list(t_cmd *cmd)
 {
+	t_redir *tmp;
+
 	while (cmd->redir)
 	{
-		t_redir *tmp = cmd->redir;
+		tmp = cmd->redir;
 		cmd->redir = cmd->redir->next;
-		free(tmp->file_name);
+		if (tmp->file_name)
+		{
+			free(tmp->file_name);
+		}
 		free(tmp);
 	}
 }
 
 void	free_cmd_list(t_parser_utils *parser)
 {
+	t_cmd *tmp;
 	int	i;
 
 	while (parser->cmd_list)
 	{
-		t_cmd *tmp = parser->cmd_list;
+		tmp = parser->cmd_list;
 		parser->cmd_list = parser->cmd_list->next;
-		free_redir_list(tmp);
-		i = 0;
-		while (tmp->data[i])
+		if (tmp->redir)
 		{
-			free(tmp->data[i]);
-			i++;
+			free_redir_list(tmp);
 		}
-		free(tmp->data);
+		i = 0;
+		if (tmp->data)
+		{
+			while (tmp->data[i])
+			{
+				free(tmp->data[i]);
+				i++;
+			}
+			free(tmp->data);
+		}
 		free(tmp);
 	}
 }

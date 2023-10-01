@@ -30,9 +30,6 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
-		// if (cmd->redir == NULL)
-		// 	cmd->redir = new;
-		// else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
 			add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
 		if (tmp->token >= 1)

@@ -129,7 +129,7 @@ int			generate_command(t_parser_utils *parser);
 //redirection.c
 int			redirection(t_cmd *cmd);
 //heredoc.c
-void		here_document(t_cmd	*cmd, t_lexer_utils *lexer);
+void		here_document(t_cmd	*cmd);
 int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 //execute_builtins.c
