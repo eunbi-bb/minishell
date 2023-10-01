@@ -21,17 +21,18 @@ int	execute_redir(t_parser_utils *parser, t_lexer_utils *lexer, t_redir *redir)
 		redir = redir->next;
 	}
 	redir = head;
+	printf("fd_in: %d\n", fd_in);
 	return (fd_in);
 }
 
 int	execute_command(t_parser_utils *parser)
 {
-	if (is_builtin(parser) == 0)
+	if (parser->cmd_list->data && is_builtin(parser) == 0)
 	{
 		execute_builtin(parser);
 		return (0);
 	}
-	else  
+	else
 	{
 		if (generate_command(parser) == EXIT_CMD)
 			return (EXIT_CMD);
