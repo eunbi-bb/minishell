@@ -128,8 +128,8 @@ int			generate_command(t_parser_utils *parser);
 //redirection.c
 int			redirection(t_cmd *cmd);
 //heredoc.c
-int		here_document(t_cmd	*cmd);
-int			create_heredoc(char *delim, char *filename);
+void		here_document(t_cmd	*cmd);
+void		create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 //execute_builtins.c
 int			is_builtin(t_parser_utils *cmd);

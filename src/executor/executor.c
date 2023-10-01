@@ -16,7 +16,7 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
 			here_document(parser->cmd_list);
-		if (redir != NULL && redir->redir_type != DEFAULT)
+		if (redir != NULL && redir->redir_type != DEFAULT && parser->cmd_list->data)
 			fd_in = redirection(parser->cmd_list);
 		redir = redir->next;
 	}
@@ -70,7 +70,6 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	if (parser->cmd_list->data)
 		find_usd(parser->cmd_list->data, *parser->env);
 	value = execute_command(parser);
-	printf("fd_in : %d\n", fd_in);
 	if (fd_in > 0)
 		close(fd_in);
 	return (value);
