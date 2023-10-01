@@ -63,6 +63,7 @@ void find_usd(char **data,  t_env *env)
             free(key);
             free(data[i]);
             data[i] = ft_strdup(val);
+			free(val);
         }
         i++;
     }

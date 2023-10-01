@@ -60,7 +60,7 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 			perror_exit(ERROR_DUP2_OUT);
 	}
 	close_ends(lexer->pipe_num, fds);
-	// find_usd(parser->cmd_list->data, *parser->env);
+	find_usd(parser->cmd_list->data, *parser->env);
 	value = execute_command(parser);
 	if (fd_in > 0)
 		close(fd_in);
