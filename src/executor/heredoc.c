@@ -15,7 +15,7 @@ char	*tmp_filename(int i)
 	return (filename);
 }
 
-int	create_heredoc(char *delim, char *filename)
+void	create_heredoc(char *delim, char *filename)
 {
 	int		fd;
 	char	*str;
@@ -37,7 +37,6 @@ int	create_heredoc(char *delim, char *filename)
 	}
 	free(delim);
 	free(str);
-	return (fd);
 }
 
 void	here_document(t_cmd	*cmd)
@@ -58,5 +57,5 @@ void	here_document(t_cmd	*cmd)
 		}
 		cmd->redir = cmd->redir->next;
 	}
-	cmd->redir = head;;
+	cmd->redir = head;
 }

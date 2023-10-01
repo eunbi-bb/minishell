@@ -26,21 +26,28 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 
 int	execute_command(t_parser_utils *parser)
 {
-	if (parser->cmd_list->data && is_builtin(parser) == 0)
+	if (parser->cmd_list->data)
 	{
-		execute_builtin(parser);
-		return (0);
-	}
-	else
-	{
-		if (generate_command(parser) == EXIT_CMD)
-			return (EXIT_CMD);
-		if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+		if (is_builtin(parser) == 0)
 		{
-			perror_exit(ERROR_EXECVE);
+			execute_builtin(parser);
+			return (0);
 		}
-	}	
-	return (1);
+		else
+		{
+			if (generate_command(parser) == EXIT_CMD)
+				return (EXIT_CMD);
+			if (parser->cmd_list->data)
+			{
+				if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+				{
+					perror_exit(ERROR_EXECVE);
+				}
+			}
+		}
+		return (1);
+	}
+	return (0);
 }
 
 int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
@@ -63,6 +70,7 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	if (parser->cmd_list->data)
 		find_usd(parser->cmd_list->data, *parser->env);
 	value = execute_command(parser);
+	printf("fd_in : %d\n", fd_in);
 	if (fd_in > 0)
 		close(fd_in);
 	return (value);

@@ -100,7 +100,6 @@ int			arg_divider(t_lexer_utils *lexer, char *str, int i);
 int			quotes(char *str, int i);
 int			take_tokens(t_lexer_utils *lexer, char *str, int i);
 t_env		**createLinkedList(char** envp);
-int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 
 int			cmd_echo(char **cmd);
@@ -129,7 +128,7 @@ int			generate_command(t_parser_utils *parser);
 //redirection.c
 int			redirection(t_cmd *cmd);
 //heredoc.c
-void		here_document(t_cmd	*cmd);
+int		here_document(t_cmd	*cmd);
 int			create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 //execute_builtins.c

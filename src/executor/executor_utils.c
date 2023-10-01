@@ -61,7 +61,7 @@ int	generate_command(t_parser_utils *parser)
 
 	cmd = parser->cmd_list;
 	parser->command = command_check(parser->cmd_dirs, *cmd->data);
-	if (parser->cmd_list->data && parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
+	if (parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
 		parser->command = *cmd->data;
 	if (parser->command == NULL)
 	{
