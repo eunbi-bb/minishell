@@ -6,24 +6,12 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 17:35:36 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/02 19:56:56 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
-
-t_tokens	*lst_last(t_tokens *lst)
-{
-	t_tokens	*tmp;
-
-	tmp = lst;
-	if (!tmp)
-		return (tmp);
-	while (tmp->next)
-		tmp = tmp->next;
-	return (tmp);
-}
 
 t_tokens	*new_node(char *data)
 {

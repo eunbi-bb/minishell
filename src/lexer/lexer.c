@@ -6,44 +6,12 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 17:33:33 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/02 19:58:48 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer.h"
-
-bool	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' \
-		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-int	skip_whitespace(char *s, int i)
-{
-	while (is_whitespace(s[i]))
-		i++;
-	return (i);
-}
-
-//Checking if the character is a token or not.
-int	is_token(int c)
-{
-	t_lexer_utils	lexer;
-	int				i;
-
-	lexer.type_arr = "|<>";
-	i = 0;
-	while (lexer.type_arr[i])
-	{
-		if (lexer.type_arr[i] == c)
-		{
-			return (i);
-		}
-		i++;
-	}
-	return (-1);
-}
 
 //Putting a token in a node
 int	take_tokens(t_lexer_utils *lexer, char *str, int i)
@@ -83,43 +51,45 @@ int	quotes(char *str, int i)
 	return (++j);
 }
 
+char	*extract_token(char	*str, int i, int *j)
+{
+	int		start;
+	int		end;
+	char	*token;
+
+	start = i;
+	end = i;
+	while (str[end] && (is_token(str[end]) == -1))
+	{
+		if (str[end] == '\'' || str[end] == '\"')
+			end += quotes(str, end);
+		else if (is_whitespace(str[end]))
+			break ;
+		else
+		{
+			end++;
+			if (is_token(str[end]) == -1)
+				end++;
+		}
+	}
+	token = ft_substr(str, start, end - start);
+	*j = end - i;
+	return (token);
+}
+
 // Find a begining and end of a string
 //(depending on white spaces or quotes)and generate a sub-string.
 int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
+	char	*token;
 	int		j;
-	char	*tmp;
-	char	quote;
 
 	j = 0;
-	tmp = NULL;
-	while (str[i + j] && (is_token(str[i + j]) == -1))
+	token = extract_token(str, i, &j);
+	if (token != NULL)
 	{
-		if (str[i + j] == '\'' || str[i + j] == '\"')
-		{
-			if (tmp != NULL)
-				free(tmp);
-			quote = str[i + j];
-			j += quotes(str, i + j);
-			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
-		}
-		else if (is_whitespace(str[i + j]))
-			break ;
-		else
-		{
-			j++;
-			if (is_token(str[i + j]) == -1)
-			{
-				if (tmp != NULL)
-					free(tmp);
-				tmp = ft_substr(str, i, j);
-			}
-		}
-	}
-	if (tmp != NULL)
-	{
-		add_after(&lexer->token_list, new_node(tmp));
-		free(tmp);
+		add_after(&lexer->token_list, new_node(token));
+		free(token);
 	}
 	return (j);
 }

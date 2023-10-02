@@ -5,7 +5,13 @@
 		"string_view": "c",
 		"minishell.h": "c",
 		"*.tcc": "c",
-		"cstdlib": "c"
+		"cstdlib": "c",
+		"deque": "c",
+		"unordered_map": "c",
+		"vector": "c",
+		"initializer_list": "c",
+		"ranges": "c",
+		"span": "c"
 	},
 	"makefile.launchConfigurations": [
 		{

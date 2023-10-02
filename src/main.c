@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 16:12:01 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/02 19:20:04 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
-		// if (match_quotes(lexer->arg) == false)
-		// 	return (err_msg(ERROR_QUOTE));
 		if (lexical_analyzer(lexer) == false)
 			return (err_msg(ERROR_LEXER));
 		parser(lexer, parser_utils);
