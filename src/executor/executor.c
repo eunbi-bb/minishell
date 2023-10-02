@@ -52,10 +52,11 @@ int	execute_command(t_parser_utils *parser)
 
 int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
 {
-	int	fd_in;
+	// int	fd_in;
 	int	value;
 
-	fd_in = execute_redir(parser, parser->cmd_list->redir);
+	value = execute_command(parser);
+	// fd_in = execute_redir(parser, parser->cmd_list->redir);
 	if (i != 0)
 	{
 		if (dup2(fds[i - 2], 0) == -1)
@@ -69,15 +70,15 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	close_ends(lexer->pipe_num, fds);
 	if (parser->cmd_list->data)
 		find_usd(parser->cmd_list->data, *parser->env);
-	value = execute_command(parser);
-	if (fd_in > 0)
-		close(fd_in);
+	// if (fd_in > 0)
+	// 	close(fd_in);
 	return (value);
 }
 
 int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
+	int	fd_in;
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
@@ -88,15 +89,24 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
+		if (parser->cmd_list->data && is_builtin(parser) == 0)
+		{
+			execute_builtin(parser);
+			return (0);
+		}
 		pid = fork();
 		child = 1;
 		signal(SIGQUIT, sigquit_handler);
-		if (pid == -1)	err_msg(ERROR_CHILD);
+		if (pid == -1)
+			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
+			fd_in = execute_redir(parser, parser->cmd_list->redir);
 			value = generate_child(parser, lexer, fds, i);
 			if (value != 1)
 				return (value);
+			if (fd_in > 0)
+				close(fd_in);
 		}
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
