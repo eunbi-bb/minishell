@@ -13,10 +13,6 @@ int	open_infile(char *file, t_cmd *cmd)
 	if (cmd->redir->redir_type == HERE_DOC)
 		unlink(file);
 	close(fd);
-	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
-	// 	err_msg(ERROR_PIPE_IN);
-	// else
-	// 	close(fd);
 	return (fd);
 }
 
@@ -53,13 +49,11 @@ int	redirection(t_cmd *cmd)
 	{
 		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
 		{
-			printf("outfile\n");
 			if (create_outfile(cmd))
 				return (EXIT_FAILURE);
 		}
 		else if (cmd->redir->redir_type == LESSER || cmd->redir->redir_type == HERE_DOC)
 		{
-			printf("infile\n");
 			fd_in = open_infile(cmd->redir->file_name, cmd);
 			if (fd_in == -1)
 				return (EXIT_FAILURE);
