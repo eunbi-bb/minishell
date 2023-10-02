@@ -1,2 +1,0 @@
-NAME		= minishell
-HEADER_SRC	= minishell.h lexer.h parser.h executor.h error.h
