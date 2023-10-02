@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   executor_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 17:37:40 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "parser.h"
 #include "executor.h"
@@ -30,7 +42,6 @@ char	*command_check(char **path, char *cmd)
 	char	*command;
 	char	*tmp;
 
-	
 	if (path == NULL)
 		return (NULL);
 	if ((access(cmd, X_OK) == 0))

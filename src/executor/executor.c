@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   executor.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 17:40:01 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "executor.h"
 #include "parser.h"
 #include "error.h"
@@ -17,7 +29,7 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 		if (redir != NULL && redir->redir_type == HERE_DOC)
 			here_document(parser->cmd_list);
 		if (redir != NULL && redir->redir_type != DEFAULT && parser->cmd_list->data)
-			fd_in = redirection(parser->cmd_list);
+			fd_in = redirection(parser->cmd_list->redir);
 		redir = redir->next;
 	}
 	redir = head;

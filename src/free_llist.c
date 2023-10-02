@@ -1,12 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   free_llist.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 16:18:25 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "minishell.h"
 
-
 void	free_token_list(t_lexer_utils *lexer)
 {
+	t_tokens	*tmp;
+
 	while (lexer->token_list)
 	{
-		t_tokens *tmp = lexer->token_list;
+		tmp = lexer->token_list;
 		lexer->token_list = lexer->token_list->next;
 		free(tmp->data);
 		free(tmp);
@@ -15,7 +28,7 @@ void	free_token_list(t_lexer_utils *lexer)
 
 void	free_redir_list(t_cmd *cmd)
 {
-	t_redir *tmp;
+	t_redir	*tmp;
 
 	while (cmd->redir)
 	{
@@ -31,8 +44,8 @@ void	free_redir_list(t_cmd *cmd)
 
 void	free_cmd_list(t_parser_utils *parser)
 {
-	t_cmd *tmp;
-	int	i;
+	t_cmd	*tmp;
+	int		i;
 
 	while (parser->cmd_list)
 	{
@@ -58,15 +71,17 @@ void	free_cmd_list(t_parser_utils *parser)
 
 void	free_env_list(t_parser_utils *parser)
 {
-	int	i;
+	t_env	*env_list;
+	t_env	*tmp;
+	int		i;
 
 	i = 0;
 	while (parser->env[i])
 	{
-		t_env *env_list = parser->env[i];
+		env_list = parser->env[i];
 		while (env_list)
 		{
-			t_env *tmp = env_list;
+			tmp = env_list;
 			env_list = env_list->next;
 			free(tmp->key);
 			free(tmp->value);
@@ -79,7 +94,7 @@ void	free_env_list(t_parser_utils *parser)
 
 void	free_envp(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i])
@@ -108,11 +123,8 @@ void	destroy_parser_utils(t_parser_utils *parser)
 	free(parser->command);
 }
 
-
 void	destroy_lexer_utils(t_lexer_utils *lexer)
 {
 	free_token_list(lexer);
 	free(lexer->type_arr);
 }
-
-

@@ -126,7 +126,7 @@ int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
 char		**get_cmd_dirs(t_env **envp);
 int			generate_command(t_parser_utils *parser);
 //redirection.c
-int			redirection(t_cmd *cmd);
+int			redirection(t_redir *redir);
 //heredoc.c
 void		here_document(t_cmd	*cmd);
 void		create_heredoc(char *delim, char *filename);

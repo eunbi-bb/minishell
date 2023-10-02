@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   execute_builtins.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 17:37:19 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "executor.h"
 
-int is_builtin(t_parser_utils *cmd)
+int	is_builtin(t_parser_utils *cmd)
 {
-	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
-		strcmp(cmd->cmd_list->data[0], "pwd") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "exit") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "env") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "cd") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "export") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "unset") == 0)
+	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "pwd") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "exit") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "env") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "cd") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "export") == 0 \
+		|| strcmp(cmd->cmd_list->data[0], "unset") == 0)
 	{
 		return (0);
 	}
@@ -19,7 +31,7 @@ int is_builtin(t_parser_utils *cmd)
 	}
 }
 
-void execute_builtin(t_parser_utils *cmd)
+void	execute_builtin(t_parser_utils *cmd)
 {
 	if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
 		cmd_echo(cmd->cmd_list->data);
