@@ -52,33 +52,36 @@ int	execute_command(t_parser_utils *parser)
 
 int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
 {
-	// int	fd_in;
 	int	value;
+	t_cmd	*head;
 
-	value = execute_command(parser);
-	// fd_in = execute_redir(parser, parser->cmd_list->redir);
-	if (i != 0)
+	head = parser->cmd_list;
+	while (parser->cmd_list)
 	{
-		if (dup2(fds[i - 2], 0) == -1)
-			perror_exit(ERROR_DUP2_IN);
+		if (i != 0)
+		{
+			if (dup2(fds[i - 2], 0) == -1)
+				perror_exit(ERROR_DUP2_IN);
+		}
+		if (parser->cmd_list->next)
+		{
+			if (dup2(fds[i + 1], 1) == -1)
+				perror_exit(ERROR_DUP2_OUT);
+		}
+		close_ends(lexer->pipe_num, fds);
+		if (parser->cmd_list->data)
+			find_usd(parser->cmd_list->data, *parser->env);
+		value = execute_command(parser);
+		parser->cmd_list = parser->cmd_list->next;
 	}
-	if (parser->cmd_list->next)
-	{
-		if (dup2(fds[i + 1], 1) == -1)
-			perror_exit(ERROR_DUP2_OUT);
-	}
-	close_ends(lexer->pipe_num, fds);
-	if (parser->cmd_list->data)
-		find_usd(parser->cmd_list->data, *parser->env);
-	// if (fd_in > 0)
-	// 	close(fd_in);
+	parser->cmd_list = head;
 	return (value);
 }
 
 int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
-	int	fd_in;
+	int		fd_in;
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;

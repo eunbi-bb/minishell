@@ -34,7 +34,7 @@ int	wait_pipes(pid_t pid, int pipe_num)
 	int	status;
 
 	i = 0;
-	while (i <= pipe_num)
+	while (i < pipe_num + 1)
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status) == 0)

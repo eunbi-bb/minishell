@@ -53,11 +53,13 @@ int	redirection(t_cmd *cmd)
 	{
 		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
 		{
+			printf("outfile\n");
 			if (create_outfile(cmd))
 				return (EXIT_FAILURE);
 		}
 		else if (cmd->redir->redir_type == LESSER || cmd->redir->redir_type == HERE_DOC)
 		{
+			printf("infile\n");
 			fd_in = open_infile(cmd->redir->file_name, cmd);
 			if (fd_in == -1)
 				return (EXIT_FAILURE);
