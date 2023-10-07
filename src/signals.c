@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/07 18:25:07 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/07 21:40:22 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 *	SIGINT	= ctrl + c
 *	SIGQUIT = ctrl + /
 *
-*
+*	|= (ECHOCTL) = showing control keys
 *
 *
 *
@@ -66,15 +66,19 @@ void	signal_heredoc(int sig)
 		g_exit_status = 1;
 		exit(g_exit_status);
 	}
+	if (sig == CTRL_D)
+	{
+		
+	}
 }
 
 void	signal_handler(int sig)
 {
-	struct termios	ter;
+	struct termios	term;
 
-	tcgetattr(STDIN_FILENO, &ter);
-	ter.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &ter);
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= (ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 	if (sig == PARENT)
 	{
 		signal(SIGINT, return_prompt);
@@ -82,9 +86,6 @@ void	signal_handler(int sig)
 	}
 	else if (sig == CHILD)
 	{
-		tcgetattr(STDIN_FILENO, &ter);
-		ter.c_lflag |= (ECHOCTL);
-		tcsetattr(STDIN_FILENO, TCSAFLUSH, &ter);
 		signal(SIGINT, ctrl_c);
 		signal(SIGQUIT, backslash);
 	}

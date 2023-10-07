@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 18:41:32 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/07 22:07:52 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 		{
 			signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
+			if (!parser->cmd_list->data)
+				exit(0);
 		}
 		if (redir != NULL && redir->redir_type != DEFAULT && parser->cmd_list->data)
 			fd_in = redirection(parser->cmd_list->redir);
@@ -49,7 +51,10 @@ int	execute_command(t_parser_utils *parser)
 		else
 		{
 			if (generate_command(parser) == EXIT_CMD)
+			{
+				exit(0);
 				return (EXIT_CMD);
+			}
 			if (parser->cmd_list->data)
 			{
 				if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
@@ -82,8 +87,8 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 				perror_exit(ERROR_DUP2_OUT);
 		}
 		close_ends(lexer->pipe_num, fds);
-		// if (parser->cmd_list->data)
-		// 	find_usd(parser->cmd_list->data, *parser->env);
+		if (parser->cmd_list->data)
+			find_usd(parser->cmd_list->data, *parser->env);
 		value = execute_command(parser);
 		parser->cmd_list = parser->cmd_list->next;
 	}
@@ -106,14 +111,8 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	while (parser->cmd_list != NULL)
 	{
 		if (parser->cmd_list->data && is_builtin(parser) == 0)
-		{
-			execute_builtin(parser);
-			return (0);
-		}
+			return (execute_builtin(parser));
 		pid = fork();
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		// signal(SIGQUIT, sigquit_handler);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 18:26:04 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/07 18:51:23 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_lexer_utils	lexer;
 	t_parser_utils	parser;
-	int				exit_code;
+	// int				exit_code;
 
 	//system ("leaks minishell -q");
 	argv = NULL;
@@ -103,11 +103,11 @@ int	main(int argc, char **argv, char **envp)
 	parser.env = createLinkedList(envp);
 	parser.envp = join_key_value(parser.env);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	exit_code = shell_loop(&lexer, &parser);
+	g_exit_status = shell_loop(&lexer, &parser);
 	// if (sigint_received == 2)
 	// 	exit(0);
 	// printf("exit code : %d\n", exit_code);
 	destroy_lexer_utils(&lexer);
 	destroy_parser_utils(&parser);
-	return (exit_code);
+	return (0);
 }

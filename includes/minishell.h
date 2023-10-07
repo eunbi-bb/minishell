@@ -12,6 +12,7 @@
 # define PARENT 1
 # define CHILD 2
 # define HEREDOC 3
+# define CTRL_D 4
 
 // extern int sigint_received;
 // extern int child;
@@ -79,7 +80,7 @@ typedef struct	s_parser_utils
 	char	*command;
 }	t_parser_utils;
 
-// extern int	g_exit_status;
+extern int	g_exit_status;
 
 //free_llist.c
 void	free_token_list(t_lexer_utils *lexer);
@@ -132,7 +133,7 @@ void		create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 //execute_builtins.c
 int			is_builtin(t_parser_utils *cmd);
-void		execute_builtin(t_parser_utils *cmd);
+int			execute_builtin(t_parser_utils *cmd);
 
 
 //env.c
@@ -147,5 +148,6 @@ void cmd_unset(t_env** head,char* key);
 // void	sigquit_handler(int sig);
 
 void	signal_handler(int signal);
+void	ctrl_d(void);
 
 #endif
