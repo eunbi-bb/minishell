@@ -7,10 +7,15 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
-
-extern int sigint_received;
-extern int child;
 # include "stdbool.h"
+
+# define PARENT 1
+# define CHILD 2
+# define HEREDOC 3
+
+// extern int sigint_received;
+// extern int child;
+
 
 typedef struct s_env
 {
@@ -74,13 +79,7 @@ typedef struct	s_parser_utils
 	char	*command;
 }	t_parser_utils;
 
-// typedef struct	s_global
-// {
-// 	int		exit_stat;
-// 	int		signal;
-// }				t_global;
-
-// t_global	g_global;
+// extern int	g_exit_status;
 
 //free_llist.c
 void	free_token_list(t_lexer_utils *lexer);
@@ -94,7 +93,7 @@ void	free_envp(char **envp);
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(t_types token);
 void		add_after(t_tokens **before, t_tokens *new_node);
-bool		match_quotes(char *str);
+// bool		match_quotes(char *str);
 bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i);
 int			quotes(char *str, int i);
@@ -141,10 +140,12 @@ t_env		**createLinkedList(char** envp);
 char	**join_key_value(t_env **head);
 void find_usd(char **data,  t_env *env);
 void cmd_env(t_env *env);
-void sigint_handler(int signal);
+// void sigint_handler(int signal);
 char *search_value(char *key, t_env *env);
 void cmd_unset(t_env** head,char* key);
-void child_sigint_handler(int signal);
-void	sigquit_handler(int sig);
+// void child_sigint_handler(int signal);
+// void	sigquit_handler(int sig);
+
+void	signal_handler(int signal);
 
 #endif

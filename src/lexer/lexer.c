@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 19:58:48 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/07 18:37:19 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,44 @@ char	*extract_token(char	*str, int i, int *j)
 //(depending on white spaces or quotes)and generate a sub-string.
 int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
-	char	*token;
-	int		j;
+	int j;
+    char *tmp = NULL;
+    char quote;
 
 	j = 0;
-	token = extract_token(str, i, &j);
-	if (token != NULL)
+	while (str[i + j] && (is_token(str[i + j]) == -1))
 	{
-		add_after(&lexer->token_list, new_node(token));
-		free(token);
+		if (str[i + j] == '\'' || str[i + j] == '\"')
+		{
+			if (tmp != NULL)
+				free(tmp);
+			quote = str[i + j];
+			j += quotes(str, i + j);
+			char *tmp2 = ft_substr(str, i, j);
+			tmp = ft_strtrim(tmp2, &quote);
+			free(tmp2);
+		}
+		else if (is_whitespace(str[i + j]))
+			break ;
+		else
+		{
+			j++;
+			if (is_token(str[i + j]) == -1)
+			{
+				if (tmp != NULL)
+					free(tmp);
+				tmp = ft_substr(str, i, j);
+			}
+		}
+	}
+	if (tmp != NULL)
+	{
+		add_after(&lexer->token_list, new_node(tmp));
+		free(tmp);
 	}
 	return (j);
 }
+
 
 bool	lexical_analyzer(t_lexer_utils *lexer)
 {

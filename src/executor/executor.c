@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 17:40:01 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/07 18:41:32 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "parser.h"
 #include "error.h"
 #include "minishell.h"
-
-int child;
 
 int	execute_redir(t_parser_utils *parser, t_redir *redir)
 {
@@ -27,7 +25,10 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
+		{
+			signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
+		}
 		if (redir != NULL && redir->redir_type != DEFAULT && parser->cmd_list->data)
 			fd_in = redirection(parser->cmd_list->redir);
 		redir = redir->next;
@@ -81,8 +82,8 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 				perror_exit(ERROR_DUP2_OUT);
 		}
 		close_ends(lexer->pipe_num, fds);
-		if (parser->cmd_list->data)
-			find_usd(parser->cmd_list->data, *parser->env);
+		// if (parser->cmd_list->data)
+		// 	find_usd(parser->cmd_list->data, *parser->env);
 		value = execute_command(parser);
 		parser->cmd_list = parser->cmd_list->next;
 	}
@@ -110,12 +111,14 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			return (0);
 		}
 		pid = fork();
-		child = 1;
-		signal(SIGQUIT, sigquit_handler);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		// signal(SIGQUIT, sigquit_handler);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
+			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
 			value = generate_child(parser, lexer, fds, i);
 			if (value != 1)

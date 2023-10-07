@@ -1,19 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cmd_exit.c                                         :+:    :+:            */
+/*   signal_utils.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
+/*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/08/16 13:03:25 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/07 17:13:15 by eunbi         ########   odam.nl         */
+/*   Created: 2023/10/05 23:16:29 by eunbi         #+#    #+#                 */
+/*   Updated: 2023/10/07 15:03:51 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-// void cmd_exit()
-// {
-//     sigint_received = 2;
-//     exit(0);
-// }
+#include ""
