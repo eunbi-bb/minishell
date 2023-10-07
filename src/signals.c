@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/07 21:40:22 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 00:03:25 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ void	backslash(int sig)
 {
 	if (sig == SIGQUIT)
 	{
-		write(STDERR_FILENO, "Quit: ", 6);
-		ft_putnbr_fd(sig, STDERR_FILENO);
-		write(STDERR_FILENO, "\n", 1);
 		g_exit_status = 128 + sig;
 	}
 }
@@ -65,10 +62,6 @@ void	signal_heredoc(int sig)
 		rl_on_new_line();
 		g_exit_status = 1;
 		exit(g_exit_status);
-	}
-	if (sig == CTRL_D)
-	{
-		
 	}
 }
 

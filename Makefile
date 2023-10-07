@@ -57,7 +57,7 @@ all: $(NAME)
 $(NAME): $(OBJ) $(OBJF)
 		@make -C $(LIBFT)
 		@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME) $(READLINE_FLAGS)
-		@echo "$(CYAN_B)- Minishell is compiled -"
+		@echo "- Minishell is compiled -"
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 			@mkdir -p $(@D)

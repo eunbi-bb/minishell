@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 18:51:23 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 00:08:52 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
 	// 	perror_exit(ERROR_SIG);
 	// signal(SIGQUIT, SIG_IGN);
-	while (status == 0 || status == 127)
+	while (status == 0)
 	{
 		// if (sigint_received)
         //     sigint_received = 0; // Reset the flag
@@ -67,7 +67,6 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			free(line);
-			write(STDOUT_FILENO, "exit\n", 6);
 			exit(EXIT_SUCCESS);
 		}
 		if (lexical_analyzer(lexer) == false)
@@ -81,6 +80,7 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		// if (sigint_received == 2)
 		// 	exit(0) ;
 	}
+		printf("exit code: %d\n", status);
 	return (status);
 }
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1 && argv[0] != NULL)
 	{
 		printf("Invalid argument.\n");
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	rl_initialize();
 	init_utils(&lexer, &parser);

@@ -11,7 +11,8 @@
 		"vector": "c",
 		"initializer_list": "c",
 		"ranges": "c",
-		"span": "c"
+		"span": "c",
+		"executor.h": "c"
 	},
 	"makefile.launchConfigurations": [
 		{

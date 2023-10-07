@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 16:15:03 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/07 23:13:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	cmd_error(char *cmd)
 int	err_msg(char *str)
 {
 	write(STDERR_FILENO, str, ft_strlen(str));
-	return (EXIT_FAILURE);
+	write(STDERR_FILENO, "\n", 1);
+	exit (EXIT_FAILURE);
 }
 
 void	perror_exit(char *str)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 17:42:28 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/07 23:22:57 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	redirection(t_redir *redir)
 			if (create_outfile(redir))
 				return (EXIT_FAILURE);
 		}
-		else if (redir->redir_type == LESSER || redir->redir_type == HERE_DOC)
+		if (redir->redir_type == LESSER || redir->redir_type == HERE_DOC)
 		{
 			fd_in = open_infile(redir->file_name, redir);
 			if (fd_in == -1)

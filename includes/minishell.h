@@ -12,11 +12,10 @@
 # define PARENT 1
 # define CHILD 2
 # define HEREDOC 3
-# define CTRL_D 4
 
 // extern int sigint_received;
 // extern int child;
-
+extern int	g_exit_status;
 
 typedef struct s_env
 {
@@ -79,8 +78,6 @@ typedef struct	s_parser_utils
 	bool	reset;
 	char	*command;
 }	t_parser_utils;
-
-extern int	g_exit_status;
 
 //free_llist.c
 void	free_token_list(t_lexer_utils *lexer);

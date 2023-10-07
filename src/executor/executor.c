@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 22:07:52 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/07 23:49:50 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 			signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
 			if (!parser->cmd_list->data)
-				exit(0);
+				exit(EXIT_SUCCESS);
 		}
-		if (redir != NULL && redir->redir_type != DEFAULT && parser->cmd_list->data)
+		if (redir != NULL && redir->redir_type != DEFAULT)
+		{
 			fd_in = redirection(parser->cmd_list->redir);
+		}
 		redir = redir->next;
 	}
 	redir = head;
@@ -52,8 +54,8 @@ int	execute_command(t_parser_utils *parser)
 		{
 			if (generate_command(parser) == EXIT_CMD)
 			{
-				exit(0);
-				return (EXIT_CMD);
+				g_exit_status = EXIT_CMD;
+				exit(EXIT_SUCCESS);
 			}
 			if (parser->cmd_list->data)
 			{
