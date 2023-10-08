@@ -16,6 +16,9 @@ void cmd_unset(t_env** head,char* key) {
     t_env* current = *head;
     t_env* previous = NULL;
     char *key_eq;
+
+    if (!key)
+        return ;
     while (current != NULL) {
         key_eq = ft_strjoin(key, "=");
         if (strcmp(current->key, key_eq) == 0) {

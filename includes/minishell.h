@@ -103,7 +103,7 @@ int			cmd_echo(char **cmd);
 int			cmd_pwd();
 void		cmd_exit();
 int			cmd_cd(char **path, t_env *env);
-void		cmd_export(t_env **head, char *str);
+void		cmd_export(t_env **head, char **str);
 
 	/** parser **/
 //parser.c

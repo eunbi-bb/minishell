@@ -122,34 +122,58 @@ void printList(t_env *head) {
     }
 }
 
-void cmd_export(t_env **head, char *str)
+t_env* insert_node(char *str, t_env **head)
 {
-    t_env* newNode;
     char* equalSign;
     size_t keyLength;
+    t_env* newNode;
     t_env* current;
-	t_env* sorted;
 
-	if (!str)
-	{
-		sorted = mergeSort(*head);
-		printList(sorted);
-	}
+    current = *head;
     newNode = (t_env*)malloc(sizeof(t_env));
+    if (newNode == NULL) {
+        perror("malloc");
+        exit(1);
+    }
     equalSign = ft_strchr(str, '=');
+    if (equalSign == NULL)
+        return (NULL);
     keyLength = equalSign - str + 1;
     newNode->key = ft_substr(str, 0, keyLength);
-    if(var_exist(newNode->key, *head) == 0)
+    if(var_exist(newNode->key, current) == 0)
         unset_var(head, newNode->key);
     newNode->value = ft_strdup(equalSign + 1);
     newNode->next = NULL;
-    if (*head == NULL) {
-        *head = newNode;
-    } else {
-        current = *head;
-        while (current->next != NULL) {
-            current = current->next;
+    return(newNode);
+}
+
+void cmd_export(t_env **head, char **str)
+{
+    t_env* newNode;
+    t_env* current;
+	t_env* sorted;
+    int     i;
+
+    i = 1;
+	if (!str[1])
+	{
+		sorted = mergeSort(*head);
+		printList(sorted);
+	} else {
+            while (str[i])
+    {
+        newNode = insert_node(str[i], head);
+        if (*head == NULL) {
+            *head = newNode;
+        } else {
+            current = *head;
+            while (current->next != NULL) {
+                current = current->next;
         }
         current->next = newNode; }
-        //printf("%s%s\n", newNode->key, newNode->value);
+        i++;
+    }
+    }
+
+    //printf("%s%s\n", newNode->key, newNode->value);
 }
