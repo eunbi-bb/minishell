@@ -3,7 +3,7 @@ CC			= gcc
 ifdef DEBUG
 CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g
 else
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g
 endif
 
 ifdef LINUX
