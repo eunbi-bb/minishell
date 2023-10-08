@@ -1,36 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error.c                                            :+:    :+:            */
+/*   token_utils.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 23:13:29 by eunbi         ########   odam.nl         */
+/*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 19:59:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "error.h"
 #include "minishell.h"
 
-void	cmd_error(char *cmd)
+bool	is_whitespace(char c)
 {
-	write(STDERR_FILENO, "Minishell: ", 11);
-	write(STDERR_FILENO, cmd, ft_strlen(cmd));
-	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, ERROR_CMD"\n", ft_strlen(ERROR_CMD) + 1);
+	return (c == ' ' || c == '\t' || c == '\n' \
+		|| c == '\v' || c == '\f' || c == '\r');
 }
 
-int	err_msg(char *str)
+int	skip_whitespace(char *s, int i)
 {
-	write(STDERR_FILENO, str, ft_strlen(str));
-	write(STDERR_FILENO, "\n", 1);
-	exit (EXIT_FAILURE);
+	while (is_whitespace(s[i]))
+		i++;
+	return (i);
 }
 
-void	perror_exit(char *str)
+//Checking if the character is a token or not.
+int	is_token(int c)
 {
-	perror(str);
-	exit(errno);
+	t_lexer_utils	lexer;
+	int				i;
+
+	lexer.type_arr = "|<>";
+	i = 0;
+	while (lexer.type_arr[i])
+	{
+		if (lexer.type_arr[i] == c)
+		{
+			return (i);
+		}
+		i++;
+	}
+	return (-1);
 }

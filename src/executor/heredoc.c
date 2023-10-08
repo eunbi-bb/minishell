@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   heredoc.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/07 22:06:41 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "lexer.h"
 #include <stdio.h>
@@ -15,7 +27,7 @@ char	*tmp_filename(int i)
 	return (filename);
 }
 
-int	create_heredoc(char *delim, char *filename)
+void	create_heredoc(char *delim, char *filename)
 {
 	int		fd;
 	char	*str;
@@ -35,19 +47,16 @@ int	create_heredoc(char *delim, char *filename)
 		write(fd, "\n", 1);
 		free(str);
 	}
+	free(delim);
 	free(str);
-	return (fd);
 }
 
-void	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
+void	here_document(t_cmd	*cmd)
 {
 	static int	i;
-	// int			fd;
-	// int			*pipefd;
 	char		*delim;
 	t_redir		*head;
 
-	(void)lexer;
 	head = cmd->redir;
 	while (cmd->redir)
 	{
@@ -55,7 +64,6 @@ void	here_document(t_cmd	*cmd, t_lexer_utils *lexer)
 		{
 			delim = cmd->redir->file_name;
 			cmd->redir->file_name = tmp_filename(i);
-			// lexer->heredoc_filename = ft_strdup(cmd->redir->file_name);
 			i++;
 			create_heredoc(delim, cmd->redir->file_name);
 		}

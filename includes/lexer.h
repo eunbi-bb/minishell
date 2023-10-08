@@ -5,4 +5,8 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <readline/readline.h>
+
+bool	is_whitespace(char c);
+int		skip_whitespace(char *s, int i);
+int		is_token(int c);
 #endif

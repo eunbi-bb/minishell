@@ -1,32 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   redirection.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/07 23:22:57 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "error.h"
 #include <fcntl.h>
 
-int	open_infile(char *file, t_cmd *cmd)
+int	open_infile(char *file, t_redir *redir)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY); 
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		err_msg(ERROR_INFILE);
 	dup2(fd, STDIN_FILENO);
-	if (cmd->redir->redir_type == HERE_DOC)
+	if (redir->redir_type == HERE_DOC)
 		unlink(file);
 	close(fd);
-	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
-	// 	err_msg(ERROR_PIPE_IN);
-	// else
-	// 	close(fd);
 	return (fd);
 }
 
-int	create_outfile(t_cmd *cmd)
+int	create_outfile(t_redir *redir)
 {
 	int	fd;
 
-	if (cmd->redir->redir_type == APPEND)
+	if (redir->redir_type == APPEND)
 	{
-		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
+		fd = open(redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
 		if (fd == -1)
 			err_msg(ERROR_OUTFILE);
 		dup2(fd, STDOUT_FILENO);
@@ -34,7 +42,7 @@ int	create_outfile(t_cmd *cmd)
 	}
 	else
 	{
-		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
+		fd = open(redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
 		if (fd == -1)
 			err_msg(ERROR_OUTFILE);
 		dup2(fd, STDOUT_FILENO);
@@ -43,27 +51,27 @@ int	create_outfile(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	redirection(t_cmd *cmd)
+int	redirection(t_redir *redir)
 {
 	t_redir	*head;
 	int		fd_in;
 
-	head = cmd->redir;
-	while (cmd->redir != NULL)
+	head = redir;
+	while (redir != NULL)
 	{
-		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
+		if (redir->redir_type == GREATER || redir->redir_type == APPEND)
 		{
-			if (create_outfile(cmd))
+			if (create_outfile(redir))
 				return (EXIT_FAILURE);
 		}
-		else if (cmd->redir->redir_type == LESSER || cmd->redir->redir_type == HERE_DOC)
+		if (redir->redir_type == LESSER || redir->redir_type == HERE_DOC)
 		{
-			fd_in = open_infile(cmd->redir->file_name, cmd);
+			fd_in = open_infile(redir->file_name, redir);
 			if (fd_in == -1)
 				return (EXIT_FAILURE);
 		}
-		cmd->redir = cmd->redir->next;
+		redir = redir->next;
 	}
-	cmd->redir = head;
+	redir = head;
 	return (fd_in);
 }

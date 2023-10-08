@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 16:25:13 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <readline/readline.h>
 #include <stddef.h>
 
 int	count_args(t_tokens	*lexer)
 {
-	int	arg_num;
+	int			arg_num;
 	t_tokens	*tmp;
 
 	tmp = lexer;
@@ -30,10 +41,7 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
-		// if (cmd->redir == NULL)
-		// 	cmd->redir = new;
-		// else if (cmd->redir != NULL && tmp->token != PIPE && tmp->token != DEFAULT)
-			add_after_redir(&cmd->redir, new);
+		add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
 		if (tmp->token >= 1)
 		{
@@ -44,10 +52,9 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 		}
 		tmp = tmp->next;
 	}
-	//free_tokens_list(tmp);
 }
 
-t_cmd *generate_cmd(t_tokens *tokens, t_cmd *cmd)
+t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 {
 	int			arg_num;
 	int			i;
@@ -70,15 +77,12 @@ t_cmd *generate_cmd(t_tokens *tokens, t_cmd *cmd)
 			cmd->data[j] = ft_calloc(len, sizeof(char));
 			ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
-			// printf("init cmd data %s\n", cmd->data[j]);
 		}
-		// printf("added %d cmd data items\n", j);
 		i++;
 		if (current->token != DEFAULT && current->token != PIPE)
 			current = current->next;
 		current = current->next;
 	}
-
 	return (cmd);
 }
 
@@ -94,14 +98,7 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		{
 			cmd = create_cmd_node();
 			generate_cmd(current, cmd);
-			// if (parser->cmd_list == NULL)
-			// {
-			// 	add_after_cmd(&parser->cmd_list, cmd);
-			// }
-			// else
-			// {
-				add_after_cmd(&parser->cmd_list, cmd);
-			// }
+			add_after_cmd(&parser->cmd_list, cmd);
 			while (current->token != PIPE && current->next)
 			{
 				current = current->next;
@@ -109,76 +106,4 @@ void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 		}
 		current = current->next;
 	}
-	// destroy_lexer_list(&lexer->token_list);
 }
-
-// int	main(void)
-// {
-// 	t_lexer_utils lexer;
-// 	t_parser_utils parser_list;
-// 	char	*str;
-
-// 	str = readline("Minishell% ");
-// 	lexer.arg = ft_strtrim(str, " ");
-// 	if (match_quotes(lexer.arg) == FALSE)
-// 		return (-1);
-// 	lexer.pipe_num = 0;
-// 	lexical_analyzer(&lexer);
-
-// 	// /***** PRINT LEXER *****/
-// 	// printf("\n");
-// 	// printf("INPUT : %s\n\n", str);
-// 	// printf("NUMBER OF PIPES : %i\n", lexer.pipe_num);
-// 	// printf("HEREDOC ACTIVE : %d\n", lexer.heredoc);
-
-// 	// t_tokens *curr = lexer.token_list;
-// 	// int i = 1;
-// 	// while (curr != NULL)
-// 	// {
-// 	// 	printf("%d. curr->data: %s\n", i, curr->data);
-// 	// 	printf("%d. curr->token: %d\n", i, curr->token);
-// 	// 	curr = curr->next;
-// 	// 	i++;
-// 	// 	printf("\n");
-// 	// }
-// 	parser(&lexer, &parser_list);
-// 	if (lexer.heredoc == TRUE)
-// 	{
-// 		here_document(parser_list.cmd_list, &lexer);
-// 	}
-
-		
-// 	/***** PRINT PARSER ****/
-// 	t_cmd	*current = parser_list.cmd_list;
-
-// 	int n = 1;
-
-// 	while (current)
-// 	{
-// 		printf("\n--------Number of command : %d---------\n", n);
-// 		int	arg_num = count_args(lexer.token_list);
-// 		int i = 0;
-// 		if (current->data && current->data[i] != NULL)
-// 		{
-// 			while (current->data[i] && i <= arg_num)
-// 			{
-// 				printf("cmd->data[%d] : %s\n", i, current->data[i]);
-// 				i++;
-// 			}
-// 		}
-// 		if (current->redir)
-// 		{
-// 			t_redir *cmd_redir = current->redir;
-// 			while (cmd_redir)
-// 			{
-// 				printf("cmd->redir_type : %d\n", cmd_redir->redir_type);
-// 				printf("cmd->filename : %s\n", cmd_redir->file_name);
-// 				cmd_redir = cmd_redir->next;
-// 			}
-// 		}
-// 		current = current->next;
-// 		n++;
-// 	}
-// 	free (str);
-// 	return (0);
-// }

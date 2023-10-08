@@ -24,13 +24,11 @@ HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 
 INCLUDES	= -I$(HEADER_DIR)
 
-# READLINE_FLAGS  = -lreadline -L/usr/local/opt/readline/lib
-# OBJ_FLAGS       = -I/usr/local/opt/readline/include
-
 SRC_DIR		= src/
-SRC_FILE	= main.c free_llist.c error.c expand.c signals.c \
+SRC_FILE	= main.c free_llist.c error.c expand.c signals.c signal_utils.c \
 				lexer/lexer.c \
 				lexer/node_utils.c \
+				lexer/lexer_utils.c \
 				parser/parser.c \
 				parser/cmd_node_utils.c \
 				parser/redir_node_utils.c \
@@ -42,7 +40,6 @@ SRC_FILE	= main.c free_llist.c error.c expand.c signals.c \
 				executor/execute_builtins.c \
 				builtins/cmd_cd.c \
 				builtins/cmd_echo.c \
-				builtins/cmd_exit.c \
 				builtins/cmd_export.c \
 				builtins/cmd_pwd.c \
 				builtins/cmd_unset.c \
@@ -60,13 +57,7 @@ all: $(NAME)
 $(NAME): $(OBJ) $(OBJF)
 		@make -C $(LIBFT)
 		@$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME) $(READLINE_FLAGS)
-		@echo "$(CYAN_B)- Minishell is compiled -"
-
-# $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
-# 			@mkdir -p $(@D)
-# 			@make -C $(LIBFT)
-# 			@$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJ) libft/libft.a -o $(NAME)
-# 			@echo "$(CYAN_B)- Lexer is compiled -"
+		@echo "- Minishell is compiled -"
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 			@mkdir -p $(@D)
@@ -74,7 +65,6 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADER)| $(OBJF)
 
 $(OBJF):
 		@mkdir -p $(OBJ_DIR)
-# @mkdir -p $(OBJ_DIR)$(SRC_DIR)
 		@touch $(OBJF)
 
 clean:

@@ -6,14 +6,14 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/16 13:03:25 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/25 20:06:28 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/07 17:13:15 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void cmd_exit()
-{
-    sigint_received = 2;
-    exit(0);
-}
+// void cmd_exit()
+// {
+//     sigint_received = 2;
+//     exit(0);
+// }

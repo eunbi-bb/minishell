@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   pipe_utils.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:14:05 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/02 17:38:45 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "executor.h"
 
@@ -20,6 +32,7 @@ void	create_pipes(int pipe_num, int fds[])
 void	close_ends(int pipe_num, int fds[])
 {
 	int	i;
+
 	i = 0;
 	while (i < pipe_num * 2)
 	{
