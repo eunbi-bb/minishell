@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 23:49:50 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 12:45:55 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,10 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		if (parser->cmd_list->data && is_builtin(parser) == 0)
+		if (is_builtin(parser) == 0)
 			return (execute_builtin(parser));
 		pid = fork();
+printf("child pid: %d\n", pid);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)

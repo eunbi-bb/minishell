@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 17:38:45 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/08 13:09:11 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,18 @@ void	close_ends(int pipe_num, int fds[])
 int	wait_pipes(pid_t pid, int pipe_num)
 {
 	int	i;
-	int	status;
+	int	status;	
+	int exitcode;
 
 	i = 0;
+	exitcode = 0;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status) == 0)
+		exitcode = WEXITSTATUS(status);
 	while (i < pipe_num + 1)
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status) == 0)
-		{
-			return (WEXITSTATUS(status));
-		}
+		wait(&status);
 		i++;
 	}
-	return (0);
+	return (exitcode);
 }
