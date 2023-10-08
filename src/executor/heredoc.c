@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 22:06:41 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 18:44:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,18 @@ void	create_heredoc(char *delim, char *filename)
 	while (1)
 	{
 		str = readline("> ");
+		if (str == NULL)
+			break ;
 		if (!ft_strncmp(delim, str, ft_strlen(delim)))
 			break ;
 		write(fd, str, ft_strlen(str));
 		write(fd, "\n", 1);
-		free(str);
+		if (str)
+			free(str);
 	}
 	free(delim);
-	free(str);
+	if (str)
+		free(str);
 }
 
 void	here_document(t_cmd	*cmd)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/08 00:08:52 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 14:39:06 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,16 @@ char	*readline_loop(void)
 	return (line);
 }
 
-int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
+void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;
-	int				status;
 
-	status = 0;
+	g_exit_status = 0;
 	// rl_catch_signals = 0;
 	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
 	// 	perror_exit(ERROR_SIG);
 	// signal(SIGQUIT, SIG_IGN);
-	while (status == 0)
+	while (g_exit_status == 0)
 	{
 		// if (sigint_received)
         //     sigint_received = 0; // Reset the flag
@@ -70,9 +69,9 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 			exit(EXIT_SUCCESS);
 		}
 		if (lexical_analyzer(lexer) == false)
-			return (err_msg(ERROR_LEXER));
+			err_msg(ERROR_LEXER);
 		parser(lexer, parser_utils);
-		status = executor(parser_utils, lexer);
+		g_exit_status = executor(parser_utils, lexer);
 		free_token_list(lexer);
 		free_cmd_list(parser_utils);
 		free(line);
@@ -80,8 +79,6 @@ int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		// if (sigint_received == 2)
 		// 	exit(0) ;
 	}
-		printf("exit code: %d\n", status);
-	return (status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -103,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	parser.env = createLinkedList(envp);
 	parser.envp = join_key_value(parser.env);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	g_exit_status = shell_loop(&lexer, &parser);
+	shell_loop(&lexer, &parser);
 	// if (sigint_received == 2)
 	// 	exit(0);
 	// printf("exit code : %d\n", exit_code);

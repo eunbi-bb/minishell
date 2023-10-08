@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/08 00:03:25 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/08 15:20:46 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	signal_handler(int sig)
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag |= (ECHOCTL);
+	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 	if (sig == PARENT)
 	{
@@ -79,6 +79,9 @@ void	signal_handler(int sig)
 	}
 	else if (sig == CHILD)
 	{
+		tcgetattr(STDIN_FILENO, &term);
+		term.c_lflag |= (ECHOCTL);
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 		signal(SIGINT, ctrl_c);
 		signal(SIGQUIT, backslash);
 	}

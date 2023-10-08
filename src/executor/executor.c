@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/08 12:45:55 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/08 18:00:58 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 				perror_exit(ERROR_DUP2_OUT);
 		}
 		close_ends(lexer->pipe_num, fds);
-		if (parser->cmd_list->data)
-			find_usd(parser->cmd_list->data, *parser->env);
 		value = execute_command(parser);
 		parser->cmd_list = parser->cmd_list->next;
 	}
@@ -112,10 +110,11 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		if (is_builtin(parser) == 0)
+		if (parser->cmd_list->data)
+			find_usd(parser->cmd_list->data, *parser->env);
+		if (parser->cmd_list->data && is_builtin(parser) == 0)
 			return (execute_builtin(parser));
 		pid = fork();
-printf("child pid: %d\n", pid);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
