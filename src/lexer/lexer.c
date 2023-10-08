@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 18:37:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/09 00:34:37 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
-		add_after(&lexer->token_list, new_token_node(APPEND));
+		add_after(&lexer->token_list, new_token_node(NULL, APPEND));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
 	{
-		add_after(&lexer->token_list, new_token_node(HERE_DOC));
+		add_after(&lexer->token_list, new_token_node(NULL, HERE_DOC));
 		lexer->heredoc = true;
 		return (2);
 	}
 	else if (is_token(str[i]) == GREATER)
-		add_after(&lexer->token_list, new_token_node(GREATER));
+		add_after(&lexer->token_list, new_token_node(NULL, GREATER));
 	else if (is_token(str[i]) == LESSER)
-		add_after(&lexer->token_list, new_token_node(LESSER));
+		add_after(&lexer->token_list, new_token_node(NULL, LESSER));
 	else if (is_token(str[i]) == PIPE)
 	{
-		add_after(&lexer->token_list, new_token_node(PIPE));
+		add_after(&lexer->token_list, new_token_node(NULL, PIPE));
 		lexer->pipe_num++;
 	}
 	else
@@ -51,30 +51,63 @@ int	quotes(char *str, int i)
 	return (++j);
 }
 
-char	*extract_token(char	*str, int i, int *j)
-{
-	int		start;
-	int		end;
-	char	*token;
+// char	*extract_token(char	*str, int i, int *j)
+// {
+// 	int		start;
+// 	int		end;
+// 	char	*token;
 
-	start = i;
-	end = i;
-	while (str[end] && (is_token(str[end]) == -1))
+// 	start = i;
+// 	end = i;
+// 	while (str[end] && (is_token(str[end]) == -1))
+// 	{
+// 		if (str[end] == '\'' || str[end] == '\"')
+// 			end += quotes(str, end);
+// 		else if (is_whitespace(str[end]))
+// 			break ;
+// 		else
+// 		{
+// 			end++;
+// 			if (is_token(str[end]) == -1)
+// 				end++;
+// 		}
+// 	}
+// 	token = ft_substr(str, start, end - start);
+// 	*j = end - i;
+// 	return (token);
+// }
+
+int	find_dollar(char *str)
+{
+	int		i;
+	int 	start;
+	char	*tmp;
+
+	i = 0;
+	tmp = NULL;
+	while (str[i])
 	{
-		if (str[end] == '\'' || str[end] == '\"')
-			end += quotes(str, end);
-		else if (is_whitespace(str[end]))
-			break ;
-		else
+		while (str[i] != '$' && str[i])
+			i++;
+		if (str[i] && str[i] == '$')
 		{
-			end++;
-			if (is_token(str[end]) == -1)
-				end++;
+			i = start;
+			if (i > 0)
+				tmp = ft_substr(str, 0, i);
+			if (tmp != NULL)
+				add_after(&lexer->token_list, new_token_node(tmp, DEFAULT))
 		}
+		while (str[i] && str[i] != '+' && str[i] != '$')
+			i++;
+		if (str[i] && str[i] == '+')
+			add_after(&lexer->token_list, new_token_node("+", DEFAULT));
+		if (i > start)
+			tmp = ft_substr(str, start, i);
+		if (tmp != NULL)
+			add_after(&lexer->token_list, new_token_node(tmp, DOLLAR));
+		i++;
 	}
-	token = ft_substr(str, start, end - start);
-	*j = end - i;
-	return (token);
+	return (i);
 }
 
 // Find a begining and end of a string
@@ -82,10 +115,11 @@ char	*extract_token(char	*str, int i, int *j)
 int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 {
 	int j;
-    char *tmp = NULL;
+    char *tmp;
     char quote;
 
 	j = 0;
+	tmp = NULL:
 	while (str[i + j] && (is_token(str[i + j]) == -1))
 	{
 		if (str[i + j] == '\'' || str[i + j] == '\"')
@@ -94,9 +128,7 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 				free(tmp);
 			quote = str[i + j];
 			j += quotes(str, i + j);
-			char *tmp2 = ft_substr(str, i, j);
-			tmp = ft_strtrim(tmp2, &quote);
-			free(tmp2);
+			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
 		}
 		else if (is_whitespace(str[i + j]))
 			break ;
@@ -113,12 +145,16 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 	}
 	if (tmp != NULL)
 	{
-		add_after(&lexer->token_list, new_node(tmp));
+		if (quote == '\'')
+			add_after(&lexer->token_list, new_token_node(tmp, S_QUOTE));
+		else if (quote == '\"')
+			add_after(&lexer->token_list, new_token_node(tmp, D_QUOTE));
+		else
+			add_after(&lexer->token_list, new_token_node(tmp, DEFAULT));
 		free(tmp);
 	}
 	return (j);
 }
-
 
 bool	lexical_analyzer(t_lexer_utils *lexer)
 {

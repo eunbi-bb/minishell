@@ -31,7 +31,10 @@ typedef enum types
 	LESSER,
 	GREATER,
 	HERE_DOC,
-	APPEND
+	APPEND,
+	S_QUOTE,
+	D_QUOTE,
+	DOLLAR
 }	t_types;
 
 typedef	struct	s_tokens
@@ -48,7 +51,6 @@ typedef	struct s_lexer_utils
 	char			*type_arr;
 	unsigned int	pipe_num;
 	bool			heredoc;
-	// char*			heredoc_filename;
 }	t_lexer_utils;
 
 typedef struct s_redir
@@ -61,8 +63,8 @@ typedef struct s_redir
 typedef struct	s_cmd
 {
 	char			**data;
+	t_types			type;
 	t_redir			*redir;
-	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
 
