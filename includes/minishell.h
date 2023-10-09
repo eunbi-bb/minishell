@@ -32,15 +32,17 @@ typedef enum types
 	GREATER,
 	HERE_DOC,
 	APPEND,
-	S_QUOTE,
-	D_QUOTE,
-	DOLLAR
+	DOLLAR,
+	QUESTION,
+	PID
 }	t_types;
 
 typedef	struct	s_tokens
 {
-	char			*data;
-	t_types			token;
+	char	*data;
+	t_types	token;
+	bool	s_quote;
+	bool	d_quote;
 	struct s_tokens	*next;
 }	t_tokens;
 
@@ -91,8 +93,9 @@ void	free_envp(char **envp);
 
 	/** lexer **/
 t_tokens	*new_node(char *data);
-t_tokens	*new_token_node(t_types token);
+t_tokens	*new_token_node(char *data, t_types token, char quote);
 void		add_after(t_tokens **before, t_tokens *new_node);
+void	find_dollar(char *str, t_lexer_utils *lexer, char quote);
 // bool		match_quotes(char *str);
 bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i);
