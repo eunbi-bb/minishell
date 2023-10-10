@@ -97,7 +97,7 @@ void		add_after(t_tokens **before, t_tokens *new_node);
 void	find_dollar(char *str, t_lexer_utils *lexer, char quote);
 // bool		match_quotes(char *str);
 bool		lexical_analyzer(t_lexer_utils *lexer);
-int			arg_divider(t_lexer_utils *lexer, char *str, int i);
+int			arg_divider(t_lexer_utils *lexer, char *str, int i, char quote);
 int	quotes(char *str, int i, char quote);
 int			take_tokens(t_lexer_utils *lexer, char *str, int i);
 t_env		**createLinkedList(char** envp);

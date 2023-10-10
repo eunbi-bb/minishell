@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 17:10:43 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 19:53:03 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,20 @@ int	quotes(char *str, int i, char quote)
 	return (j);
 }
 
+void free_tmp(char *value)
+{
+	if (value != NULL)
+		free(value);
+}
 // Find a begining and end of a string
 //(depending on white spaces or quotes)and generate a sub-string.
-int	arg_divider(t_lexer_utils *lexer, char *str, int i)
+int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 {
-	int j;
-    char *tmp;
-    char quote;
-	(void)lexer;
+	int		j;
+    char	*tmp;
+
 	j = 0;
 	tmp = NULL;
-	quote = '\0';
 	while (str[i + j] && (is_token(str[i + j]) == -1))
 	{
 		if (str[i + j] == '\'' || str[i + j] == '\"')
@@ -79,30 +82,24 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 		}
 		else if (is_whitespace(str[i + j]) || quote != '\0')
 			break ;
-		else
+		else if (is_token(str[i + ++j]) == -1)
 		{
-			j++;
-			if (is_token(str[i + j]) == -1)
-			{
-				if (tmp != NULL)
-					free(tmp);
-				tmp = ft_substr(str, i, j);
-			}
+			free_tmp(tmp);
+			tmp = ft_substr(str, i, j);
 		}
 	}
-	if (tmp != NULL)
-	{
-		find_dollar(tmp, lexer, quote);
-		free(tmp);
-	}
+	find_dollar(tmp, lexer, quote);
+	free_tmp(tmp);
 	return (j);
 }
 
 bool	lexical_analyzer(t_lexer_utils *lexer)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	quote;
 
+	quote = '\0';
 	i = 0;
 	while (lexer->arg[i])
 	{
@@ -111,7 +108,7 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 		if (is_token(lexer->arg[i]) >= 0)
 			j = take_tokens(lexer, lexer->arg, i);
 		else
-			j = arg_divider(lexer, lexer->arg, i);
+			j = arg_divider(lexer, lexer->arg, i, quote);
 		if (j < 0)
 			return (false);
 		i = i + j;

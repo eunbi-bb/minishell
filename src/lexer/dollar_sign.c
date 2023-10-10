@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/10 17:09:10 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 19:45:31 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,13 @@ int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
 	return (i);
 }
 
-
 void	find_dollar(char *str, t_lexer_utils *lexer, char quote)
 {
 	char	*tmp;
 	int		i;
+
+	if (str == NULL)
+		return;
 
 	i = 0;
 	while (str[i])

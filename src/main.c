@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 17:44:43 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 19:12:45 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		// parser_utils->cmd_list = head;
 		/************************/
 
-		// g_exit_status = executor(parser_utils, lexer);
+		g_exit_status = executor(parser_utils, lexer);
 		free_token_list(lexer);
 		free_cmd_list(parser_utils);
 		free(line);
