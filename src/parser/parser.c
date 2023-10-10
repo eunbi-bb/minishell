@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 16:13:52 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 17:43:05 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	t_redir		*new;
 
 	tmp = current;
-	while (tmp && tmp->token != PIPE )
+	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
 		add_after_redir(&cmd->redir, new);
 		new->redir_type = tmp->token;
-		if (tmp->token >= 1)
+		if (tmp->token >= LESSER && tmp->token <= APPEND)
 		{
 			current = current->next;
 			new->file_name = ft_strdup(tmp->next->data);
@@ -72,14 +72,14 @@ t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 	while (i <= arg_num && current)
 	{
 		if (current->data != NULL && (current->token == DEFAULT || current->token >= DOLLAR))
-		{
+		{;
 			len = ft_strlen(current->data) + 1;
 			cmd->data[j] = ft_calloc(len, sizeof(char));
 			ft_strlcpy(cmd->data[j], current->data, len);
 			j++;
 		}
 		i++;
-		if (current->token != DEFAULT && current->token != PIPE)
+		if (current->token >= LESSER && current->token <= APPEND)
 			current = current->next;
 		current = current->next;
 	}

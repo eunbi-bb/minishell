@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 16:06:45 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 17:10:43 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,14 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 		else
 		{
 			j++;
-			// printf("str[i + j] = %c\n", str[i + j]);
 			if (is_token(str[i + j]) == -1)
 			{
-				// if (str[i + j] == '\'' || str[i + j] == '\"')
-				// 	break ;
 				if (tmp != NULL)
 					free(tmp);
 				tmp = ft_substr(str, i, j);
 			}
 		}
 	}
-	// printf("tmp: %s\n", tmp);
 	if (tmp != NULL)
 	{
 		find_dollar(tmp, lexer, quote);
