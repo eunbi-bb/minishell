@@ -6,7 +6,7 @@
 			"name": "(gdb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-            "program": "/home/eucho/Desktop/minishell/minishell",
+            "program": "${workspaceFolder}/minishell",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",

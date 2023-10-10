@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/09 22:20:04 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/09 23:19:19 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*readline_loop(void)
 void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 {
 	char			*line;
-
+	(void)parser_utils;
 	g_exit_status = 0;
 	// rl_catch_signals = 0;
 	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
@@ -70,12 +70,12 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		}
 		if (lexical_analyzer(lexer) == false)
 			err_msg(ERROR_LEXER);
-		parser(lexer, parser_utils);
-		g_exit_status = executor(parser_utils, lexer);
+		// parser(lexer, parser_utils);
+		// g_exit_status = executor(parser_utils, lexer);
 		free_token_list(lexer);
-		free_cmd_list(parser_utils);
+		// free_cmd_list(parser_utils);
 		free(line);
-		lexer->pipe_num = 0;
+		// lexer->pipe_num = 0;
 		// if (sigint_received == 2)
 		// 	exit(0) ;
 	}
