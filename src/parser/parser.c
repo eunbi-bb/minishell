@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 16:25:13 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/10 16:13:52 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	count_args(t_tokens	*lexer)
 		if (tmp->token == PIPE)
 			break ;
 		arg_num++;
-		if (tmp->token != PIPE && tmp->token != DEFAULT)
+		if (tmp->token >= LESSER && tmp->token <= APPEND)
 			arg_num -= 2;
 		tmp = tmp->next;
 	}
@@ -38,7 +38,7 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 	t_redir		*new;
 
 	tmp = current;
-	while (tmp && tmp->token != PIPE)
+	while (tmp && tmp->token != PIPE )
 	{
 		new = create_redir_node();
 		add_after_redir(&cmd->redir, new);
@@ -71,7 +71,7 @@ t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 	generate_redir(current, cmd);
 	while (i <= arg_num && current)
 	{
-		if (current->data != NULL && current->token == DEFAULT)
+		if (current->data != NULL && (current->token == DEFAULT || current->token >= DOLLAR))
 		{
 			len = ft_strlen(current->data) + 1;
 			cmd->data[j] = ft_calloc(len, sizeof(char));

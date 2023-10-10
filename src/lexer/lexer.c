@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 12:06:08 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 16:06:45 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i)
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
 			if (tmp != NULL)
-				free(tmp);
+				break;
 			quote = str[i + j];
 			j += quotes(str, i + j, quote);
 			tmp = ft_strtrim(ft_substr(str, i, j), &quote);

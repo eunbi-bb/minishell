@@ -33,8 +33,7 @@ typedef enum types
 	HERE_DOC,
 	APPEND,
 	DOLLAR,
-	QUESTION,
-	PID
+	QUESTION
 }	t_types;
 
 typedef	struct	s_tokens

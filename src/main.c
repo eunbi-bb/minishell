@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/09 23:19:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/10 16:15:02 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,22 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		}
 		if (lexical_analyzer(lexer) == false)
 			err_msg(ERROR_LEXER);
-		// parser(lexer, parser_utils);
+		parser(lexer, parser_utils);
+		// t_cmd	*head = parser_utils->cmd_list;
+		// int i = 0;
+		// while (parser_utils->cmd_list)
+		// {
+		// 	printf("\n");
+		// 	while (parser_utils->cmd_list->data[i])
+		// 	{
+		// 		printf("	data[%i]	: %s\n", i, parser_utils->cmd_list->data[i]);
+		// 		i++;
+		// 	}
+		// 	printf("	type	: %d\n", parser_utils->cmd_list->type);
+		// 	printf("--------------------------\n\n");
+		// 	parser_utils->cmd_list = parser_utils->cmd_list->next;
+		// }
+		// parser_utils->cmd_list = head;
 		// g_exit_status = executor(parser_utils, lexer);
 		free_token_list(lexer);
 		// free_cmd_list(parser_utils);
