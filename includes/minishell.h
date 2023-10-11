@@ -151,4 +151,6 @@ void cmd_unset(t_env** head,char* key);
 void	signal_handler(int signal);
 void	ctrl_d(void);
 
+void expand(t_tokens *token_list,  t_env *env);
+
 #endif

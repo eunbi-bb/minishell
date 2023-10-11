@@ -110,8 +110,8 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		if (parser->cmd_list->data)
-			find_usd(parser->cmd_list->data, *parser->env);
+		// if (parser->cmd_list->data)
+		// 	find_usd(parser->cmd_list->data, *parser->env);
 		if (parser->cmd_list->data && is_builtin(parser) == 0)
 			return (execute_builtin(parser));
 		pid = fork();

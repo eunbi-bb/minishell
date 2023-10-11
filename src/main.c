@@ -48,7 +48,7 @@ char	*readline_loop(void)
 	return (line);
 }
 
-void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
+void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 {
 	char			*line;
 	(void)parser_utils;
@@ -70,6 +70,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
 		}
 		if (lexical_analyzer(lexer) == false)
 			err_msg(ERROR_LEXER);
+		expand(lexer->token_list, env);
 		parser(lexer, parser_utils);
 	
 		/****Printinf parser******/
@@ -119,7 +120,7 @@ int	main(int argc, char **argv, char **envp)
 	parser.env = createLinkedList(envp);
 	parser.envp = join_key_value(parser.env);
 	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	shell_loop(&lexer, &parser);
+	shell_loop(&lexer, &parser, *parser.env);
 	// if (sigint_received == 2)
 	// 	exit(0);
 	// printf("exit code : %d\n", exit_code);

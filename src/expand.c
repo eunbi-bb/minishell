@@ -14,122 +14,54 @@ char *search_value(char *key, t_env *env)
     return (ft_strdup(""));
 }
 
-// char* print_qm(char *data, char *prestr)
-// {
-//     char *subs;
-//     char *exitc;
-//     size_t len;
+char* print_qm(char *data)
+{
+    char *exitc;
     
-//     g_exit_status = 666;
-//     len = ft_strlen(data);
-//     subs = ft_substr(data, ft_strlen(prestr) + 2, len);
-//     exitc = ft_itoa(g_exit_status);
-//     //printf("SUBSTRING IS %s\n", subs);
-//     free(data);
-//     data = ft_strjoin(exitc, subs);
-//     //printf("DATA IS %s\n", data);
-//     printf("%s", prestr);
-//     free(subs);
-//     free(exitc);
-//     return (data);
-// }
-
-// void find_usd(char **data,  t_env *env)
-// {
-//     int i;
-//     char *start;
-//     char *val;
-//     size_t len;
-//     char *key;
-//     char *prestr;
- 
-//     i = 1;
-//     while (data[i])
-//     {   
-//         // if(strcmp(data[i], "$?") == 0), '$'
-//         // {
-//         //     data[i]=print_qm(data[i]);
-//         // }   
-//             key = ft_strjoin(data[i], "=");
-//             len = ft_strlen(key);
-//             start = ft_strchr(key, '$');
-//             prestr = ft_substr(data[i], 0, len - ft_strlen(start));
-//             if (start != NULL && len > 1)
-//             {
-//                 start++;
-//                 if( *start == '?')
-//                     data[i]=print_qm(data[i], prestr);
-//                 else {
-//                 val = search_value(start, env);
-//                 free(key);
-//                 free(data[i]);
-//                 data[i] = ft_strjoin(prestr, val);
-//                 free(val);
-//                 free(prestr);
-//                 }
-//             }
-//         i++;
-//     }
-// }
-
-int countUsd(const char *str, char target) {
-    int count = 0;
-
-    while (*str != '\0') {
-        if (*str == target) {
-            count++;
-        }
-        str++; // Move to the next character in the string
-    }
-
-    return count;
+    g_exit_status = 666;
+    exitc = ft_itoa(g_exit_status);
+    //printf("SUBSTRING IS %s\n", subs);
+    free(data);
+    data = ft_strdup(exitc);
+    //printf("DATA IS %s\n", data);
+    free(exitc);
+    return (data);
 }
 
-void find_usd(char **data,  t_env *env)
+void expand(t_tokens *token_list,  t_env *env)
 {
-    int i;
-    int j;
-    char **split;
-    char *start;
-    char *end;
-    char *prestr;
-    char *key;
+	t_tokens *current;
     char *val;
-    char  *str1;
     size_t len;
-
-    i = 1;
-    while (data[i])
+    char *key;
+ 
+	current = token_list;
+    while (current != NULL)
     {   
-        if (ft_strchr(data[i], '$') != NULL)
-        {
-            split = ft_split(data[i], '+');
-            if (!split[1])
+		if(current->token == QUESTION && current->s_quote == false)
+		{
+			current->data = print_qm(current->data);
+		}
+		if(current->token == DOLLAR && current->s_quote == false) 
+		{ 
+			//printf("DATA IS %s\n", current->data);
+            key = ft_strjoin(current->data + 1, "=");
+            len = ft_strlen(key);
+            if (len > 1)
             {
-                len = ft_strlen(split[0]);
-                start = ft_strchr(split[0], '$');
-                if(len > ft_strlen(start))
-                    prestr = ft_substr(split[0], 0, len - ft_strlen(start));
-                printf("PRESTRS IS %s\n", prestr);
-                j = 0;
-                while (j < countUsd(split[0], '$'))
-                {
-                    start++;
-                    end = ft_strchr(start, '$');
-                    key = ft_strjoin(ft_substr(start, 0, (ft_strlen(start) - ft_strlen(end))), "=");
-                    printf("KEY IS %s\n", key);
-                    val = search_value(key, env);
-                    str1 = ft_strjoin(prestr, val);
-                    printf("FIRST EXPAND  IS %s\n", str1);
-                    free(val);
-                    free(key);
-                    start = end;
-                    j++;
-                }
-
+				//printf("KEY IS  %s\n", key);
+                val = search_value(key, env);
+                free(key);
+				//printf("val is IS  %s\n", val);
+				if (val)
+				{
+					free(current->data);
+                	current->data = ft_strdup(val);
+					//printf("DATA AFTER  %s\n", current->data);
+					//free(val);
+				}	
             }
-            
-        }
-        i++;   
+		}
+        current = current->next;
     }
 }
