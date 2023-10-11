@@ -12,15 +12,17 @@
 
 #include "minishell.h"
 
-void cmd_unset(t_env** head,char* key) {
+int cmd_unset(t_env** head,char* key) {
     t_env* current = *head;
     t_env* previous = NULL;
     char *key_eq;
 
     if (!key)
-        return ;
+        return (0);
     while (current != NULL) {
         key_eq = ft_strjoin(key, "=");
+		if (!key_eq)
+			err_msg("malloc fail");
         if (strcmp(current->key, key_eq) == 0) {
             if (previous == NULL) {
                 *head = current->next;
@@ -31,9 +33,10 @@ void cmd_unset(t_env** head,char* key) {
             free(current->value);
             free(current);
             free(key_eq);
-            return;
+            return (0);
         }
         previous = current;
         current = current->next;
     }
+	return (0);
 }
