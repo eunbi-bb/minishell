@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/10 19:45:31 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/12 23:37:28 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,25 @@ int	get_len_dollar(char *str)
 	return (i);
 }
 
-int	get_len(char *str)
+int	get_len(char *str, char quote)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' || is_whitespace(str[i]))
-			break ;
-		i++;
-	}
+		while (str[i])
+		{
+			if (quote == '\0')
+			{
+				if (str[i] == '$' || is_whitespace(str[i]))
+					break ;
+			}
+			else if (quote)
+			{
+				if (str[i] == '$' || str[i] == '+')
+				break ;
+			}
+			i++;
+		}
 	return (i);
 }
 
@@ -46,7 +54,7 @@ int	generate_node(char *str, int i, t_lexer_utils *lexer, char quote)
 	char	*tmp;
 	int		len;
 
-	len = get_len(&str[i]);
+	len = get_len(&str[i], quote);
 	tmp = ft_substr(str, i, len);
 	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT, quote));
 	free(tmp);
@@ -82,15 +90,12 @@ void	find_dollar(char *str, t_lexer_utils *lexer, char quote)
 	int		i;
 
 	if (str == NULL)
-		return;
-
+		return ;
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '$')
-		{
 			i = split_dollar(str, i, lexer->token_list, quote);
-		}
 		else if (str[i] == '+')
 		{
 			tmp = ft_strdup("+");
@@ -98,7 +103,9 @@ void	find_dollar(char *str, t_lexer_utils *lexer, char quote)
 			free(tmp);
 			i++;
 		}
-		else if (str[i] != '+' && !is_whitespace(str[i]))
+		else if (str[i] != '+' && !is_whitespace(str[i]) && quote == '\0')
+			i = generate_node(str, i, lexer, quote);
+		else if (quote)
 			i = generate_node(str, i, lexer, quote);
 		else
 			i++;
