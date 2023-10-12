@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/23 18:13:32 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/11 23:10:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int cmd_unset(t_env** head,char* key) {
         return (0);
     while (current != NULL) {
         key_eq = ft_strjoin(key, "=");
-		if (!key_eq)
-			err_msg("malloc fail");
+		// if (!key_eq)
+		// 	err_msg("malloc fail");
         if (strcmp(current->key, key_eq) == 0) {
             if (previous == NULL) {
                 *head = current->next;

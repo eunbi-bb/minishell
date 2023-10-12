@@ -8,7 +8,8 @@
 # define ERROR_FORK "Filed to fork\n"
 //Syntax error
 # define ERROR_QUOTE "syntax error: unexpected EOF while looking for matching"
-
+# define ERROR_NEWLINE "minishell: syntax error near unexpected token `newline'"
+# define ERROR_PIPE	"minishell: syntax error near unexpected token `|'"
 # define ERROR_LEXER "lexer error"
 # define ERROR_MEM "memory error"
 
@@ -30,6 +31,7 @@
 # include <errno.h>
 # include <unistd.h>
 
+int		input_check(char *str);
 int		err_msg(char *str);
 void	perror_exit(char *str);
 void	cmd_error(char *cmd);

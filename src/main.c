@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 19:12:45 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/12 22:16:28 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
 	// 	perror_exit(ERROR_SIG);
 	// signal(SIGQUIT, SIG_IGN);
-	while (g_exit_status == 0)
+	while (g_exit_status >= 0)
 	{
 		// if (sigint_received)
         //     sigint_received = 0; // Reset the flag
@@ -68,36 +68,23 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
-		if (lexical_analyzer(lexer) == false)
-			err_msg(ERROR_LEXER);
-		expand(lexer->token_list, env);
-		parser(lexer, parser_utils);
-	
-		/****Printinf parser******/
-		// t_cmd	*head = parser_utils->cmd_list;
-		// int i = 0;
-		// while (parser_utils->cmd_list)
-		// {
-		// 	printf("\n");
-		// 	while (parser_utils->cmd_list->data[i])
-		// 	{
-		// 		printf("	data[%i]	: %s\n", i, parser_utils->cmd_list->data[i]);
-		// 		i++;
-		// 	}
-		// 	printf("	type	: %d\n", parser_utils->cmd_list->type);
-		// 	printf("--------------------------\n\n");
-		// 	parser_utils->cmd_list = parser_utils->cmd_list->next;
-		// }
-		// parser_utils->cmd_list = head;
-		/************************/
-
-		g_exit_status = executor(parser_utils, lexer);
-		free_token_list(lexer);
-		free_cmd_list(parser_utils);
-		free(line);
-		// lexer->pipe_num = 0;
-		// if (sigint_received == 2)
-		// 	exit(0) ;
+		if (input_check(lexer->arg) == EXIT_FAILURE)
+		{
+			free(line);
+			free(lexer->arg);
+		}
+		else
+		{
+			if (lexical_analyzer(lexer) == false)
+				err_msg(ERROR_LEXER);
+			expand(lexer->token_list, env);
+			parser(lexer, parser_utils);
+			g_exit_status = executor(parser_utils, lexer);
+			free_token_list(lexer);
+			free_cmd_list(parser_utils);
+			free(line);
+			lexer->pipe_num = 0;
+		}
 	}
 }
 
