@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/08 18:00:58 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/13 21:59:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,34 +46,28 @@ int	execute_command(t_parser_utils *parser)
 	if (parser->cmd_list->data)
 	{
 		if (is_builtin(parser) == 0)
-		{
 			execute_builtin(parser);
-			return (0);
-		}
 		else
 		{
 			if (generate_command(parser) == EXIT_CMD)
+				return (EXIT_CMD);
+			else
 			{
-				g_exit_status = EXIT_CMD;
-				exit(EXIT_SUCCESS);
-			}
-			if (parser->cmd_list->data)
-			{
-				if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+				if (parser->cmd_list->data)
 				{
-					perror_exit(ERROR_EXECVE);
+					if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+						perror_exit(ERROR_EXECVE);
 				}
 			}
 		}
-		return (1);
 	}
-	return (0);
+	return(EXIT_SUCCESS);
 }
 
 int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
 {
-	int	value;
 	t_cmd	*head;
+	int		value;
 
 	head = parser->cmd_list;
 	while (parser->cmd_list)
@@ -96,24 +90,26 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	return (value);
 }
 
-int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
+void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
 	int		fd_in;
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
-	int		value;
-	
+	int build_in = 0;
+
 	head = parser->cmd_list;
 	i = 0;
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		// if (parser->cmd_list->data)
-		// 	find_usd(parser->cmd_list->data, *parser->env);
 		if (parser->cmd_list->data && is_builtin(parser) == 0)
-			return (execute_builtin(parser));
+		{
+			build_in = 1;
+			g_exit_status = execute_builtin(parser);
+			break;
+		}
 		pid = fork();
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
@@ -121,9 +117,9 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 		{
 			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
-			value = generate_child(parser, lexer, fds, i);
-			if (value != 1)
-				return (value);
+			int exitCode = generate_child(parser, lexer, fds, i);
+			if (exitCode == EXIT_CMD)
+				exit(exitCode);
 			if (fd_in > 0)
 				close(fd_in);
 		}
@@ -132,5 +128,6 @@ int	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	}
 	parser->cmd_list = head;
 	close_ends(lexer->pipe_num, fds);
-	return (wait_pipes(pid, lexer->pipe_num));
+	if (build_in == 0 && g_exit_status != EXIT_CMD)
+		g_exit_status = wait_pipes(pid, lexer->pipe_num);
 }

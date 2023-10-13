@@ -18,7 +18,7 @@ char* print_qm(char *data)
 {
     char *exitc;
     
-    g_exit_status = 666;
+    // g_exit_status = 666;
     exitc = ft_itoa(g_exit_status);
     //printf("SUBSTRING IS %s\n", subs);
     free(data);

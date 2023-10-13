@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/23 18:14:02 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/13 21:35:00 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int cmd_cd(char **path, t_env *env)
 		printf("%s\n", home);
 		if (chdir(home) == -1) {
 			printf("erorr cd invalid\n");
+			return (1);
 		}
 		pwd = search_value("PWD", env);
 		env_replace_var("OLDPWD", env, pwd);
@@ -56,6 +57,7 @@ int cmd_cd(char **path, t_env *env)
 	{
 		if (chdir(path[1]) == -1) {
 			printf("erorr cd\n");
+			return (1);
 		}
 			// error
 		pwd = search_value("PWD", env);
@@ -65,5 +67,4 @@ int cmd_cd(char **path, t_env *env)
 		free(new_pwd);
 		return (0);
 	}
-	return (1);
 }

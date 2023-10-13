@@ -12,7 +12,8 @@
 		"initializer_list": "c",
 		"ranges": "c",
 		"span": "c",
-		"executor.h": "c"
+		"executor.h": "c",
+		"siginfo_t.h": "c"
 	},
 	"makefile.launchConfigurations": [
 		{

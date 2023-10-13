@@ -122,7 +122,7 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 
 	/** executor **/
 //executor.c
-int			executor(t_parser_utils *cmd, t_lexer_utils *lexer);
+void	executor(t_parser_utils *parser, t_lexer_utils *lexer);
 //executor_utils.c
 char		**get_cmd_dirs(t_env **envp);
 int			generate_command(t_parser_utils *parser);
@@ -140,7 +140,7 @@ int			execute_builtin(t_parser_utils *cmd);
 //env.c
 t_env		**createLinkedList(char** envp);
 char		**join_key_value(t_env **head);
-void		cmd_env(t_env *env);
+int			cmd_env(t_env *env);
 // void sigint_handler(int signal);
 char		*search_value(char *key, t_env *env);
 int			cmd_unset(t_env** head,char* key);

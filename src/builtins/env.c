@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/25 22:45:36 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/13 21:37:49 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,14 @@ t_env* createNode(char* key, char* value) {
     return newNode;
 }
 
-void cmd_env(t_env *env)
+int cmd_env(t_env *env)
 {
     while(env)
     {
         printf("%s%s\n", env->key, env->value);
         env = env->next;
     }
-    
+    return (0);
 }
 
 t_env **createLinkedList(char** envp) {

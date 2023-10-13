@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/08 13:09:11 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/13 21:42:07 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ int	wait_pipes(pid_t pid, int pipe_num)
 	i = 0;
 	exitcode = 0;
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) == 0)
-		exitcode = WEXITSTATUS(status);
+	exitcode = WEXITSTATUS(status);
 	while (i < pipe_num + 1)
 	{
 		wait(&status);
 		i++;
 	}
+
 	return (exitcode);
 }

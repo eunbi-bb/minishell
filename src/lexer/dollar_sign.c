@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/12 23:37:28 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/12 23:41:37 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ int	get_len(char *str, char quote)
 	int	i;
 
 	i = 0;
-		while (str[i])
+	while (str[i])
+	{
+		if (quote == '\0')
 		{
-			if (quote == '\0')
-			{
-				if (str[i] == '$' || is_whitespace(str[i]))
-					break ;
-			}
-			else if (quote)
-			{
-				if (str[i] == '$' || str[i] == '+')
+			if (str[i] == '$' || is_whitespace(str[i]))
 				break ;
-			}
-			i++;
 		}
+		else if (quote)
+		{
+			if (str[i] == '$' || str[i] == '+')
+				break ;
+		}
+		i++;
+	}
 	return (i);
 }
 
