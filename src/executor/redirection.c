@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/07 23:22:57 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/13 23:20:14 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,19 @@ int	open_infile(char *file, t_redir *redir)
 int	create_outfile(t_redir *redir)
 {
 	int	fd;
+	int type;
 
 	if (redir->redir_type == APPEND)
-	{
-		fd = open(redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
-		if (fd == -1)
-			err_msg(ERROR_OUTFILE);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+		type = O_APPEND;
 	else
-	{
-		fd = open(redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
-		if (fd == -1)
-			err_msg(ERROR_OUTFILE);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+		type = O_TRUNC;
+
+	fd = open(redir->file_name, O_CREAT | O_RDWR | type, 0000644);
+	if (fd == -1)
+		err_msg(ERROR_OUTFILE);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+
 	return (EXIT_SUCCESS);
 }
 

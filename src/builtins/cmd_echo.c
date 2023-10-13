@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/03 11:06:15 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/12 23:26:36 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/13 23:28:06 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int cmd_echo(char **cmd)
         if (ft_strncmp(cmd[i], "", 1) == 0)
             i++;
         else
-            printf("%s", cmd[i]);
+            write(1, cmd[i], ft_strlen(cmd[i]));
 		if (i < count - 1)
-            printf(" ");
+            write(1, " ", 2);
         i++;
     } 
     if (printNewline)
-        printf("\n");
+        write(1, "\n", 1);
     return 0;
 }

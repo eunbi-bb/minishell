@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/13 21:59:29 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 00:01:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	execute_command(t_parser_utils *parser)
 	if (parser->cmd_list->data)
 	{
 		if (is_builtin(parser) == 0)
-			execute_builtin(parser);
+			return execute_builtin(parser);
 		else
 		{
 			if (generate_command(parser) == EXIT_CMD)
@@ -90,6 +90,21 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	return (value);
 }
 
+int	redir_check(t_redir *redir)
+{
+	t_redir *current;
+
+	current = redir;
+	while (current)
+	{
+		if (current->redir_type != DEFAULT)
+			return (EXIT_FAILURE);
+		else
+			current = current->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
 void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
 	int		fds[lexer->pipe_num * 2];
@@ -104,7 +119,7 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		if (parser->cmd_list->data && is_builtin(parser) == 0)
+		if (parser->cmd_list->data && redir_check(parser->cmd_list->redir) == EXIT_SUCCESS && is_builtin(parser) == 0)
 		{
 			build_in = 1;
 			g_exit_status = execute_builtin(parser);
@@ -118,10 +133,9 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
 			int exitCode = generate_child(parser, lexer, fds, i);
-			if (exitCode == EXIT_CMD)
-				exit(exitCode);
 			if (fd_in > 0)
 				close(fd_in);
+			exit(exitCode);
 		}
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
