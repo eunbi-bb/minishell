@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 17:25:08 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/14 18:30:17 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,34 @@ int	is_token(int c)
 		i++;
 	}
 	return (-1);
+}
+
+bool	match_quotes(char *str)
+{
+	int		i;
+	int		num_s;
+	int		num_d;
+	char	quote;
+
+	i = 0;
+	num_s = 0;
+	num_d = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			quote = str[i];
+			if (quote == '\'')
+				num_s++;
+			else if (quote == '\"')
+				num_d++;
+			while (str[i] != quote && str[i])
+				i++;
+		}
+		else
+			i++;
+	}
+	if ((num_s % 2) != 0 || (num_d % 2) != 0)
+		return (false);
+	return (true);
 }
