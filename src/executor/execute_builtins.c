@@ -40,9 +40,9 @@ int	execute_builtin(t_parser_utils *cmd)
 		return (cmd_env(*cmd->env));
 	else if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
 		return (cmd_cd(cmd->cmd_list->data, *cmd->env));
-	// else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
-	// 	cmd_export(cmd->env, cmd->cmd_list->data[1]);
+	else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
+		cmd_export(cmd->env, cmd->cmd_list->data);
 	else if (strcmp(cmd->cmd_list->data[0], "unset") == 0)
-		return (cmd_unset(cmd->env, cmd->cmd_list->data[1]));
+		return (cmd_unset(cmd->env, cmd->cmd_list->data));
 	return (0);
 }

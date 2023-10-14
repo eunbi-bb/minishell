@@ -59,7 +59,6 @@ int cmd_cd(char **path, t_env *env)
 			printf("erorr cd\n");
 			return (1);
 		}
-			// error
 		pwd = search_value("PWD", env);
 		env_replace_var("OLDPWD", env, pwd);
 		new_pwd = getcwd(NULL, 0);

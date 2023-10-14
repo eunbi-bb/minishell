@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "error.h"
 
 // Function to split the linked list into two halves
 void splitList(t_env *source, t_env **leftRef, t_env **rightRef) {
@@ -147,7 +148,16 @@ t_env* insert_node(char *str, t_env **head)
     return(newNode);
 }
 
-void cmd_export(t_env **head, char **str)
+int valid_char(char *str)
+{
+    if (ft_isdigit(str[0]))
+        return(1);;
+    if (ft_strchr(str, '-'))
+       return(1);;
+    return(0);
+}
+
+int cmd_export(t_env **head, char **str)
 {
     t_env* newNode;
     t_env* current;
@@ -162,6 +172,11 @@ void cmd_export(t_env **head, char **str)
 	} else {
             while (str[i])
     {
+        if (valid_char(str[i]) == 1)
+        {
+            printf("export: '%s': not a valid identifier\n", str[i]);
+            return (1);
+        }
         newNode = insert_node(str[i], head);
         if (*head == NULL) {
             *head = newNode;
@@ -174,6 +189,5 @@ void cmd_export(t_env **head, char **str)
         i++;
     }
     }
-
-    //printf("%s%s\n", newNode->key, newNode->value);
+    return(0);
 }
