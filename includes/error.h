@@ -30,8 +30,9 @@
 
 # include <errno.h>
 # include <unistd.h>
+# include <stdbool.h>
 
-int		input_check(char *str);
+bool	input_check(char *str);
 int		err_msg(char *str);
 void	perror_exit(char *str);
 void	cmd_error(char *cmd);

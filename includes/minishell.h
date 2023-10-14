@@ -78,11 +78,11 @@ typedef struct	s_parser_utils
 	char	**cmd_dirs;
 	int		pipes;
 	int		pid;
-	bool	reset;
 	char	*command;
 }	t_parser_utils;
 
 //free_llist.c
+void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line);
 void	free_token_list(t_lexer_utils *lexer);
 void	free_cmd_list(t_parser_utils *parser);
 void	free_env_list(t_parser_utils *parser);

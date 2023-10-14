@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/13 20:30:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 14:17:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 *	SIGQUIT = ctrl + /
 *
 *	|= (ECHOCTL) = showing control keys
-*	= ~(ECHOCTL) = Not showing control keys
+*	&= ~(ECHOCTL) = Not showing control keys
 */
 
 
@@ -74,9 +74,6 @@ void	signal_handler(int sig)
 	}
 	else if (sig == CHILD)
 	{
-		tcgetattr(STDIN_FILENO, &term);
-		term.c_lflag |= (ECHOCTL);
-		tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 		signal(SIGINT, ctrl_c);
 		signal(SIGQUIT, backslash);
 	}

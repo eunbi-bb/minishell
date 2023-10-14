@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/13 23:20:14 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 14:35:15 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	open_infile(char *file, t_redir *redir)
 int	create_outfile(t_redir *redir)
 {
 	int	fd;
-	int type;
+	int	type;
 
 	if (redir->redir_type == APPEND)
 		type = O_APPEND;
@@ -43,7 +43,6 @@ int	create_outfile(t_redir *redir)
 		err_msg(ERROR_OUTFILE);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-
 	return (EXIT_SUCCESS);
 }
 

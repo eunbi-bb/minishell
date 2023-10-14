@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 00:01:13 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 14:21:07 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	return (value);
 }
 
-int	redir_check(t_redir *redir)
+bool	redir_check(t_redir *redir)
 {
 	t_redir *current;
 
@@ -98,11 +98,11 @@ int	redir_check(t_redir *redir)
 	while (current)
 	{
 		if (current->redir_type != DEFAULT)
-			return (EXIT_FAILURE);
+			return (false);
 		else
 			current = current->next;
 	}
-	return (EXIT_SUCCESS);
+	return (true);
 }
 
 void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
@@ -112,16 +112,18 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
-	int build_in = 0;
+	int 	exit_code;
+	int		built_in;
 
 	head = parser->cmd_list;
+	built_in = 0;
 	i = 0;
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list != NULL)
 	{
-		if (parser->cmd_list->data && redir_check(parser->cmd_list->redir) == EXIT_SUCCESS && is_builtin(parser) == 0)
+		if (parser->cmd_list->data && redir_check(parser->cmd_list->redir) == true && is_builtin(parser) == 0)
 		{
-			build_in = 1;
+			built_in = 1;
 			g_exit_status = execute_builtin(parser);
 			break;
 		}
@@ -132,16 +134,16 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 		{
 			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
-			int exitCode = generate_child(parser, lexer, fds, i);
-			if (fd_in > 0)
+			exit_code = generate_child(parser, lexer, fds, i);
+			if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
 				close(fd_in);
-			exit(exitCode);
+			exit(exit_code);
 		}
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
 	}
 	parser->cmd_list = head;
 	close_ends(lexer->pipe_num, fds);
-	if (build_in == 0 && g_exit_status != EXIT_CMD)
+	if (built_in == 0 && g_exit_status != EXIT_CMD)
 		g_exit_status = wait_pipes(pid, lexer->pipe_num);
 }

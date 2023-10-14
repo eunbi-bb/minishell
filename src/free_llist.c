@@ -6,12 +6,20 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/02 16:18:25 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/14 12:23:59 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
+
+void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line)
+{
+	free_token_list(lexer);
+	free_cmd_list(parser);
+	free(line);
+	lexer->pipe_num = 0;
+}
 
 void	free_token_list(t_lexer_utils *lexer)
 {

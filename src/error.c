@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/13 21:42:58 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 12:15:31 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 #include "error.h"
 #include "minishell.h"
 
-int	input_check(char *str)
+bool	input_check(char *str)
 {
 	if (str[ft_strlen(str) - 1] == '<' || str[ft_strlen(str) - 1] == '>')
 	{
 		write(STDERR_FILENO, ERROR_NEWLINE, ft_strlen(ERROR_NEWLINE));
 		write(STDERR_FILENO, "\n", 1);
 		g_exit_status = 2;
-		return (EXIT_FAILURE);
+		return (false);
 	}
 	else if (str[0] == '|')
 	{
 		write(STDERR_FILENO, ERROR_PIPE, ft_strlen(ERROR_PIPE));
 		write(STDERR_FILENO, "\n", 1);
 		g_exit_status = 2;
-		return(EXIT_FAILURE);
+		return(false);
 	}
-	return (EXIT_SUCCESS);
+	return (true);
 }
 
 void	cmd_error(char *cmd)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/13 22:00:57 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 13:42:02 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 	lexer->token_list = NULL;
 	parser->cmd_list = NULL;
 	parser->pid = 0;
-	parser->reset = false;
 	parser->env = NULL;
 }
 
@@ -48,6 +47,12 @@ char	*readline_loop(void)
 	return (line);
 }
 
+void	free_prev_line(t_lexer_utils *lexer, char *line)
+{
+	free(line);
+	free(lexer->arg);
+}
+
 void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 {
 	char			*line;
@@ -62,11 +67,8 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
-		if (input_check(lexer->arg) == EXIT_FAILURE)
-		{
-			free(line);
-			free(lexer->arg);
-		}
+		if (input_check(lexer->arg) == false)
+			free_prev_line(lexer, line);
 		else
 		{
 			if (lexical_analyzer(lexer) == false)
@@ -74,10 +76,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 			expand(lexer->token_list, env);
 			parser(lexer, parser_utils);
 			executor(parser_utils, lexer);
-			free_token_list(lexer);
-			free_cmd_list(parser_utils);
-			free(line);
-			lexer->pipe_num = 0;
+			reset(lexer, parser_utils, line);
 		}
 	}
 }
