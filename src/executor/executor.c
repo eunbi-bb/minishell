@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 14:21:07 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/14 15:07:53 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,13 @@ bool	redir_check(t_redir *redir)
 	t_redir *current;
 
 	current = redir;
-	while (current)
+	if (redir == NULL)
+		return (true);
+	while (current != NULL)
 	{
-		if (current->redir_type != DEFAULT)
+		if (current->redir_type >= LESSER && current->redir_type <= APPEND)
 			return (false);
-		else
-			current = current->next;
+		current = current->next;
 	}
 	return (true);
 }
@@ -119,7 +120,7 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	built_in = 0;
 	i = 0;
 	create_pipes(lexer->pipe_num, fds);
-	while (parser->cmd_list != NULL)
+	while (parser->cmd_list)
 	{
 		if (parser->cmd_list->data && redir_check(parser->cmd_list->redir) == true && is_builtin(parser) == 0)
 		{
