@@ -9,4 +9,5 @@
 bool	is_whitespace(char c);
 int		skip_whitespace(char *s, int i);
 int		is_token(int c);
+bool	match_quotes(char *str);
 #endif
