@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/09 00:00:45 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/14 17:25:08 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 bool	is_whitespace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' \
-		|| c == '\v' || c == '\f' || c == '\r');
+	if (c == ' ' || c == '\t' || c == '\n' \
+		|| c == '\v' || c == '\f' || c == '\r')
+		return (true);
+	else
+		return (false);
 }
 
 int	skip_whitespace(char *s, int i)

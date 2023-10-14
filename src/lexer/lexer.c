@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 12:19:49 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/14 15:29:52 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 		}
 	}
 	find_dollar(tmp, lexer, quote);
-	free_tmp(tmp);
+	free(tmp);
 	return (j);
 }
 
