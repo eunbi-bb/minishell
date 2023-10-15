@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 12:53:01 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 14:36:25 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,11 @@ bool	input_check(char *str)
 		g_exit_status = 2;
 		return(false);
 	}
-	else if (is_str_whitespace(str) == true)
+	else if (is_str_whitespace(str) == true || match_quotes(str) == false)
 	{
 		g_exit_status = 0;
 		return (false);
 	}
-	// if (match_quotes(str) == false)
-	// {
-	// 	write(STDERR_FILENO, ERROR_PIPE, ft_strlen(ERROR_PIPE));
-	// 	write(STDERR_FILENO, "\n", 1);
-	// 	g_exit_status = 0;
-	// 	return (false);
-	// }
 	return (true);
 }
 

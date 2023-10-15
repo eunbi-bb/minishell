@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 18:30:17 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 14:35:54 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,15 @@ bool	match_quotes(char *str)
 		{
 			quote = str[i];
 			if (quote == '\'')
+			{
 				num_s++;
+				i++;
+			}
 			else if (quote == '\"')
+			{
 				num_d++;
+				i++;
+			}
 			while (str[i] != quote && str[i])
 				i++;
 		}
