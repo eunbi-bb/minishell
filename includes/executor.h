@@ -14,5 +14,4 @@
 char	*command_check(char **path, char *cmd);
 void	create_pipes(int pipe_num, int fds[]);
 void	close_ends(int pipe_num, int fds[]);
-int	wait_pipes(pid_t pid, int pipe_num);
 #endif

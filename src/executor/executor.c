@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 13:06:49 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 15:54:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	pid_t	pid;
 	int		i;
 	t_cmd	*head;
-	int 	exit_code;
 	int		built_in;
 
 	head = parser->cmd_list;
@@ -126,7 +125,7 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 		{
 			built_in = 1;
 			g_exit_status = execute_builtin(parser);
-			break;
+			break ;
 		}
 		pid = fork();
 		if (pid == -1)
@@ -135,10 +134,10 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 		{
 			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
-			exit_code = generate_child(parser, lexer, fds, i);
+			g_exit_status = generate_child(parser, lexer, fds, i);
 			if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
 				close(fd_in);
-			exit(exit_code);
+			exit(g_exit_status);
 		}
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
@@ -146,5 +145,6 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	parser->cmd_list = head;
 	close_ends(lexer->pipe_num, fds);
 	if (built_in == 0)
-		g_exit_status = wait_pipes(pid, lexer->pipe_num);
+		wait_pipes(pid, lexer->pipe_num, built_in);
+	// printf("exit code: %d\n", g_exit_status);
 }
