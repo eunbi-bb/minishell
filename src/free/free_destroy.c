@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 19:42:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 19:51:15 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 20:49:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line)
 {
 	free_token_list(lexer);
 	free_cmd_list(parser);
+	free_envp(parser->envp);
 	free(line);
 	lexer->pipe_num = 0;
 }

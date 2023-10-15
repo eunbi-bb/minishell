@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/15 17:56:03 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/15 20:33:25 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	cmd_unset(t_env **head, char **key)
 	int		i;
 
 	i = 0;
+	previous = NULL;
 	while (key[++i])
 	{
 		key_eq = ft_strjoin(key[i], "=");

@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/14 14:17:45 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 21:41:43 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(STDOUT_FILENO, "\n", 1);
+
 		g_exit_status = 130;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 17:00:23 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 21:03:19 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	redirection(t_redir *redir)
 	{
 		if (redir->redir_type == GREATER || redir->redir_type == APPEND)
 		{
-			printf("create outfile\n");
 			if (create_outfile(redir))
 				return (EXIT_FAILURE);
 		}

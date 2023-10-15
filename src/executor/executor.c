@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 17:26:14 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 21:37:09 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,11 +128,11 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 			break ;
 		}
 		pid = fork();
+		signal_handler(CHILD);
 		if (pid == -1)
 			err_msg(ERROR_CHILD);
 		else if (pid == 0)
 		{
-			signal_handler(CHILD);
 			fd_in = execute_redir(parser, parser->cmd_list->redir);
 			g_exit_status = generate_child(parser, lexer, fds, i);
 			if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
