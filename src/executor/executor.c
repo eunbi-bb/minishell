@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 15:54:45 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 16:05:48 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	}
 	parser->cmd_list = head;
 	close_ends(lexer->pipe_num, fds);
+	// printf("exit code1: %d\n", g_exit_status);
 	if (built_in == 0)
 		wait_pipes(pid, lexer->pipe_num, built_in);
-	// printf("exit code: %d\n", g_exit_status);
+	// printf("exit code2: %d\n", g_exit_status);
 }
