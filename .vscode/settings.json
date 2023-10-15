@@ -13,7 +13,8 @@
 		"ranges": "c",
 		"span": "c",
 		"executor.h": "c",
-		"siginfo_t.h": "c"
+		"siginfo_t.h": "c",
+		"libft.h": "c"
 	},
 	"makefile.launchConfigurations": [
 		{

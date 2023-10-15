@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 17:54:06 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 01:49:31 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 	while (g_exit_status >= 0)
 	{
 		line = readline_loop();
-		lexer->arg = ft_strtrim(line, " ");
+		if (line)
+			lexer->arg = ft_strtrim(line, " ");
+		else
+			lexer->arg = line;
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			free(line);

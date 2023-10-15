@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 18:25:41 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/14 23:46:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool	input_check(char *str)
 		g_exit_status = 2;
 		return(false);
 	}
-	else if (is_str_whitespace(str) == true || match_quotes(str) == false)
+	else if (is_str_whitespace(str) == true)
 	{
 		g_exit_status = 0;
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 12:23:59 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 00:27:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	free_token_list(t_lexer_utils *lexer)
 	{
 		tmp = lexer->token_list;
 		lexer->token_list = lexer->token_list->next;
-		free(tmp->data);
+		if (tmp->data)
+			free(tmp->data);
 		free(tmp);
 	}
 }
