@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 01:59:32 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/15 16:34:34 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	quotes(char *str, int i, char quote)
 		j++;
 		while (str[i + j] && str[i + j] != quote)
 			j++;
-		// j++;
 	}
 	return (j);
 }
@@ -78,7 +77,11 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 				break;
 			quote = str[i + j];
 			j += quotes(str, i + j, quote);
-			tmp = ft_substr(str, i + 1, j -1);
+			if (str[i + j] != quote)
+				tmp = ft_substr(str, i + 1, j -1);
+			else
+				tmp = ft_strdup("''");
+			printf("tmp :  %sX\n", tmp);
 		}
 		else if (is_whitespace(str[i + j]) || quote != '\0')
 			break ;
