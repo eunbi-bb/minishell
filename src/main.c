@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 14:36:30 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 19:46:53 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,17 @@ char	*readline_loop(void)
 	return (line);
 }
 
-void	free_prev_line(t_lexer_utils *lexer, char *line)
+void	run_shell(t_lexer_utils *lexer, t_parser_utils *parser_utils, t_env *env)
 {
-	free(line);
-	free(lexer->arg);
+	if (lexical_analyzer(lexer) == false)
+		err_msg(ERROR_LEXER);
+	expand(lexer->token_list, env);
+	parser(lexer, parser_utils);
+	executor(parser_utils, lexer);
 }
 
-void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
+
+void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
 {
 	char			*line;
 
@@ -68,18 +72,15 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils, t_env *env)
 		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
 		{
 			free(line);
+			write(STDOUT_FILENO, "exit\n", 5);
 			exit(EXIT_SUCCESS);
 		}
 		if (input_check(lexer->arg) == false)
 			free_prev_line(lexer, line);
 		else
 		{
-			if (lexical_analyzer(lexer) == false)
-				err_msg(ERROR_LEXER);
-			expand(lexer->token_list, env);
-			parser(lexer, parser_utils);
-			executor(parser_utils, lexer);
-			reset(lexer, parser_utils, line);
+			run_shell(lexer, parser, env);
+			reset(lexer, parser, line);
 		}
 	}
 }
@@ -88,9 +89,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_lexer_utils	lexer;
 	t_parser_utils	parser;
-	// int				exit_code;
 
-	//system ("leaks minishell -q");
 	argv = NULL;
 	if (argc != 1 && argv[0] != NULL)
 	{

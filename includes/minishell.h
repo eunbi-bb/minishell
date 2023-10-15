@@ -89,6 +89,7 @@ void	free_env_list(t_parser_utils *parser);
 void	destroy_lexer_utils(t_lexer_utils *lexer);
 void	destroy_parser_utils(t_parser_utils *parser);
 void	free_envp(char **envp);
+void	free_prev_line(t_lexer_utils *lexer, char *line);
 
 	/** lexer **/
 t_tokens	*new_node(char *data);
@@ -123,20 +124,23 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 	/** executor **/
 //executor.c
 void	executor(t_parser_utils *parser, t_lexer_utils *lexer);
+int	execute_redir(t_parser_utils *parser, t_redir *redir);
 //executor_utils.c
 char		**get_cmd_dirs(t_env **envp);
 int			generate_command(t_parser_utils *parser);
 //redirection.c
 int			redirection(t_redir *redir);
+int	create_outfile(t_redir *redir);
 //heredoc.c
 void		here_document(t_cmd	*cmd);
 void		create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
+
 //execute_builtins.c
 int			is_builtin(t_parser_utils *cmd);
 int			execute_builtin(t_parser_utils *cmd);
 
-void	wait_pipes(pid_t pid, int pipe_num, int built_in);
+void		wait_pipes(pid_t pid, int pipe_num, int built_in);
 
 
 //env.c

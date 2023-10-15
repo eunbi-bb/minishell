@@ -25,7 +25,7 @@ HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 INCLUDES	= -I$(HEADER_DIR)
 
 SRC_DIR		= src/
-SRC_FILE	= main.c free_llist.c error.c expand.c signals.c \
+SRC_FILE	= main.c error.c expand.c signals.c \
 				lexer/lexer.c \
 				lexer/node_utils.c \
 				lexer/lexer_utils.c \
@@ -45,6 +45,8 @@ SRC_FILE	= main.c free_llist.c error.c expand.c signals.c \
 				builtins/cmd_pwd.c \
 				builtins/cmd_unset.c \
 				builtins/env.c \
+				free/free_llist.c \
+				free/free_destroy.c \
 
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))
 

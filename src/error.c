@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 15:58:15 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/15 19:49:22 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_str_whitespace(char *str)
 
 bool	input_check(char *str)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(str);
 	if (len > 0 && (str[len - 1] == '<' || str[len - 1] == '>'))
@@ -45,7 +45,7 @@ bool	input_check(char *str)
 		write(STDERR_FILENO, ERROR_PIPE, ft_strlen(ERROR_PIPE));
 		write(STDERR_FILENO, "\n", 1);
 		g_exit_status = 2;
-		return(false);
+		return (false);
 	}
 	else if (is_str_whitespace(str) == true || match_quotes(str) == false)
 	{
@@ -75,4 +75,3 @@ void	perror_exit(char *str)
 	perror(str);
 	exit(errno);
 }
-
