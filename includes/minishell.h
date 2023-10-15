@@ -108,7 +108,10 @@ int			cmd_echo(char **cmd);
 int			cmd_pwd();
 void		cmd_exit();
 int			cmd_cd(char **path, t_env *env);
-int		cmd_export(t_env **head, char **str);
+int			cmd_export(t_env **head, char **str);
+int			var_exist(char *key, t_env *env);
+void		print_list(t_env *head);
+t_env		*merge_sort(t_env *head);
 
 	/** parser **/
 //parser.c
