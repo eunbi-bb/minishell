@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/15 16:42:04 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/15 18:35:30 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,26 +73,34 @@ int	valid_char(char *str)
 	return (0);
 }
 
-// void add_to_list(t_env *current, t_env **head, t_env *new)
-// {
-// 	current = *head;
-// 	while (current->next != NULL)
-// 		current = current->next;
-// 	current->next = new_node;
-// }
+void	add_to_list(t_env *current, t_env **head, char *str)
+{
+	t_env	*new_node;
+
+	new_node = insert_node(str, head);
+	if (*head == NULL)
+		*head = new_node;
+	else
+	{
+		current = *head;
+		while (current->next != NULL)
+			current = current->next;
+		current->next = new_node;
+	}
+}
 
 int	cmd_export(t_env **head, char **str)
 {
-	t_env	*new_node;
 	t_env	*current;
 	t_env	*sorted;
 	int		i;
 
 	i = 1;
+	current = NULL;
 	if (!str[1])
 	{
-		sorted = mergeSort(*head);
-		printList(sorted);
+		sorted = merge_sort(*head);
+		print_list(sorted);
 	}
 	else
 	{
@@ -103,16 +111,7 @@ int	cmd_export(t_env **head, char **str)
 				printf("export: '%s': not a valid identifier\n", str[i]);
 				return (1);
 			}
-			new_node = insert_node(str[i], head);
-			if (*head == NULL)
-				*head = new_node;
-			else
-			{
-				current = *head;
-				while (current->next != NULL)
-					current = current->next;
-				current->next = new_node;
-			}
+			add_to_list(current, head, str[i]);
 			i++;
 		}
 	}
