@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 21:19:42 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/16 22:43:44 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	redirection(t_redir *redir)
 	int		fd_in;
 
 	head = redir;
+	fd_in = 0;
 	while (redir != NULL)
 	{
 		if (redir->redir_type == GREATER || redir->redir_type == APPEND)

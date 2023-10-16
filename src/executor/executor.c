@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 21:11:27 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/16 22:38:00 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	create_pipes(lexer->pipe_num, fds);
 	while (parser->cmd_list)
 	{
-		if (redir_check(parser->cmd_list->redir) == true && is_builtin(parser) == 0)
+		if (redir_check(parser->cmd_list->redir) == true && is_builtin(parser) == 0 && lexer->pipe_num == 0)
 		{
 			g_exit_status = execute_builtin(parser);
 			built_in = 1;
