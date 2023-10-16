@@ -143,7 +143,7 @@ char		*tmp_filename(int i);
 int			is_builtin(t_parser_utils *cmd);
 int			execute_builtin(t_parser_utils *cmd);
 
-void		wait_pipes(pid_t pid, int pipe_num, int built_in);
+void		wait_pipes(pid_t pid, int pipe_num);
 
 
 //env.c

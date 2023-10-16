@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/15 21:41:43 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/16 20:37:32 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	backslash(int sig)
 {
 	if (sig == SIGQUIT)
 	{
+		write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 		g_exit_status = 131;
 	}
 }
@@ -44,7 +45,7 @@ void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
-
+		write(STDIN_FILENO, "\n", 1);
 		g_exit_status = 130;
 	}
 }
@@ -74,6 +75,9 @@ void	signal_handler(int sig)
 	}
 	else if (sig == CHILD)
 	{
+		tcgetattr(STDIN_FILENO, &term);
+		term.c_lflag |= (ECHOCTL);
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 		signal(SIGINT, ctrl_c);
 		signal(SIGQUIT, backslash);
 	}

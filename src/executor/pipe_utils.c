@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 15:53:49 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/16 20:58:54 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ void	close_ends(int pipe_num, int fds[])
 	}
 }
 
-void	wait_pipes(pid_t pid, int pipe_num, int built_in)
+void	wait_pipes(pid_t pid, int pipe_num)
 {
 	int	i;
-	int	status;	
+	int	status;
 
 	i = 0;
 	waitpid(pid, &status, 0);
@@ -53,6 +53,6 @@ void	wait_pipes(pid_t pid, int pipe_num, int built_in)
 		wait(&status);
 		i++;
 	}
-	if (built_in == 0)
+	if (WIFEXITED(status))
 		g_exit_status = WEXITSTATUS(status);
 }

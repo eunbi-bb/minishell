@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 21:03:19 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/16 21:19:42 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	open_infile(char *file, t_redir *redir)
 	dup2(fd, STDIN_FILENO);
 	if (redir->redir_type == HERE_DOC)
 		unlink(file);
-	close(fd);
+	if (fd > 0)
+		close(fd);
 	return (fd);
 }
 
@@ -41,7 +42,8 @@ int	create_outfile(t_redir *redir)
 	if (fd == -1)
 		err_msg(ERROR_OUTFILE);
 	dup2(fd, STDOUT_FILENO);
-	close(fd);
+	if (fd > 0)
+		close(fd);
 	return (EXIT_SUCCESS);
 }
 
