@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 21:35:44 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 23:16:33 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
 	g_exit_status = 0;
 	while (g_exit_status >= 0)
 	{
+		signal_handler(PARENT);
 		line = readline_loop();
 		if (line)
 			lexer->arg = ft_strtrim(line, " ");
@@ -99,7 +100,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	rl_initialize();
 	init_utils(&lexer, &parser);
-	signal_handler(PARENT);
 	parser.env = createLinkedList(envp);
 	// parser.cmd_dirs = get_cmd_dirs(parser.env);
 	shell_loop(&lexer, &parser, *parser.env);
