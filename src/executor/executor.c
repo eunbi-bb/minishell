@@ -6,36 +6,43 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 22:30:37 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 22:54:28 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "minishell.h"
 
+static void	unlink_exit(char *file_name)
+{
+	unlink(file_name);
+	exit(EXIT_SUCCESS);
+}
+
 int	execute_redir(t_parser_utils *parser, t_redir *redir)
 {
-	int	fd_in;
+	int		fd_in;
+	int		signal_handling;
 	t_redir	*head;
 
 	head = redir;
 	fd_in = 0;
+	signal_handling = 0;
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
 		{
-			signal_handler(HEREDOC);
+			if (!signal_handling++)
+				signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
 			if (!parser->cmd_list->data && !redir->next)
 			{
-				unlink(redir->file_name);
-				exit(EXIT_SUCCESS);
+				signal_handling = 0;
+				unlink_exit(redir->file_name);
 			}
 		}
 		if (redir != NULL && redir->redir_type != DEFAULT)
-		{
 			fd_in = redirection(parser->cmd_list->redir);
-		}
 		redir = redir->next;
 	}
 	redir = head;
