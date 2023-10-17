@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 23:57:02 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 22:19:18 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ int	open_infile(char *file, t_redir *redir)
 {
 	int	fd;
 
-	printf("HERE3\n");
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		err_msg(ERROR_INFILE);
 	dup2(fd, STDIN_FILENO);
-	if (redir->redir_type == HERE_DOC)
+	if (redir->redir_type == HERE_DOC && !redir->next)
 		unlink(file);
 	if (fd > 0)
 		close(fd);
@@ -33,15 +32,8 @@ int	open_infile(char *file, t_redir *redir)
 int	create_outfile(t_redir *redir)
 {
 	int	fd;
-	int	heredoc_fd;
 	int	type;
 
-	if (redir->prev->redir_type == HERE_DOC)
-	{
-		heredoc_fd = open(redir->prev->file_name, O_RDONLY);
-		printf("heredoc: %d\n", heredoc_fd);
-		dup2(heredoc_fd, STDIN_FILENO);
-	}
 	if (redir->redir_type == APPEND)
 		type = O_APPEND;
 	else

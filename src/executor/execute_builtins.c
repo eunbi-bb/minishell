@@ -6,12 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 18:30:02 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:39:08 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
 
 int	is_builtin(t_parser_utils *cmd)
 {

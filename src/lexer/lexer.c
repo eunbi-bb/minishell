@@ -6,12 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 21:38:02 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:38:02 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
 
 //Putting a token in a node
 int	take_tokens(t_lexer_utils *lexer, char *str, int i)

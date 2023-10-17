@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 20:33:21 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 22:30:37 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ int	execute_redir(t_parser_utils *parser, t_redir *redir)
 		{
 			signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
-			if (!parser->cmd_list->data)
+			if (!parser->cmd_list->data && !redir->next)
+			{
+				unlink(redir->file_name);
 				exit(EXIT_SUCCESS);
+			}
 		}
 		if (redir != NULL && redir->redir_type != DEFAULT)
 		{

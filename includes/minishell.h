@@ -57,7 +57,6 @@ typedef struct s_redir
 {
 	char		*file_name;
 	t_types		redir_type;
-	struct s_redir *prev;
 	struct s_redir *next;
 }	t_redir;
 
@@ -99,6 +98,8 @@ void		add_after(t_tokens **before, t_tokens *new_node);
 void		find_dollar(char *str, t_lexer_utils *lexer, char quote);
 bool		match_quotes(char *str);
 bool		is_whitespace(char c);
+int			skip_whitespace(char *s, int i);
+int			is_token(int c);
 bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i, char quote);
 int			quotes(char *str, int i, char quote);

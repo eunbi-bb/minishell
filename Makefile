@@ -1,5 +1,5 @@
 NAME		= minishell
-CC			= gcc
+CC			= cc
 ifdef DEBUG
 CFLAGS		= -Wall -Wextra -Werror -fsanitize=address -g
 else

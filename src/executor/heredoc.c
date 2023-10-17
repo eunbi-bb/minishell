@@ -6,12 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 18:06:06 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:38:58 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
