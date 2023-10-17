@@ -6,12 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 20:50:16 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:35:44 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
 #include "error.h"
 
 int	g_exit_status;
@@ -49,6 +48,8 @@ char	*readline_loop(void)
 
 void	run_shell(t_lexer_utils *lexer, t_parser_utils *parser_utils, t_env *env)
 {
+	parser_utils->envp = join_key_value(parser_utils->env);	
+	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
 	if (lexical_analyzer(lexer) == false)
 		err_msg(ERROR_LEXER);
 	expand(lexer->token_list, env);
@@ -79,7 +80,6 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
 			free_prev_line(lexer, line);
 		else
 		{
-			parser->envp = join_key_value(parser->env);
 			run_shell(lexer, parser, env);
 			reset(lexer, parser, line);
 		}
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **envp)
 	init_utils(&lexer, &parser);
 	signal_handler(PARENT);
 	parser.env = createLinkedList(envp);
-	parser.cmd_dirs = get_cmd_dirs(parser.env);
+	// parser.cmd_dirs = get_cmd_dirs(parser.env);
 	shell_loop(&lexer, &parser, *parser.env);
 	destroy_lexer_utils(&lexer);
 	destroy_parser_utils(&parser);

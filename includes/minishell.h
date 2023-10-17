@@ -2,19 +2,18 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include "parser.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
-# include "stdbool.h"
+# include <stdbool.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define PARENT 1
 # define CHILD 2
 # define HEREDOC 3
 
-// extern int sigint_received;
-// extern int child;
 extern int	g_exit_status;
 
 typedef struct s_env
@@ -58,6 +57,7 @@ typedef struct s_redir
 {
 	char		*file_name;
 	t_types		redir_type;
+	struct s_redir *prev;
 	struct s_redir *next;
 }	t_redir;
 
@@ -90,13 +90,15 @@ void	destroy_lexer_utils(t_lexer_utils *lexer);
 void	destroy_parser_utils(t_parser_utils *parser);
 void	free_envp(char **envp);
 void	free_prev_line(t_lexer_utils *lexer, char *line);
+void	free_cmd_dirs(t_parser_utils *parser);
 
 	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(char *data, t_types token, char quote);
 void		add_after(t_tokens **before, t_tokens *new_node);
 void		find_dollar(char *str, t_lexer_utils *lexer, char quote);
-// bool		match_quotes(char *str);
+bool		match_quotes(char *str);
+bool		is_whitespace(char c);
 bool		lexical_analyzer(t_lexer_utils *lexer);
 int			arg_divider(t_lexer_utils *lexer, char *str, int i, char quote);
 int			quotes(char *str, int i, char quote);
@@ -138,11 +140,12 @@ int	create_outfile(t_redir *redir);
 void		here_document(t_cmd	*cmd);
 void		create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
-
 //execute_builtins.c
 int			is_builtin(t_parser_utils *cmd);
 int			execute_builtin(t_parser_utils *cmd);
-
+//pipe_utils.c
+void		create_pipes(int pipe_num, int fds[]);
+void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
 
 

@@ -6,13 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/13 20:31:15 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:17:33 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "parser.h"
-#include "executor.h"
 #include "error.h"
 
 char	**get_cmd_dirs(t_env **envp)

@@ -6,12 +6,10 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 22:38:00 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 20:33:21 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
-#include "parser.h"
 #include "error.h"
 #include "minishell.h"
 

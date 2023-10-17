@@ -6,12 +6,11 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 20:58:54 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 20:27:08 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "executor.h"
 
 void	create_pipes(int pipe_num, int fds[])
 {

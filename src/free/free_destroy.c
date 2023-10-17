@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 19:42:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 20:49:45 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/17 21:36:46 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,10 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
-void	destroy_parser_utils(t_parser_utils *parser)
+void	free_cmd_dirs(t_parser_utils *parser)
 {
 	int	i;
 
-	free_cmd_list(parser);
-	free(parser->args);
-	free_env_list(parser);
-	free_envp(parser->envp);
 	i = 0;
 	while (parser->cmd_dirs[i])
 	{
@@ -46,6 +42,16 @@ void	destroy_parser_utils(t_parser_utils *parser)
 		i++;
 	}
 	free(parser->cmd_dirs);
+}
+
+void	destroy_parser_utils(t_parser_utils *parser)
+{
+	free_cmd_list(parser);
+	free(parser->args);
+	free_env_list(parser);
+	if (parser->cmd_dirs)
+		free_cmd_dirs(parser);
+	free_envp(parser->envp);
 	free(parser->command);
 }
 
@@ -60,6 +66,8 @@ void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line)
 	free_token_list(lexer);
 	free_cmd_list(parser);
 	free_envp(parser->envp);
+	if (parser->cmd_dirs)
+		free_cmd_dirs(parser);
 	free(line);
 	lexer->pipe_num = 0;
 }

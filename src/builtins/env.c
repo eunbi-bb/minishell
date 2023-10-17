@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/13 21:37:49 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/17 20:53:12 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	**join_key_value(t_env **head)
 			return (free_array(str, i + 1));
 		i++;
 		current = current->next;
-		// free((void *)key_is);
 	}
 	str[i] = NULL;
 	return (str);
@@ -80,11 +79,15 @@ t_env* createNode(char* key, char* value) {
 
 int cmd_env(t_env *env)
 {
+	t_env	*head;
+
+	head = env;
     while(env)
     {
         printf("%s%s\n", env->key, env->value);
         env = env->next;
     }
+	env = head;
     return (0);
 }
 
