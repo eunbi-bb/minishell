@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:43:52 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 18:22:06 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 	parser->cmd_list = head;
 	return (value);
 }
-
 
 static bool	redir_check(t_redir *redir)
 {
@@ -100,17 +99,17 @@ static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
 	}
-	parser->cmd_list = head;
 	close_ends(lexer->pipe_num, fds);
 	if (built_in == 0)
 		wait_pipes(pid, lexer->pipe_num);
+	parser->cmd_list = head;
 }
 
 void	setup_executor(t_lexer *lexer, t_parser *parser)
 {
 	int		*fds;
 
-	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
+	fds = malloc(lexer->pipe_num * 2 * sizeof(int));
 	if (fds == NULL)
 	{
 		free(fds);
