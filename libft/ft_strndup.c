@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cmd_exit.c                                         :+:    :+:            */
+/*   ft_strndup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/08/16 13:03:25 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/15 18:29:15 by eucho         ########   odam.nl         */
+/*   Created: 2023/10/18 18:18:13 by ssemanco      #+#    #+#                 */
+/*   Updated: 2023/10/18 18:29:23 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void cmd_exit()
+char	*ft_strndup(const char *s1, size_t n)
 {
-    exit(0);
+	size_t  size;
+	char	*str;
+
+	size = n + 1;
+	str = (char *)malloc(size);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, size);
+	return (str);
 }

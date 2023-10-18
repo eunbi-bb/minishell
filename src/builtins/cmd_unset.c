@@ -27,6 +27,12 @@ void	unset_free(t_env *current, t_env *previous, t_env **head)
 	current = NULL;
 }
 
+void	check_malloc(char *key)
+{
+	if (!key)
+		err_msg("malloc fail");
+}
+
 int	cmd_unset(t_env **head, char **key)
 {
 	t_env	*current;
@@ -39,8 +45,7 @@ int	cmd_unset(t_env **head, char **key)
 	while (key[++i])
 	{
 		key_eq = ft_strjoin(key[i], "=");
-		if (!key_eq)
-			err_msg("malloc fail");
+		check_malloc(key_eq);
 		current = *head;
 		while (current)
 		{

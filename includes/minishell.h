@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:35:22 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 19:21:01 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,17 @@ typedef struct s_parser
 	char	*command;
 }	t_parser;
 
+typedef struct s_data
+{
+	char	*eq_sign;
+	char	*env;
+	size_t	key_len;
+	char	*key;
+	char	*value;
+	t_env	*new_node;
+	int		i;
+}	t_data;
+
 void	signal_handler(int sig);
 
 /***** parser *****/
@@ -148,7 +159,7 @@ void		wait_pipes(pid_t pid, int pipe_num);
 	//	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
 
-t_env		**createLinkedList(char** envp);
+t_env		**create_link_list(char** envp, t_data *data);
 
 int			cmd_echo(char **cmd);
 int			cmd_pwd();
