@@ -6,11 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2023/10/18 20:02:23 by ssemanco      ########   odam.nl         */
-=======
-/*   Updated: 2023/10/18 19:13:29 by eucho         ########   odam.nl         */
->>>>>>> fff6768bd6dd792531373fbfadcb3bcf50e9d55d
+/*   Updated: 2023/10/18 20:11:01 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +15,7 @@
 
 int	g_exit_status;
 
-void	init_utils(t_lexer *lexer, t_parser	*parser, t_data *data)
+void	init_utils(t_lexer *lexer, t_parser	*parser)
 {
 	lexer->pipe_num = 0;
 	lexer->heredoc = false;
@@ -27,13 +23,6 @@ void	init_utils(t_lexer *lexer, t_parser	*parser, t_data *data)
 	parser->cmd_list = NULL;
 	parser->pid = 0;
 	parser->env = NULL;
-	data->eq_sign = NULL;
-	data->env = NULL;
-	data->key_len = 0;
-	data->key = NULL;
-	data->value = NULL;
-	data->new_node = NULL;
-	data->i = 0;
 }
 
 /*
@@ -113,22 +102,10 @@ static void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
 	}
 }
 
-void init_data(t_data *data)
-{
-	data->eq_sign = NULL;
-	data->env = NULL;
-	data->key_len = 0;
-	data->key = NULL;
-	data->value = NULL;
-	data->new_node = NULL;
-	data->i = 0;
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_lexer		lexer;
 	t_parser	parser;
-	t_data		data;
 
 	argv = NULL;
 	if (argc != 1 && argv[0] != NULL)
@@ -137,8 +114,8 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_SUCCESS);
 	}
 	rl_initialize();
-	init_utils(&lexer, &parser, &data);
-	parser.env = create_link_list(envp, &data);
+	init_utils(&lexer, &parser);
+	parser.env = createLinkedList(envp);
 	shell_loop(&lexer, &parser, *parser.env);
 	destroy_lexer_parser(&lexer, &parser);
 	return (0);
