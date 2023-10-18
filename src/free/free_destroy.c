@@ -6,13 +6,13 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 19:42:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:42:34 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_prev_line(t_lexer_utils *lexer, char *line)
+void	free_prev_line(t_lexer *lexer, char *line)
 {
 	free(line);
 	free(lexer->arg);
@@ -31,7 +31,7 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
-void	free_cmd_dirs(t_parser_utils *parser)
+void	free_cmd_dirs(t_parser *parser)
 {
 	int	i;
 
@@ -44,7 +44,7 @@ void	free_cmd_dirs(t_parser_utils *parser)
 	free(parser->cmd_dirs);
 }
 
-void	destroy_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
+void	destroy_lexer_parser(t_lexer *lexer, t_parser *parser)
 {
 	free_token_list(lexer);
 	free(lexer->type_arr);
@@ -57,7 +57,7 @@ void	destroy_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
 	free(parser->command);
 }
 
-void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line)
+void	reset(t_lexer *lexer, t_parser *parser, char *line)
 {
 	free_token_list(lexer);
 	free_cmd_list(parser);

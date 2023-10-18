@@ -6,74 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:55:18 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:48:36 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "minishell.h"
 
-static void	unlink_exit(char *file_name)
-{
-	unlink(file_name);
-	exit(EXIT_SUCCESS);
-}
-
-int	execute_redir(t_parser_utils *parser, t_redir *redir)
-{
-	int		fd_in;
-	int		signal_handling;
-	t_redir	*head;
-
-	head = redir;
-	fd_in = 0;
-	signal_handling = 0;
-	while (redir)
-	{
-		if (redir != NULL && redir->redir_type == HERE_DOC)
-		{
-			if (!signal_handling++)
-				signal_handler(HEREDOC);
-			here_document(parser->cmd_list);
-			if (!parser->cmd_list->data && !redir->next)
-			{
-				signal_handling = 0;
-				unlink_exit(redir->file_name);
-			}
-		}
-		if (redir != NULL && redir->redir_type != DEFAULT)
-			fd_in = redirection(parser->cmd_list->redir);
-		redir = redir->next;
-	}
-	redir = head;
-	return (fd_in);
-}
-
-int	execute_command(t_parser_utils *parser)
-{
-	if (parser->cmd_list->data)
-	{
-		if (is_builtin(parser) == 0)
-			return (execute_builtin(parser));
-		else
-		{
-			if (generate_command(parser) == EXIT_CMD)
-				return (EXIT_CMD);
-			else
-			{
-				if (parser->cmd_list->data)
-				{
-					if (execve(parser->command, parser->cmd_list->data, \
-						parser->envp) < 0)
-						perror_exit(ERROR_EXECVE);
-				}
-			}
-		}
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
+int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 {
 	t_cmd	*head;
 	int		value;
@@ -99,6 +39,21 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 	return (value);
 }
 
+void	setup_executor(t_lexer *lexer, t_parser *parser)
+{
+	int		*fds;
+
+	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
+	if (fds == NULL)
+	{
+		free(fds);
+		err_msg(ERROR_FDS);
+	}
+	create_pipes(lexer->pipe_num, fds);
+	executor(lexer, parser, fds);
+	free(fds);
+}
+
 bool	redir_check(t_redir *redir)
 {
 	t_redir	*current;
@@ -115,45 +70,48 @@ bool	redir_check(t_redir *redir)
 	return (true);
 }
 
-void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
+pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
-	int		*fds;
 	int		fd_in;
+	pid_t	pid;
+
+	fd_in = 0;
+	pid = fork();
+	signal_handler(CHILD);
+	if (pid == -1)
+		err_msg(ERROR_CHILD);
+	else if (pid == 0)
+	{
+		fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
+		g_exit_status = generate_child(parser, lexer, fds, i);
+		if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
+			close(fd_in);
+		exit(g_exit_status);
+	}
+	return (pid);
+}
+
+
+void	executor(t_lexer *lexer, t_parser *parser, int fds[])
+{
 	pid_t	pid;
 	int		i;
 	int		built_in;
 	t_cmd	*head;
 
-	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
-	if (fds == NULL)
-	{
-		free(fds);
-		err_msg(ERROR_FDS);
-	}
-	head = parser->cmd_list;
 	i = 0;
 	built_in = 0;
-	create_pipes(lexer->pipe_num, fds);
+	head = parser->cmd_list;
 	while (parser->cmd_list)
 	{
-		if (redir_check(parser->cmd_list->redir) == true && is_builtin(parser) == 0 && lexer->pipe_num == 0)
+		if (redir_check(parser->cmd_list->redir) == true \
+			&& is_builtin(parser) == 0 && lexer->pipe_num == 0)
 		{
 			g_exit_status = execute_builtin(parser);
 			built_in = 1;
 			break ;
 		}
-		pid = fork();
-		signal_handler(CHILD);
-		if (pid == -1)
-			err_msg(ERROR_CHILD);
-		else if (pid == 0)
-		{
-			fd_in = execute_redir(parser, parser->cmd_list->redir);
-			g_exit_status = generate_child(parser, lexer, fds, i);
-			if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
-				close(fd_in);
-			exit(g_exit_status);
-		}
+		pid = child_process(lexer, parser, fds, i);
 		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
 	}
@@ -161,5 +119,4 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	close_ends(lexer->pipe_num, fds);
 	if (built_in == 0)
 		wait_pipes(pid, lexer->pipe_num);
-	free(fds);
 }

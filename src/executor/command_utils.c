@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   executor_utils.c                                   :+:    :+:            */
+/*   command_utils.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 21:17:33 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:43:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*command_check(char **path, char *cmd)
 	return (NULL);
 }
 
-int	generate_command(t_parser_utils *parser)
+int	generate_command(t_parser *parser)
 {
 	t_cmd	*cmd;
 
@@ -76,6 +76,30 @@ int	generate_command(t_parser_utils *parser)
 	{
 		cmd_error(*cmd->data);
 		return (EXIT_CMD);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	execute_command(t_parser *parser)
+{
+	if (parser->cmd_list->data)
+	{
+		if (is_builtin(parser) == 0)
+			return (execute_builtin(parser));
+		else
+		{
+			if (generate_command(parser) == EXIT_CMD)
+				return (EXIT_CMD);
+			else
+			{
+				if (parser->cmd_list->data)
+				{
+					if (execve(parser->command, parser->cmd_list->data, \
+						parser->envp) < 0)
+						perror_exit(ERROR_EXECVE);
+				}
+			}
+		}
 	}
 	return (EXIT_SUCCESS);
 }

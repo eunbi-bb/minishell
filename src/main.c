@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:42:24 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:36:51 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	g_exit_status;
 
-void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
+void	init_utils(t_lexer *lexer, t_parser	*parser)
 {
 	lexer->pipe_num = 0;
 	lexer->heredoc = false;
@@ -46,18 +46,18 @@ char	*readline_loop(void)
 	return (line);
 }
 
-void	run_shell(t_lexer_utils *lexer, t_parser_utils *parser_u, t_env *env)
+void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
 {
-	parser_u->envp = join_key_value(parser_u->env);
-	parser_u->cmd_dirs = get_cmd_dirs(parser_u->env);
+	parser_utils->envp = join_key_value(parser_utils->env);
+	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
 	if (lexical_analyzer(lexer) == false)
 		err_msg(ERROR_LEXER);
 	expand(lexer->token_list, env);
-	parser(lexer, parser_u);
-	executor(parser_u, lexer);
+	parser(lexer, parser_utils);
+	setup_executor(lexer, parser_utils);
 }
 
-void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
+void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
 {
 	char			*line;
 
@@ -88,8 +88,8 @@ void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_lexer_utils	lexer;
-	t_parser_utils	parser;
+	t_lexer	lexer;
+	t_parser	parser;
 
 	argv = NULL;
 	if (argc != 1 && argv[0] != NULL)

@@ -6,14 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:40:39 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:32:46 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //Putting a token in a node
-int	take_tokens(t_lexer_utils *lexer, char *str, int i)
+int	take_tokens(t_lexer *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
@@ -54,13 +54,19 @@ int	quotes(char *str, int i, char quote)
 	return (j);
 }
 
-void	free_tmp(char *value)
+char	*extract_word(char	*str, int i, int j, char quote)
 {
-	if (value != NULL)
-		free(value);
+	char	*tmp;
+
+	tmp = NULL;
+	if (str[i + 1] == quote)
+		tmp = ft_strdup("''");
+	else
+		tmp = ft_substr(str, i + 1, j -1);
+	return (tmp);
 }
 
-int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
+int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
 {
 	int		j;
 	char	*tmp;
@@ -75,10 +81,7 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 				break ;
 			quote = str[i + j];
 			j += quotes(str, i + j, quote);
-			if (str[i + j] != quote)
-				tmp = ft_substr(str, i + 1, j -1);
-			else
-				tmp = ft_strdup("''");
+			tmp = extract_word(str, i, j, quote);
 		}
 		else if (is_whitespace(str[i + j]) || quote != '\0')
 			break ;
@@ -89,11 +92,10 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 		}
 	}
 	find_dollar(tmp, lexer, quote);
-	free_tmp(tmp);
 	return (j);
 }
 
-bool	lexical_analyzer(t_lexer_utils *lexer)
+bool	lexical_analyzer(t_lexer *lexer)
 {
 	int		i;
 	int		j;

@@ -6,14 +6,20 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:43:12 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-void	free_token_list(t_lexer_utils *lexer)
+void	free_tmp(char *tmp)
+{
+	if (tmp != NULL)
+		free(tmp);
+}
+
+void	free_token_list(t_lexer *lexer)
 {
 	t_tokens	*tmp;
 
@@ -44,7 +50,7 @@ void	free_redir_list(t_cmd *cmd)
 	cmd->redir = NULL;
 }
 
-void	free_cmd_list(t_parser_utils *parser)
+void	free_cmd_list(t_parser *parser)
 {
 	t_cmd	*tmp;
 	int		i;
@@ -71,7 +77,7 @@ void	free_cmd_list(t_parser_utils *parser)
 	}
 }
 
-void	free_env_list(t_parser_utils *parser)
+void	free_env_list(t_parser *parser)
 {
 	t_env	*env_list;
 	t_env	*tmp;

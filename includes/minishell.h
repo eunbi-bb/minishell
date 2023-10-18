@@ -44,14 +44,14 @@ typedef	struct	s_tokens
 	struct s_tokens	*next;
 }	t_tokens;
 
-typedef	struct s_lexer_utils
+typedef	struct s_lexer
 {
 	char			*arg;
 	t_tokens		*token_list;
 	char			*type_arr;
 	unsigned int	pipe_num;
 	bool			heredoc;
-}	t_lexer_utils;
+}	t_lexer;
 
 typedef struct s_redir
 {
@@ -68,7 +68,7 @@ typedef struct	s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct	s_parser_utils
+typedef struct	s_parser
 {
 	t_cmd	*cmd_list;
 	char	*args;
@@ -78,31 +78,32 @@ typedef struct	s_parser_utils
 	int		pipes;
 	int		pid;
 	char	*command;
-}	t_parser_utils;
+}	t_parser;
 
 //free_llist.c
-void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line);
-void	free_token_list(t_lexer_utils *lexer);
-void	free_cmd_list(t_parser_utils *parser);
-void	free_env_list(t_parser_utils *parser);
-void	destroy_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser);
+void	free_tmp(char *tmp);
+void	reset(t_lexer *lexer, t_parser *parser, char *line);
+void	free_token_list(t_lexer *lexer);
+void	free_cmd_list(t_parser *parser);
+void	free_env_list(t_parser *parser);
+void	destroy_lexer_parser(t_lexer *lexer, t_parser *parser);
 void	free_envp(char **envp);
-void	free_prev_line(t_lexer_utils *lexer, char *line);
-void	free_cmd_dirs(t_parser_utils *parser);
+void	free_prev_line(t_lexer *lexer, char *line);
+void	free_cmd_dirs(t_parser *parser);
 
 	/** lexer **/
 t_tokens	*new_node(char *data);
 t_tokens	*new_token_node(char *data, t_types token, char quote);
 void		add_after(t_tokens **before, t_tokens *new_node);
-void		find_dollar(char *str, t_lexer_utils *lexer, char quote);
+void		find_dollar(char *str, t_lexer *lexer, char quote);
 bool		match_quotes(char *str);
 bool		is_whitespace(char c);
 int			skip_whitespace(char *s, int i);
 int			is_token(int c);
-bool		lexical_analyzer(t_lexer_utils *lexer);
-int			arg_divider(t_lexer_utils *lexer, char *str, int i, char quote);
+bool		lexical_analyzer(t_lexer *lexer);
+int			arg_divider(t_lexer *lexer, char *str, int i, char quote);
 int			quotes(char *str, int i, char quote);
-int			take_tokens(t_lexer_utils *lexer, char *str, int i);
+int			take_tokens(t_lexer *lexer, char *str, int i);
 t_env		**createLinkedList(char** envp);
 char		*tmp_filename(int i);
 
@@ -117,7 +118,7 @@ t_env		*merge_sort(t_env *head);
 
 	/** parser **/
 //parser.c
-void		parser(t_lexer_utils *lexer, t_parser_utils *parser);
+void		parser(t_lexer *lexer, t_parser *parser);
 int			count_args(t_tokens	*lexer);
 //cmd_node_utils.c
 t_cmd		*create_cmd_node(void);
@@ -128,11 +129,13 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 
 	/** executor **/
 //executor.c
-void	executor(t_parser_utils *parser, t_lexer_utils *lexer);
-int	execute_redir(t_parser_utils *parser, t_redir *redir);
+void	setup_executor(t_lexer *lexer, t_parser *parser);
+void	executor(t_lexer *lexer, t_parser *parser, int fds[]);
+int	execute_redir(t_parser *parser, t_redir *redir, int fd_in);
+int	execute_command(t_parser *parser);
 //executor_utils.c
 char		**get_cmd_dirs(t_env **envp);
-int			generate_command(t_parser_utils *parser);
+int			generate_command(t_parser *parser);
 //redirection.c
 int			redirection(t_redir *redir);
 int	create_outfile(t_redir *redir);
@@ -141,8 +144,8 @@ void		here_document(t_cmd	*cmd);
 void		create_heredoc(char *delim, char *filename);
 char		*tmp_filename(int i);
 //execute_builtins.c
-int			is_builtin(t_parser_utils *cmd);
-int			execute_builtin(t_parser_utils *cmd);
+int			is_builtin(t_parser *cmd);
+int			execute_builtin(t_parser *cmd);
 //pipe_utils.c
 void		create_pipes(int pipe_num, int fds[]);
 void		close_ends(int pipe_num, int fds[]);

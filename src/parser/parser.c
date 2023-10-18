@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:34:46 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
 	return (cmd);
 }
 
-void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
+void	parser(t_lexer *lexer, t_parser *parser)
 {
 	t_tokens	*curr;
 	t_cmd		*cmd;

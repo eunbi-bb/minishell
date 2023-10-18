@@ -6,13 +6,13 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 11:44:19 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_builtin(t_parser_utils *cmd)
+int	is_builtin(t_parser *cmd)
 {
 	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 \
 		|| strcmp(cmd->cmd_list->data[0], "pwd") == 0 \
@@ -30,7 +30,7 @@ int	is_builtin(t_parser_utils *cmd)
 	}
 }
 
-int	execute_builtin(t_parser_utils *cmd)
+int	execute_builtin(t_parser *cmd)
 {
 	if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
 		return (cmd_echo(cmd->cmd_list->data));

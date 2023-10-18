@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 15:33:16 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:43:40 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	skip_whitespace(char *s, int i)
 //Checking if the character is a token or not.
 int	is_token(int c)
 {
-	t_lexer_utils	lexer;
-	int				i;
+	t_lexer	lexer;
+	int		i;
 
 	lexer.type_arr = "|<>";
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/15 01:29:50 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 14:32:46 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	get_len(char *str, char quote)
 	return (i);
 }
 
-int	generate_node(char *str, int i, t_lexer_utils *lexer, char quote)
+int	generate_node(char *str, int i, t_lexer *lexer, char quote)
 {
 	char	*tmp;
 	int		len;
@@ -84,7 +84,7 @@ int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
 	return (i);
 }
 
-void	find_dollar(char *str, t_lexer_utils *lexer, char quote)
+void	find_dollar(char *str, t_lexer *lexer, char quote)
 {
 	char	*tmp;
 	int		i;
@@ -110,4 +110,5 @@ void	find_dollar(char *str, t_lexer_utils *lexer, char quote)
 		else
 			i++;
 	}
+	free_tmp(str);
 }
