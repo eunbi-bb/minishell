@@ -6,18 +6,12 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:10:05 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
-
-void	free_tmp(char *tmp)
-{
-	if (tmp != NULL)
-		free(tmp);
-}
 
 void	free_token_list(t_lexer *lexer)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/18 15:27:06 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -18,10 +30,10 @@ extern int	g_exit_status;
 
 typedef struct s_env
 {
-    char	*key;
-    char	*value;
-    struct s_env *next;
-}               t_env;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef enum types
 {
@@ -35,16 +47,16 @@ typedef enum types
 	QUESTION
 }	t_types;
 
-typedef	struct	s_tokens
+typedef struct s_tokens
 {
-	char	*data;
-	t_types	token;
-	bool	s_quote;
-	bool	d_quote;
+	char			*data;
+	t_types			token;
+	bool			s_quote;
+	bool			d_quote;
 	struct s_tokens	*next;
 }	t_tokens;
 
-typedef	struct s_lexer
+typedef struct s_lexer
 {
 	char			*arg;
 	t_tokens		*token_list;
@@ -55,12 +67,12 @@ typedef	struct s_lexer
 
 typedef struct s_redir
 {
-	char		*file_name;
-	t_types		redir_type;
-	struct s_redir *next;
+	char			*file_name;
+	t_types			redir_type;
+	struct s_redir	*next;
 }	t_redir;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	char			**data;
 	t_types			type;
@@ -68,7 +80,7 @@ typedef struct	s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct	s_parser
+typedef struct s_parser
 {
 	t_cmd	*cmd_list;
 	char	*args;
@@ -80,91 +92,80 @@ typedef struct	s_parser
 	char	*command;
 }	t_parser;
 
-//free_llist.c
-void	free_tmp(char *tmp);
-void	reset(t_lexer *lexer, t_parser *parser, char *line);
-void	free_token_list(t_lexer *lexer);
-void	free_cmd_list(t_parser *parser);
-void	free_env_list(t_parser *parser);
-void	destroy_lexer_parser(t_lexer *lexer, t_parser *parser);
-void	free_envp(char **envp);
-void	free_prev_line(t_lexer *lexer, char *line);
-void	free_cmd_dirs(t_parser *parser);
+void	signal_handler(int sig);
 
-	/** lexer **/
-t_tokens	*new_node(char *data);
-t_tokens	*new_token_node(char *data, t_types token, char quote);
-void		add_after(t_tokens **before, t_tokens *new_node);
-void		find_dollar(char *str, t_lexer *lexer, char quote);
-bool		match_quotes(char *str);
+/***** parser *****/
+	//	parser.c
+void		parser(t_lexer *lexer, t_parser *parser);
+	//	cmd_node_utils.c
+t_cmd		*create_cmd_node(void);
+void		add_after_cmd(t_cmd **before, t_cmd *new_node);
+	//	redir_node_utils.c
+t_redir		*create_redir_node(void);
+void		add_after_redir(t_redir **before, t_redir *new_node);
+/***** lexer *****/
+	//	lexer.c
+bool		lexical_analyzer(t_lexer *lexer);
+void		free_tmp(char *tmp);
+	//	lexer_utils.c
 bool		is_whitespace(char c);
 int			skip_whitespace(char *s, int i);
 int			is_token(int c);
-bool		lexical_analyzer(t_lexer *lexer);
-int			arg_divider(t_lexer *lexer, char *str, int i, char quote);
-int			quotes(char *str, int i, char quote);
-int			take_tokens(t_lexer *lexer, char *str, int i);
+bool		match_quotes(char *str);
+int			next_quote(char *str, int i, char quote);
+	//	dollar_sign.c
+void		find_dollar(char *str, t_lexer *lexer, char quote);
+	//	node_utils.c
+t_tokens	*new_token_node(char *data, t_types token, char quote);
+void		add_after(t_tokens **before, t_tokens *new_node);
+/***** free *****/
+	//	free_destroy.c
+void		free_prev_line(t_lexer *lexer, char *line);
+void		free_envp(char **envp);
+void		free_cmd_dirs(t_parser *parser);
+void		destroy_lexer_parser(t_lexer *lexer, t_parser *parser);
+void		reset(t_lexer *lexer, t_parser *parser, char *line);
+	//	free_llist.c
+void		free_token_list(t_lexer *lexer);
+void		free_redir_list(t_cmd *cmd);
+void		free_cmd_list(t_parser *parser);
+void		free_env_list(t_parser *parser);
+/***** executor *****/
+	//	command_utils.c
+char		**get_cmd_dirs(t_env **envp);
+int			execute_command(t_parser *parser);
+	//	execute_builtins.c
+int			is_builtin(t_parser *cmd);
+int			execute_builtin(t_parser *cmd);
+	//	executor.c
+void		setup_executor(t_lexer *lexer, t_parser *parser);
+	//	heredoc.c
+void		here_document(t_cmd	*cmd);
+	//	pipe_utils.c
+void		create_pipes(int pipe_num, int fds[]);
+void		close_ends(int pipe_num, int fds[]);
+void		wait_pipes(pid_t pid, int pipe_num);
+	//	redirection.c
+int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
+
 t_env		**createLinkedList(char** envp);
-char		*tmp_filename(int i);
 
 int			cmd_echo(char **cmd);
 int			cmd_pwd();
 void		cmd_exit();
 int			cmd_cd(char **path, t_env *env);
 int			cmd_export(t_env **head, char **str);
+int			cmd_unset(t_env **head, char **key);
 int			var_exist(char *key, t_env *env);
 void		print_list(t_env *head);
 t_env		*merge_sort(t_env *head);
-
-	/** parser **/
-//parser.c
-void		parser(t_lexer *lexer, t_parser *parser);
-int			count_args(t_tokens	*lexer);
-//cmd_node_utils.c
-t_cmd		*create_cmd_node(void);
-void		add_after_cmd(t_cmd **before, t_cmd *new_node);
-//redir_node_utils.c
-t_redir		*create_redir_node(void);
-void		add_after_redir(t_redir **before, t_redir *new_node);
-
-	/** executor **/
-//executor.c
-void	setup_executor(t_lexer *lexer, t_parser *parser);
-void	executor(t_lexer *lexer, t_parser *parser, int fds[]);
-int	execute_redir(t_parser *parser, t_redir *redir, int fd_in);
-int	execute_command(t_parser *parser);
-//executor_utils.c
-char		**get_cmd_dirs(t_env **envp);
-int			generate_command(t_parser *parser);
-//redirection.c
-int			redirection(t_redir *redir);
-int	create_outfile(t_redir *redir);
-//heredoc.c
-void		here_document(t_cmd	*cmd);
-void		create_heredoc(char *delim, char *filename);
-char		*tmp_filename(int i);
-//execute_builtins.c
-int			is_builtin(t_parser *cmd);
-int			execute_builtin(t_parser *cmd);
-//pipe_utils.c
-void		create_pipes(int pipe_num, int fds[]);
-void		close_ends(int pipe_num, int fds[]);
-void		wait_pipes(pid_t pid, int pipe_num);
-
 
 //env.c
 t_env		**createLinkedList(char** envp);
 char		**join_key_value(t_env **head);
 int			cmd_env(t_env *env);
-// void sigint_handler(int signal);
-char		*search_value(char *key, t_env *env);
-int			cmd_unset(t_env** head,char** key);
-// void child_sigint_handler(int signal);
-// void	sigquit_handler(int sig);
-
-void		signal_handler(int signal);
-void		ctrl_d(void);
 
 void		expand(t_tokens *token_list,  t_env *env);
+char 		*search_value(char *key, t_env *env);
 
 #endif

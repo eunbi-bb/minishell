@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:48:36 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:14:21 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,6 @@ int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 	return (value);
 }
 
-void	setup_executor(t_lexer *lexer, t_parser *parser)
-{
-	int		*fds;
-
-	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
-	if (fds == NULL)
-	{
-		free(fds);
-		err_msg(ERROR_FDS);
-	}
-	create_pipes(lexer->pipe_num, fds);
-	executor(lexer, parser, fds);
-	free(fds);
-}
 
 bool	redir_check(t_redir *redir)
 {
@@ -91,7 +77,6 @@ pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 	return (pid);
 }
 
-
 void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 {
 	pid_t	pid;
@@ -119,4 +104,19 @@ void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 	close_ends(lexer->pipe_num, fds);
 	if (built_in == 0)
 		wait_pipes(pid, lexer->pipe_num);
+}
+
+void	setup_executor(t_lexer *lexer, t_parser *parser)
+{
+	int		*fds;
+
+	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
+	if (fds == NULL)
+	{
+		free(fds);
+		err_msg(ERROR_FDS);
+	}
+	create_pipes(lexer->pipe_num, fds);
+	executor(lexer, parser, fds);
+	free(fds);
 }

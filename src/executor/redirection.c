@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:46:51 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:19:13 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	redirection(t_redir *redir)
 	return (fd_in);
 }
 
-static void	unlink_exit(char *file_name)
+void	unlink_exit(char *file_name)
 {
 	unlink(file_name);
 	exit(EXIT_SUCCESS);

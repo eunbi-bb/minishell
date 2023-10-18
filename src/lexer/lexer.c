@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:32:46 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:10:19 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,6 @@ int	take_tokens(t_lexer *lexer, char *str, int i)
 	return (1);
 }
 
-int	quotes(char *str, int i, char quote)
-{
-	int	j;
-
-	j = 0;
-	if (str[i + j] == quote)
-	{
-		j++;
-		while (str[i + j] && str[i + j] != quote)
-			j++;
-	}
-	return (j);
-}
-
 char	*extract_word(char	*str, int i, int j, char quote)
 {
 	char	*tmp;
@@ -64,6 +50,12 @@ char	*extract_word(char	*str, int i, int j, char quote)
 	else
 		tmp = ft_substr(str, i + 1, j -1);
 	return (tmp);
+}
+
+void	free_tmp(char *tmp)
+{
+	if (tmp != NULL)
+		free(tmp);
 }
 
 int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
@@ -80,7 +72,7 @@ int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
 			if (tmp != NULL)
 				break ;
 			quote = str[i + j];
-			j += quotes(str, i + j, quote);
+			j += next_quote(str, i + j, quote);
 			tmp = extract_word(str, i, j, quote);
 		}
 		else if (is_whitespace(str[i + j]) || quote != '\0')
