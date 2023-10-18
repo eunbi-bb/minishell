@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 19:21:01 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/18 21:35:24 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int			cmd_unset(t_env **head, char **key);
 int			var_exist(char *key, t_env *env);
 void		print_list(t_env *head);
 t_env		*merge_sort(t_env *head);
+void		free_sorted(t_env *head);
 
 //env.c
 t_env		**createLinkedList(char** envp);
