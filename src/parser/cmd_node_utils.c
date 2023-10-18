@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/10 16:12:00 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 18:48:35 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_cmd	*create_cmd_node(void)
 	if (!new)
 		return (NULL);
 	new->data = NULL;
+	new->type = DEFAULT;
 	new->redir = NULL;
 	new->next = NULL;
 	return (new);

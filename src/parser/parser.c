@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:41:21 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 19:08:38 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	generate_redir(t_tokens *curr, t_cmd *cmd)
 	t_redir		*new;
 
 	tmp = curr;
-	while (tmp && tmp->token != PIPE)
+	while (tmp && (tmp->token >= LESSER && tmp->token <= APPEND))
 	{
 		new = create_redir_node();
 		add_after_redir(&cmd->redir, new);
@@ -76,13 +76,16 @@ static t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
 			ft_strlcpy(cmd->data[j], curr->data, len);
 			j++;
 		}
-		if (curr->token >= LESSER && curr->token <= APPEND)
+		if ((curr->token >= LESSER && curr->token <= APPEND) || curr->token == PIPE)
 			curr = curr->next;
 		curr = curr->next;
 	}
 	return (cmd);
 }
 
+/*
+*	Generating a command list based on PIPE('|') symbol.
+*/
 void	parser(t_lexer *lexer, t_parser *parser)
 {
 	t_tokens	*curr;
