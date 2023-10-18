@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 19:04:40 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 00:19:59 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,5 @@ bool	lexical_analyzer(t_lexer *lexer)
 		i = i + j;
 	}
 	free(lexer->arg);
-	// while (lexer->token_list)
-	// {
-	// 	printf("lexer: %s\n", lexer->token_list->data);
-	// 	lexer->token_list = lexer->token_list->next;
-	// }
-	// printf("END\n");
 	return (true);
 }
