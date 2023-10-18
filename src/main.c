@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 23:16:33 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:42:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
 
 char	*readline_loop(void)
 {
-	char 	*line;
+	char	*line;
 
 	rl_on_new_line();
 	line = readline("Minishell% ");
@@ -46,17 +46,16 @@ char	*readline_loop(void)
 	return (line);
 }
 
-void	run_shell(t_lexer_utils *lexer, t_parser_utils *parser_utils, t_env *env)
+void	run_shell(t_lexer_utils *lexer, t_parser_utils *parser_u, t_env *env)
 {
-	parser_utils->envp = join_key_value(parser_utils->env);	
-	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
+	parser_u->envp = join_key_value(parser_u->env);
+	parser_u->cmd_dirs = get_cmd_dirs(parser_u->env);
 	if (lexical_analyzer(lexer) == false)
 		err_msg(ERROR_LEXER);
 	expand(lexer->token_list, env);
-	parser(lexer, parser_utils);
-	executor(parser_utils, lexer);
+	parser(lexer, parser_u);
+	executor(parser_u, lexer);
 }
-
 
 void	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser, t_env *env)
 {
@@ -101,9 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_initialize();
 	init_utils(&lexer, &parser);
 	parser.env = createLinkedList(envp);
-	// parser.cmd_dirs = get_cmd_dirs(parser.env);
 	shell_loop(&lexer, &parser, *parser.env);
-	destroy_lexer_utils(&lexer);
-	destroy_parser_utils(&parser);
+	destroy_lexer_parser(&lexer, &parser);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/16 23:45:03 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:43:12 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void	free_token_list(t_lexer_utils *lexer)
 
 void	free_redir_list(t_cmd *cmd)
 {
-	t_redir	*current = cmd->redir;
+	t_redir	*current;
 	t_redir	*next;
 
+	current = cmd->redir;
 	while (current)
 	{
 		next = current->next;
@@ -92,4 +93,3 @@ void	free_env_list(t_parser_utils *parser)
 	}
 	free(parser->env);
 }
-

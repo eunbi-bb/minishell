@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 19:42:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 21:36:46 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:42:34 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void	free_cmd_dirs(t_parser_utils *parser)
 	free(parser->cmd_dirs);
 }
 
-void	destroy_parser_utils(t_parser_utils *parser)
+void	destroy_lexer_parser(t_lexer_utils *lexer, t_parser_utils *parser)
 {
+	free_token_list(lexer);
+	free(lexer->type_arr);
 	free_cmd_list(parser);
 	free(parser->args);
 	free_env_list(parser);
@@ -53,12 +55,6 @@ void	destroy_parser_utils(t_parser_utils *parser)
 		free_cmd_dirs(parser);
 	free_envp(parser->envp);
 	free(parser->command);
-}
-
-void	destroy_lexer_utils(t_lexer_utils *lexer)
-{
-	free_token_list(lexer);
-	free(lexer->type_arr);
 }
 
 void	reset(t_lexer_utils *lexer, t_parser_utils *parser, char *line)

@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/17 23:16:17 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:23:15 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 *	|= (ECHOCTL) = showing control keys
 *	&= ~(ECHOCTL) = Not showing control keys
 */
-
-
 #include "minishell.h"
 
 void	return_prompt(int sig)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 23:11:06 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:55:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	execute_command(t_parser_utils *parser)
 	if (parser->cmd_list->data)
 	{
 		if (is_builtin(parser) == 0)
-			return execute_builtin(parser);
+			return (execute_builtin(parser));
 		else
 		{
 			if (generate_command(parser) == EXIT_CMD)
@@ -63,13 +63,14 @@ int	execute_command(t_parser_utils *parser)
 			{
 				if (parser->cmd_list->data)
 				{
-					if (execve(parser->command, parser->cmd_list->data, parser->envp) < 0)
+					if (execve(parser->command, parser->cmd_list->data, \
+						parser->envp) < 0)
 						perror_exit(ERROR_EXECVE);
 				}
 			}
 		}
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int i)
@@ -100,7 +101,7 @@ int	generate_child(t_parser_utils *parser, t_lexer_utils *lexer, int fds[], int 
 
 bool	redir_check(t_redir *redir)
 {
-	t_redir *current;
+	t_redir	*current;
 
 	current = redir;
 	if (redir == NULL)
@@ -116,13 +117,19 @@ bool	redir_check(t_redir *redir)
 
 void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 {
-	int		fds[lexer->pipe_num * 2];
+	int		*fds;
 	int		fd_in;
 	pid_t	pid;
 	int		i;
 	int		built_in;
 	t_cmd	*head;
 
+	fds = (int *)malloc(lexer->pipe_num * 2 * sizeof(int));
+	if (fds == NULL)
+	{
+		free(fds);
+		err_msg(ERROR_FDS);
+	}
 	head = parser->cmd_list;
 	i = 0;
 	built_in = 0;
@@ -154,4 +161,5 @@ void	executor(t_parser_utils *parser, t_lexer_utils *lexer)
 	close_ends(lexer->pipe_num, fds);
 	if (built_in == 0)
 		wait_pipes(pid, lexer->pipe_num);
+	free(fds);
 }

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/14 12:22:29 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:34:46 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-void	generate_redir(t_tokens *current, t_cmd *cmd)
+void	generate_redir(t_tokens *curr, t_cmd *cmd)
 {
 	t_tokens	*tmp;
 	t_redir		*new;
 
-	tmp = current;
+	tmp = curr;
 	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
@@ -45,65 +45,64 @@ void	generate_redir(t_tokens *current, t_cmd *cmd)
 		new->redir_type = tmp->token;
 		if (tmp->token >= LESSER && tmp->token <= APPEND)
 		{
-			current = current->next;
+			curr = curr->next;
 			new->file_name = ft_strdup(tmp->next->data);
 			tmp = tmp->next;
-			current = current->next;
+			curr = curr->next;
 		}
 		tmp = tmp->next;
 	}
 }
 
-t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
+t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
 {
-	int			arg_num;
 	int			i;
 	int			j;
 	size_t		len;
-	t_tokens	*current;
+	t_tokens	*curr;
 
 	i = 0;
 	j = 0;
-	current = tokens;
-	arg_num = count_args(current);
+	curr = tokens;
 	if (arg_num > 0)
 		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
-	generate_redir(current, cmd);
-	while (i <= arg_num && current)
+	generate_redir(curr, cmd);
+	while (i++ <= arg_num && curr)
 	{
-		if (current->data != NULL && (current->token == DEFAULT || current->token >= DOLLAR))
+		if (curr->data && (curr->token == DEFAULT || curr->token >= DOLLAR))
 		{
-			len = ft_strlen(current->data) + 1;
+			len = ft_strlen(curr->data) + 1;
 			cmd->data[j] = ft_calloc(len, sizeof(char));
-			ft_strlcpy(cmd->data[j], current->data, len);
+			ft_strlcpy(cmd->data[j], curr->data, len);
 			j++;
 		}
-		i++;
-		if (current->token >= LESSER && current->token <= APPEND)
-			current = current->next;
-		current = current->next;
+		if (curr->token >= LESSER && curr->token <= APPEND)
+			curr = curr->next;
+		curr = curr->next;
 	}
 	return (cmd);
 }
 
 void	parser(t_lexer_utils *lexer, t_parser_utils *parser)
 {
-	t_tokens	*current;
+	t_tokens	*curr;
 	t_cmd		*cmd;
+	int			arg_num;
 
-	current = lexer->token_list;
-	while (current)
+	curr = lexer->token_list;
+	arg_num = count_args(curr);
+	while (curr)
 	{
-		if (current->token != PIPE)
+		if (curr->token != PIPE)
 		{
 			cmd = create_cmd_node();
-			generate_cmd(current, cmd);
+			generate_cmd(curr, cmd, arg_num);
 			add_after_cmd(&parser->cmd_list, cmd);
-			while (current->token != PIPE && current->next)
+			while (curr->token != PIPE && curr->next)
 			{
-				current = current->next;
+				curr = curr->next;
 			}
 		}
-		current = current->next;
+		curr = curr->next;
 	}
 }

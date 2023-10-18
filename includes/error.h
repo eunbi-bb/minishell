@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   error.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/18 11:24:23 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/18 11:54:11 by eucho         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 //File errors
@@ -27,6 +39,9 @@
 
 //Signal error
 # define ERROR_SIG "signal error" 
+
+//fds error
+# define ERROR_FDS "fds malloc error"
 
 # include <errno.h>
 # include <unistd.h>

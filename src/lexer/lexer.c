@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 21:38:02 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 11:40:39 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,16 @@ int	quotes(char *str, int i, char quote)
 	return (j);
 }
 
-void free_tmp(char *value)
+void	free_tmp(char *value)
 {
 	if (value != NULL)
 		free(value);
 }
-// Find a begining and end of a string
-//(depending on white spaces or quotes)and generate a sub-string.
+
 int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 {
 	int		j;
-    char	*tmp;
+	char	*tmp;
 
 	j = 0;
 	tmp = NULL;
@@ -73,13 +72,13 @@ int	arg_divider(t_lexer_utils *lexer, char *str, int i, char quote)
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
 			if (tmp != NULL)
-				break;
+				break ;
 			quote = str[i + j];
 			j += quotes(str, i + j, quote);
-			// if (str[i + j] != quote)
+			if (str[i + j] != quote)
 				tmp = ft_substr(str, i + 1, j -1);
-			// else
-			// 	tmp = ft_strdup("''");
+			else
+				tmp = ft_strdup("''");
 		}
 		else if (is_whitespace(str[i + j]) || quote != '\0')
 			break ;
