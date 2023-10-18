@@ -6,20 +6,19 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 15:26:13 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 16:08:33 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 *	SIGINT	= ctrl + c
 *	SIGQUIT = ctrl + /
-*
 *	|= (ECHOCTL) = showing control keys
 *	&= ~(ECHOCTL) = Not showing control keys
 */
 #include "minishell.h"
 
-void	return_prompt(int sig)
+static void	return_prompt(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -30,7 +29,7 @@ void	return_prompt(int sig)
 	}
 }
 
-void	backslash(int sig)
+static void	backslash(int sig)
 {
 	if (sig == SIGQUIT)
 	{
@@ -39,7 +38,7 @@ void	backslash(int sig)
 	}
 }
 
-void	ctrl_c(int sig)
+static void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -48,7 +47,7 @@ void	ctrl_c(int sig)
 	}
 }
 
-void	signal_heredoc(int sig)
+static void	signal_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -59,6 +58,16 @@ void	signal_heredoc(int sig)
 	}
 }
 
+/*
+*	termios	: data structure used to configure terminal I/O settings,
+*	tcgetattr(STDIN_FILENO, &term) : To get the current terminal settings.
+*			It retrieves the current terminal attributes associated 
+*			with the standard input and stores them in &term.
+*	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term) : Call sets the terminal attributes
+*			for the standard input to the values stored in the term structure.
+*	The 'TCSAFLUSH' flag indicates that the change should occur after all output 
+*			is transmitted, and all input received is processed.
+*/
 void	signal_handler(int sig)
 {
 	struct termios	term;

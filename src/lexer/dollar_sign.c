@@ -6,13 +6,13 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:32:46 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 16:17:52 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_len_dollar(char *str)
+static int	get_len_dollar(char *str)
 {
 	int	i;
 
@@ -27,7 +27,7 @@ int	get_len_dollar(char *str)
 	return (i);
 }
 
-int	get_len(char *str, char quote)
+static int	get_len(char *str, char quote)
 {
 	int	i;
 
@@ -49,7 +49,7 @@ int	get_len(char *str, char quote)
 	return (i);
 }
 
-int	generate_node(char *str, int i, t_lexer *lexer, char quote)
+static int	generate_node(char *str, int i, t_lexer *lexer, char quote)
 {
 	char	*tmp;
 	int		len;
@@ -62,7 +62,12 @@ int	generate_node(char *str, int i, t_lexer *lexer, char quote)
 	return (i);
 }
 
-int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
+/*
+*	"$?" should expand to represent an exit code.
+*	Therefore, when generating a node for "$?",
+*	set the node type as "QUESTION" in the token_list
+*/
+static int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
 {
 	char	*tmp;
 	int		len;
@@ -84,6 +89,10 @@ int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
 	return (i);
 }
 
+/*
+*	Splitting str based on '$' and '+' in order to expand
+*	environmental variables in Expander before parsing.
+*/
 void	find_dollar(char *str, t_lexer *lexer, char quote)
 {
 	char	*tmp;

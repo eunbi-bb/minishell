@@ -6,14 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:01:10 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:41:21 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stddef.h>
 
-int	count_args(t_tokens	*lexer)
+static int	count_args(t_tokens	*lexer)
 {
 	int			arg_num;
 	t_tokens	*tmp;
@@ -32,7 +32,7 @@ int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-void	generate_redir(t_tokens *curr, t_cmd *cmd)
+static void	generate_redir(t_tokens *curr, t_cmd *cmd)
 {
 	t_tokens	*tmp;
 	t_redir		*new;
@@ -54,7 +54,7 @@ void	generate_redir(t_tokens *curr, t_cmd *cmd)
 	}
 }
 
-t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
+static t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
 {
 	int			i;
 	int			j;

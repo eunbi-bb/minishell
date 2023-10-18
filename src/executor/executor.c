@@ -6,14 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:14:21 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:43:52 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "minishell.h"
 
-int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
+static int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 {
 	t_cmd	*head;
 	int		value;
@@ -40,7 +40,7 @@ int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 }
 
 
-bool	redir_check(t_redir *redir)
+static bool	redir_check(t_redir *redir)
 {
 	t_redir	*current;
 
@@ -56,7 +56,7 @@ bool	redir_check(t_redir *redir)
 	return (true);
 }
 
-pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
+static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
 	int		fd_in;
 	pid_t	pid;
@@ -77,7 +77,7 @@ pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 	return (pid);
 }
 
-void	executor(t_lexer *lexer, t_parser *parser, int fds[])
+static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 {
 	pid_t	pid;
 	int		i;

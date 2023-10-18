@@ -6,16 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/17 21:38:58 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:43:28 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
 #include <fcntl.h>
-#include <string.h>
 
-char	*tmp_filename(int i)
+static char	*tmp_filename(int i)
 {
 	char		*num;
 	char		*filename;
@@ -26,7 +24,7 @@ char	*tmp_filename(int i)
 	return (filename);
 }
 
-void	create_heredoc(char *delim, char *filename)
+static void	create_heredoc(char *delim, char *filename)
 {
 	int		fd;
 	char	*str;

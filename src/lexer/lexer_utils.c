@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:09:30 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 16:21:25 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	skip_whitespace(char *s, int i)
 	return (i);
 }
 
-//Checking if the character is a token or not.
+// Checking if the character is a token or not.
 int	is_token(int c)
 {
 	t_lexer	lexer;
@@ -47,6 +47,7 @@ int	is_token(int c)
 	return (-1);
 }
 
+// Checking if quotes are in a pair.
 bool	match_quotes(char *str)
 {
 	int		i;
@@ -76,6 +77,10 @@ bool	match_quotes(char *str)
 	return ((num_s % 2 == 0) && (num_d % 2 == 0));
 }
 
+/*
+*	Finding an end quote.
+*	It returns the length from the beginning quote to the end quote. 
+*/
 int	next_quote(char *str, int i, char quote)
 {
 	int	j;

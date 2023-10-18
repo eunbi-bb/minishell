@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:43:24 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:44:04 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**get_cmd_dirs(t_env **envp)
 	return (NULL);
 }
 
-char	*command_check(char **path, char *cmd)
+static char	*command_check(char **path, char *cmd)
 {
 	char	*command;
 	char	*tmp;
@@ -64,7 +64,7 @@ char	*command_check(char **path, char *cmd)
 	return (NULL);
 }
 
-int	generate_command(t_parser *parser)
+static int	generate_command(t_parser *parser)
 {
 	t_cmd	*cmd;
 

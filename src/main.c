@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:36:51 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 15:58:23 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,19 @@ void	init_utils(t_lexer *lexer, t_parser	*parser)
 	parser->env = NULL;
 }
 
-char	*readline_loop(void)
+/*
+*	Set up a loop for reading user input,
+*	handling scenarios where the user wants to exit or enters an empty line.
+*	It also maintains a command history using the Readline library,
+*	allowing the user to navigate and reuse previous commands.
+*	if (!line) : Check if line is NULL, which happens if the user presses Ctrl+D.
+*	if (!*line): If the line is empty, it frees the memory allocated for line 
+*					and then calls readline_loop() recursively.
+*	if (*line): If the input line is not empty (i.e., the user entered a command), 
+*				it adds the input line to the command history using add_history.
+*				This allows to recall and reuse previously entered commands.
+*/
+static char	*readline_loop(void)
 {
 	char	*line;
 
@@ -46,7 +58,7 @@ char	*readline_loop(void)
 	return (line);
 }
 
-void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
+static void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
 {
 	parser_utils->envp = join_key_value(parser_utils->env);
 	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
@@ -57,7 +69,11 @@ void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
 	setup_executor(lexer, parser_utils);
 }
 
-void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
+/*
+*	Obtain input from the prompt through readline_loop()
+*	and if the input passes input_check(), then proceed to run Minishell.
+*/
+static void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
 {
 	char			*line;
 
@@ -88,7 +104,7 @@ void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_lexer	lexer;
+	t_lexer		lexer;
 	t_parser	parser;
 
 	argv = NULL;

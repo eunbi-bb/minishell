@@ -6,14 +6,23 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:10:19 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 16:34:44 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//Putting a token in a node
-int	take_tokens(t_lexer *lexer, char *str, int i)
+/*
+*	Scan an input string and tokenizes specific characters such as,
+*	>>	: APPEND
+*	<<	: HERE_DOC
+*	>	: GREATER
+*	<	: LESSER
+*	|	: PIPE
+*	And store these tokens in a token_list. Return 1 or 2 if it is a token,
+*	to skip in the entire string.
+*/
+static int	take_tokens(t_lexer *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
@@ -40,7 +49,11 @@ int	take_tokens(t_lexer *lexer, char *str, int i)
 	return (1);
 }
 
-char	*extract_word(char	*str, int i, int j, char quote)
+/*
+*	Extract the word between quotes.
+*	If there is nothing between the quotes, set tmp to an empty string.
+*/
+static char	*extract_word(char	*str, int i, int j, char quote)
 {
 	char	*tmp;
 
@@ -58,7 +71,12 @@ void	free_tmp(char *tmp)
 		free(tmp);
 }
 
-int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
+/*
+*	Dividing given string based on quotes and white spaces.
+*	After division, parse it to find_dollar() to find '$' for expansion
+*	and generate nodes in the token_list.
+*/
+static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
 {
 	int		j;
 	char	*tmp;
