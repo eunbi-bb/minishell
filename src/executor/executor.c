@@ -6,36 +6,29 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 18:22:06 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 16:40:33 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "minishell.h"
 
-static int	generate_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
+static int	execute_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 {
-	t_cmd	*head;
 	int		value;
 
-	head = parser->cmd_list;
-	while (parser->cmd_list)
+	if (i != 0)
 	{
-		if (i != 0)
-		{
-			if (dup2(fds[i - 2], 0) == -1)
-				perror_exit(ERROR_DUP2_IN);
-		}
-		if (parser->cmd_list->next)
-		{
-			if (dup2(fds[i + 1], 1) == -1)
-				perror_exit(ERROR_DUP2_OUT);
-		}
-		close_ends(lexer->pipe_num, fds);
-		value = execute_command(parser);
-		parser->cmd_list = parser->cmd_list->next;
+		if (dup2(fds[i - 2], 0) == -1)
+			perror_exit(ERROR_DUP2_IN);
 	}
-	parser->cmd_list = head;
+	if (parser->cmd_list->next)
+	{
+		if (dup2(fds[i + 1], 1) == -1)
+			perror_exit(ERROR_DUP2_OUT);
+	}
+	close_ends(lexer->pipe_num, fds);
+	value = execute_command(parser);
 	return (value);
 }
 
@@ -67,8 +60,10 @@ static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 		err_msg(ERROR_CHILD);
 	else if (pid == 0)
 	{
-		fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
-		g_exit_status = generate_child(parser, lexer, fds, i);
+		if (parser->cmd_list->redir != NULL)
+			fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
+		g_exit_status = execute_child
+	(parser, lexer, fds, i);
 		if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
 			close(fd_in);
 		exit(g_exit_status);
