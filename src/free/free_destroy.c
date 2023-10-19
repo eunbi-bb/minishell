@@ -6,12 +6,13 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 19:42:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 14:33:14 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 22:34:02 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Free the previous input line if the input_check() fails
 void	free_prev_line(t_lexer *lexer, char *line)
 {
 	free(line);
@@ -44,6 +45,7 @@ void	free_cmd_dirs(t_parser *parser)
 	free(parser->cmd_dirs);
 }
 
+// Clean up data before quitting the program.
 void	destroy_lexer_parser(t_lexer *lexer, t_parser *parser)
 {
 	free_token_list(lexer);
@@ -57,6 +59,7 @@ void	destroy_lexer_parser(t_lexer *lexer, t_parser *parser)
 	free(parser->command);
 }
 
+// Reset data for the next inserted input.
 void	reset(t_lexer *lexer, t_parser *parser, char *line)
 {
 	free_token_list(lexer);

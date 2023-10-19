@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 15:34:55 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/19 22:46:19 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ static int	create_outfile(t_redir *redir)
 	return (EXIT_SUCCESS);
 }
 
+/*
+*	Depending on the redirection type, 
+*	it either executes 'create_outfile()' or 'open_infile()'.
+*/
 static int	redirection(t_redir *redir)
 {
 	t_redir	*head;
@@ -79,6 +83,13 @@ void	unlink_exit(char *file_name)
 	exit(EXIT_SUCCESS);
 }
 
+/*
+*	If the redirection type is HERE_DOC, start by executing here_document() 
+*	to generate a temporary file. If Heredoc is executed without any other command,
+*	then unlink the temporary file and exit. 
+*	Otherwise, proceed to execute redirection(). The redirection() returns 'fd_in' 
+*	if the infile has been opened. In the child_process(), it will be closed.
+*/
 int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
 {
 	int		signal_handling;

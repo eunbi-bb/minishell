@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 16:40:33 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/19 23:40:54 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static int	execute_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 
 	if (i != 0)
 	{
-		if (dup2(fds[i - 2], 0) == -1)
+		if (dup2(fds[i - 2], STDIN_FILENO) == -1)
 			perror_exit(ERROR_DUP2_IN);
 	}
 	if (parser->cmd_list->next)
 	{
-		if (dup2(fds[i + 1], 1) == -1)
+		if (dup2(fds[i + 1], STDOUT_FILENO) == -1)
 			perror_exit(ERROR_DUP2_OUT);
 	}
 	close_ends(lexer->pipe_num, fds);
@@ -32,6 +32,10 @@ static int	execute_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 	return (value);
 }
 
+/*
+*	Check if the redir linked list contains redir_type.
+*	Return true if it contains it, otherwise return false.
+*/
 static bool	redir_check(t_redir *redir)
 {
 	t_redir	*current;
@@ -48,6 +52,12 @@ static bool	redir_check(t_redir *redir)
 	return (true);
 }
 
+/*
+*	Generate child processes. Initially, redirect based on the command and 
+*	then execute the command. The 'execute_child' will return an 'exit_code' 
+*	based on its status. This 'exit_code' is stored in 'g_exit_status' and 
+*	will later be used in the expander for the '$?' character.
+*/
 static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
 	int		fd_in;
@@ -62,8 +72,7 @@ static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 	{
 		if (parser->cmd_list->redir != NULL)
 			fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
-		g_exit_status = execute_child
-	(parser, lexer, fds, i);
+		g_exit_status = execute_child(parser, lexer, fds, i);
 		if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
 			close(fd_in);
 		exit(g_exit_status);
@@ -71,6 +80,15 @@ static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 	return (pid);
 }
 
+/*
+*	Execute commands. If the input consists of only one built-in command 
+*	without redirecion, execute that command and terminate the executor. 
+*	Otherwise, generate child processes and execute them inside.
+*	The 'built_in' variable  is used to determine whether the parent process
+*	needs to wait for child processes or not.
+*	'i' increments every 2 to redirect STDIN(even number) and STDOUT(odd number)
+	inside the 'child_process()'.
+*/
 static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 {
 	pid_t	pid;
@@ -100,6 +118,11 @@ static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 	parser->cmd_list = head;
 }
 
+/* 
+*	Set up for executing commands.
+*	This involves allocating pipe file descriptors, creating pipes,
+*	and launching the 'executor()'.
+*/
 void	setup_executor(t_lexer *lexer, t_parser *parser)
 {
 	int		*fds;
