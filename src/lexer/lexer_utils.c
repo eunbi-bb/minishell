@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 16:21:25 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 12:48:46 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ int	next_quote(char *str, int i, char quote)
 		while (str[i + j] && str[i + j] != quote)
 			j++;
 	}
+	j++;
 	return (j);
 }
