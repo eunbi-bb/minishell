@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/03 11:06:15 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 15:40:26 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 20:04:58 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,22 @@ int	count_cmd(char **cmd)
 	return (count);
 }
 
+int	is_n(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (str[0] == '-')
+		i++;
+	while (str[i] == 'n')
+	{
+		if (i == ft_strlen(str) - 1)
+			return (0);
+		i++;
+	}
+	return (-1);
+}
+
 int	cmd_echo(char **cmd)
 {
 	int		new_line;
@@ -31,10 +47,10 @@ int	cmd_echo(char **cmd)
 	i = 1;
 	count = count_cmd(cmd);
 	new_line = 1;
-	if (count > 1 && ft_strcmp(cmd[1], "-n") == 0)
+	while (count > 1 && cmd[i] && is_n(cmd[i]) == 0)
 	{
 		new_line = 0;
-		i = 2;
+		i++;
 	}
 	while (i < count)
 	{
