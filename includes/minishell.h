@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 11:59:24 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 17:12:06 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_parser
 	int		pipes;
 	int		pid;
 	char	*command;
+	int		cmd_exit_code;
 }	t_parser;
 
 typedef struct s_data
