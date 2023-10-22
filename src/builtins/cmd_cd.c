@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/13 21:35:00 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/22 12:21:26 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	cmd_cd(char **path, t_env *env)
 	if (!path[1])
 	{
 		home = search_value("HOME=", env);
-		printf("%s\n", home);
 		if (chdir(home) == -1)
 		{
 			perror("cd ");
