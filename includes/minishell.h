@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 21:35:24 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 11:59:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,67 +103,67 @@ typedef struct s_data
 	int		i;
 }	t_data;
 
-void	signal_handler(int sig);
+void		signal_handler(int sig);
 
 /***** parser *****/
-	//	parser.c
+//	parser.c
 void		parser(t_lexer *lexer, t_parser *parser);
-	//	cmd_node_utils.c
+//	cmd_node_utils.c
 t_cmd		*create_cmd_node(void);
 void		add_after_cmd(t_cmd **before, t_cmd *new_node);
-	//	redir_node_utils.c
+//	redir_node_utils.c
 t_redir		*create_redir_node(void);
 void		add_after_redir(t_redir **before, t_redir *new_node);
 /***** lexer *****/
-	//	lexer.c
+//	lexer.c
 bool		lexical_analyzer(t_lexer *lexer);
 void		free_tmp(char *tmp);
-	//	lexer_utils.c
+//	lexer_utils.c
 bool		is_whitespace(char c);
 int			skip_whitespace(char *s, int i);
 int			is_token(int c);
 bool		match_quotes(char *str);
 int			next_quote(char *str, int i, char quote);
-	//	dollar_sign.c
+//	dollar_sign.c
 void		find_dollar(char *str, t_lexer *lexer, char quote);
-	//	node_utils.c
+//	node_utils.c
 t_tokens	*new_token_node(char *data, t_types token, char quote);
 void		add_after(t_tokens **before, t_tokens *new_node);
 /***** free *****/
-	//	free_destroy.c
+//	free_destroy.c
 void		free_prev_line(t_lexer *lexer, char *line);
 void		free_envp(char **envp);
 void		free_cmd_dirs(t_parser *parser);
 void		destroy_lexer_parser(t_lexer *lexer, t_parser *parser);
 void		reset(t_lexer *lexer, t_parser *parser, char *line);
-	//	free_llist.c
+//	free_llist.c
 void		free_token_list(t_lexer *lexer);
 void		free_redir_list(t_cmd *cmd);
 void		free_cmd_list(t_parser *parser);
 void		free_env_list(t_parser *parser);
 /***** executor *****/
-	//	command_utils.c
+//	command_utils.c
 char		**get_cmd_dirs(t_env **envp);
 int			execute_command(t_parser *parser);
-	//	execute_builtins.c
+//	execute_builtins.c
 int			is_builtin(t_parser *cmd);
 int			execute_builtin(t_parser *cmd);
-	//	executor.c
+//	executor.c
 void		setup_executor(t_lexer *lexer, t_parser *parser);
-	//	heredoc.c
+//	heredoc.c
 void		here_document(t_cmd	*cmd);
-	//	pipe_utils.c
+//	pipe_utils.c
 void		create_pipes(int pipe_num, int fds[]);
 void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
-	//	redirection.c
+//	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
 
-t_env		**create_link_list(char** envp, t_data *data);
+t_env		**create_link_list(char **envp, t_data *data);
 
 int			cmd_echo(char **cmd);
-int			cmd_pwd();
-void		cmd_exit();
+int			cmd_pwd(void);
+void		cmd_exit(void);
 int			cmd_cd(char **path, t_env *env);
 int			cmd_export(t_env **head, char **str);
 int			cmd_unset(t_env **head, char **key);
@@ -173,11 +173,10 @@ t_env		*merge_sort(t_env *head);
 void		free_sorted(t_env *head);
 
 //env.c
-t_env		**createLinkedList(char** envp);
+t_env		**createLinkedList(char	**envp);
 char		**join_key_value(t_env **head);
 int			cmd_env(t_env *env);
-
-void		expand(t_tokens *token_list,  t_env *env);
-char 		*search_value(char *key, t_env *env);
+void		expand(t_tokens *token_list, t_env *env);
+char		*search_value(char *key, t_env *env);
 
 #endif
