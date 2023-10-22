@@ -6,16 +6,16 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 21:31:54 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 21:34:52 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 11:53:41 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void free_sorted(t_env *head)
+void	free_sorted(t_env *head)
 {
-	t_env *current;
-	t_env *next;
+	t_env	*current;
+	t_env	*next;
 
 	current = head;
 	while (current != NULL)

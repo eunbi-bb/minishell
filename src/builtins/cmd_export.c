@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 11:48:01 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 11:53:25 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,23 +88,6 @@ void	add_to_list(t_env *current, t_env **head, char *str)
 		current->next = new_node;
 	}
 }
-
-void free_sorted(t_env *head)
-{
-    t_env *current;
-    t_env *next;
-
-	current = head; 
-    while (current != NULL)
-	{
-        next = current->next;
-        free(current->key);
-        free(current->value);
-        free(current);
-        current = next;
-    }
-}
-
 
 int	cmd_export(t_env **head, char **str)
 {

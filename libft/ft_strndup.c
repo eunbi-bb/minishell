@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 18:18:13 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 18:29:23 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 11:55:44 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strndup(const char *s1, size_t n)
 {
-	size_t  size;
+	size_t	size;
 	char	*str;
 
 	size = n + 1;

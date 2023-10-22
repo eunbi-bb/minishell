@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 16:09:04 by eucho         #+#    #+#                 */
-/*   Updated: 2022/10/24 15:28:01 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 11:57:32 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 		{
 			*(d + len) = *(s + len);
 		}
-	}	
+	}
 	return (dst);
 }

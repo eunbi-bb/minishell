@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 16:10:16 by eucho         #+#    #+#                 */
-/*   Updated: 2022/10/24 15:31:24 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 11:56:37 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 */
 #include <stdlib.h>
 
-int ft_strcmp(const char *str1, const char *str2)
+int	ft_strcmp(const char *str1, const char *str2)
 {
-    while (*str1 != '\0' || *str2 != '\0') {
-        if (*str1 != *str2) {
-            return *str1 - *str2;
-        }
-        str1++;
-        str2++;
-    }
-    return 0;
+	while (*str1 != '\0' || *str2 != '\0')
+	{
+		if (*str1 != *str2)
+			return (*str1 - *str2);
+		str1++;
+		str2++;
+	}
+	return (0);
 }
