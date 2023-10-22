@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 21:36:19 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 11:48:01 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,15 @@ void	add_to_list(t_env *current, t_env **head, char *str)
 
 void free_sorted(t_env *head)
 {
-    t_env *current = head;
+    t_env *current;
     t_env *next;
 
-    while (current != NULL) {
+	current = head; 
+    while (current != NULL)
+	{
         next = current->next;
-        // Free the key and value strings
         free(current->key);
         free(current->value);
-        // Free the current node
         free(current);
         current = next;
     }
