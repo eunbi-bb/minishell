@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/18 19:02:37 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 17:01:09 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	generate_node(char *str, int i, t_lexer *lexer, char quote)
 *	Therefore, when generating a node for "$?",
 *	set the node type as "QUESTION" in the token_list
 */
-static int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
+static int	split_dollar(char *str, int i, t_lexer *lexer, char quote)
 {
 	char	*tmp;
 	int		len;
@@ -75,14 +75,14 @@ static int	split_dollar(char *str, int i, t_tokens *token_list, char quote)
 	if (str[i + 1] && str[i + 1] == '?')
 	{
 		tmp = ft_substr(str, i, 2);
-		add_after(&token_list, new_token_node(tmp, QUESTION, quote));
+		add_after(&lexer->token_list, new_token_node(tmp, QUESTION, quote));
 		i += 2;
 	}
 	else
 	{
 		len = get_len_dollar(&str[i + 1]) + 1;
 		tmp = ft_substr(str, i, len);
-		add_after(&token_list, new_token_node(tmp, DOLLAR, quote));
+		add_after(&lexer->token_list, new_token_node(tmp, DOLLAR, quote));
 		i += len;
 	}
 	free(tmp);
@@ -104,7 +104,7 @@ void	find_dollar(char *str, t_lexer *lexer, char quote)
 	while (str[i])
 	{
 		if (str[i] == '$')
-			i = split_dollar(str, i, lexer->token_list, quote);
+			i = split_dollar(str, i, lexer, quote);
 		else if (str[i] == '+')
 		{
 			tmp = ft_strdup("+");

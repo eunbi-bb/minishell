@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 00:34:54 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/22 17:03:20 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 	generate_redir(curr, cmd);
 	while (0 <= arg_num-- && curr)
 	{
-		if (curr->data != NULL && (curr->token == DEFAULT || curr->token >= DOLLAR))
+		if (curr->data != NULL \
+			&& (curr->token == DEFAULT || curr->token >= DOLLAR))
 		{
 			len = ft_strlen(curr->data) + 1;
 			cmd->data[i] = ft_calloc(len, sizeof(char));
@@ -106,4 +107,3 @@ void	parser(t_lexer *lexer, t_parser *parser)
 		curr = curr->next;
 	}
 }
-

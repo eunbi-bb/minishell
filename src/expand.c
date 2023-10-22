@@ -6,11 +6,12 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 15:33:15 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 15:36:33 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "error.h"
 
 char	*search_value(char *key, t_env *env)
 {

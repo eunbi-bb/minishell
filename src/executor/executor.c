@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 23:40:54 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/22 17:00:35 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static bool	redir_check(t_redir *redir)
 *	based on its status. This 'exit_code' is stored in 'g_exit_status' and 
 *	will later be used in the expander for the '$?' character.
 */
-static pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
+pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
 	int		fd_in;
 	pid_t	pid;
