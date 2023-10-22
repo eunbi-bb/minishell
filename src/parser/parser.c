@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 19:08:38 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 00:34:54 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static int	count_args(t_tokens	*lexer)
 	return (arg_num);
 }
 
-static void	generate_redir(t_tokens *curr, t_cmd *cmd)
+void	generate_redir(t_tokens *curr, t_cmd *cmd)
 {
 	t_tokens	*tmp;
 	t_redir		*new;
 
 	tmp = curr;
-	while (tmp && (tmp->token >= LESSER && tmp->token <= APPEND))
+	while (tmp && tmp->token != PIPE)
 	{
 		new = create_redir_node();
 		add_after_redir(&cmd->redir, new);
@@ -54,29 +54,28 @@ static void	generate_redir(t_tokens *curr, t_cmd *cmd)
 	}
 }
 
-static t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd, int arg_num)
+t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 {
+	int			arg_num;
 	int			i;
-	int			j;
 	size_t		len;
 	t_tokens	*curr;
 
 	i = 0;
-	j = 0;
 	curr = tokens;
+	arg_num = count_args(curr);
 	if (arg_num > 0)
 		cmd->data = ft_calloc((arg_num + 1), sizeof(char *));
 	generate_redir(curr, cmd);
-	while (i++ <= arg_num && curr)
+	while (0 <= arg_num-- && curr)
 	{
-		if (curr->data && (curr->token == DEFAULT || curr->token >= DOLLAR))
+		if (curr->data != NULL && (curr->token == DEFAULT || curr->token >= DOLLAR))
 		{
 			len = ft_strlen(curr->data) + 1;
-			cmd->data[j] = ft_calloc(len, sizeof(char));
-			ft_strlcpy(cmd->data[j], curr->data, len);
-			j++;
+			cmd->data[i] = ft_calloc(len, sizeof(char));
+			ft_strlcpy(cmd->data[i++], curr->data, len);
 		}
-		if ((curr->token >= LESSER && curr->token <= APPEND) || curr->token == PIPE)
+		if (curr->token >= LESSER && curr->token <= APPEND)
 			curr = curr->next;
 		curr = curr->next;
 	}
@@ -90,16 +89,14 @@ void	parser(t_lexer *lexer, t_parser *parser)
 {
 	t_tokens	*curr;
 	t_cmd		*cmd;
-	int			arg_num;
 
 	curr = lexer->token_list;
-	arg_num = count_args(curr);
 	while (curr)
 	{
 		if (curr->token != PIPE)
 		{
 			cmd = create_cmd_node();
-			generate_cmd(curr, cmd, arg_num);
+			generate_cmd(curr, cmd);
 			add_after_cmd(&parser->cmd_list, cmd);
 			while (curr->token != PIPE && curr->next)
 			{
@@ -109,3 +106,4 @@ void	parser(t_lexer *lexer, t_parser *parser)
 		curr = curr->next;
 	}
 }
+

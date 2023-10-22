@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 18:15:26 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 15:33:26 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ int	execute_command(t_parser *parser)
 	if (parser->cmd_list->data)
 	{
 		if (is_builtin(parser) == 0)
-			return (execute_builtin(parser));
+		{
+			if (execute_builtin(parser) != 0)
+				return (1);
+		}
 		else
 		{
 			if (generate_command(parser) == EXIT_CMD)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/18 15:43:28 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/19 23:02:18 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ static char	*tmp_filename(int i)
 	return (filename);
 }
 
+/*
+*	Create a temporary file to store the written inputs using 'write()'
+*	until a line containing the delimiter is encountered.
+*/
 static void	create_heredoc(char *delim, char *filename)
 {
 	int		fd;
@@ -52,6 +56,11 @@ static void	create_heredoc(char *delim, char *filename)
 		free(str);
 }
 
+/*
+*	If the redirecion type is HERE_DOC('<<'),
+*	the 'cmd->redir->file_name' will serve as a delimiter and
+*	be replaced with a temporary filename to store the written inputs.
+*/
 void	here_document(t_cmd	*cmd)
 {
 	static int	i;

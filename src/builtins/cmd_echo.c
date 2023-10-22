@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/03 11:06:15 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/13 23:28:06 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/19 17:22:55 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	cmd_echo(char **cmd)
 	i = 1;
 	count = count_cmd(cmd);
 	new_line = 1;
-	if (count > 1 && strcmp(cmd[1], "-n") == 0)
+	if (count > 1 && ft_strcmp(cmd[1], "-n") == 0)
 	{
 		new_line = 0;
 		i = 2;
