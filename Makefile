@@ -46,6 +46,7 @@ SRC_FILE	= main.c error.c expand.c signals.c \
 				builtins/cmd_pwd.c \
 				builtins/cmd_unset.c \
 				builtins/env.c \
+				builtins/cmd_exit.c \
 				builtins/env_utilis.c \
 				builtins/export_free.c \
 				free/free_llist.c \

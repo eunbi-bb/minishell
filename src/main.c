@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 16:58:22 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 20:50:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,23 @@ static void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
 	setup_executor(lexer, parser_utils);
 }
 
+int	find_heredoc(const char *str)
+{
+	size_t	len;
+	size_t		i;
+
+	len = ft_strlen(str);
+	i = 0;
+
+	while (i < len - 1)
+	{
+		if (str[i] == '<' && str[i + 1] == '<')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 /*
 *	Obtain input from the prompt through readline_loop()
 *	and if the input passes input_check(), then proceed to run Minishell.
@@ -93,7 +110,7 @@ static void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
 			lexer->arg = ft_strtrim(line, " ");
 		else
 			lexer->arg = line;
-		if (!lexer->arg || ft_strncmp(lexer->arg, "exit", 4) == 0)
+		if (!lexer->arg)
 		{
 			free(line);
 			write(STDOUT_FILENO, "exit\n", 5);

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 17:08:03 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/22 21:08:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_builtin(t_parser *cmd)
 		|| ft_strcmp(cmd->cmd_list->data[0], "cd") == 0 \
 		|| ft_strcmp(cmd->cmd_list->data[0], "export") == 0 \
 		|| ft_strcmp(cmd->cmd_list->data[0], "unset") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "exit") == 0)
+		|| ft_strcmp(cmd->cmd_list->data[0], "exit") == 0) 
 	{
 		return (0);
 	}
@@ -44,5 +44,7 @@ int	execute_builtin(t_parser *cmd)
 		return (cmd_export(cmd->env, cmd->cmd_list->data));
 	else if (ft_strcmp(cmd->cmd_list->data[0], "unset") == 0)
 		return (cmd_unset(cmd->env, cmd->cmd_list->data));
+	else if (ft_strcmp(cmd->cmd_list->data[0], "exit") == 0)
+		g_exit_status = cmd_exit(cmd->cmd_list->data);
 	return (0);
 }

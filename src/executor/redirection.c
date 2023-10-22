@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/19 22:46:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/22 20:34:36 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,26 @@ void	unlink_exit(char *file_name)
 *	Otherwise, proceed to execute redirection(). The redirection() returns 'fd_in' 
 *	if the infile has been opened. In the child_process(), it will be closed.
 */
-int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
+int	execute_redir(t_lexer *lexer, t_parser *parser, t_redir *redir, int fd_in)
 {
-	int		signal_handling;
+	// int		signal_handling;
 	t_redir	*head;
 
 	head = redir;
-	signal_handling = 0;
+	// signal_handling = 0;
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
 		{
-			if (!signal_handling++)
-				signal_handler(HEREDOC);
+			// if (!signal_handling++)
+			// 	signal_handler(HEREDOC);
 			here_document(parser->cmd_list);
 			if (!parser->cmd_list->data && !redir->next)
 			{
-				signal_handling = 0;
+				// signal_handling = 0;
 				unlink_exit(redir->file_name);
 			}
+			lexer->heredoc = 0;
 		}
 		if (redir != NULL && redir->redir_type != DEFAULT)
 			fd_in = redirection(parser->cmd_list->redir);

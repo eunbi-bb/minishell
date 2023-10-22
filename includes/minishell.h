@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 17:12:06 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/22 21:04:09 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,16 +158,17 @@ void		create_pipes(int pipe_num, int fds[]);
 void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
 //	redirection.c
-int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
+int	execute_redir(t_lexer *lexer, t_parser *parser, t_redir *redir, int fd_in);
 
 t_env		**create_link_list(char **envp, t_data *data);
 
 int			cmd_echo(char **cmd);
 int			cmd_pwd(void);
-void		cmd_exit(void);
+// void		cmd_exit(void);
 int			cmd_cd(char **path, t_env *env);
 int			cmd_export(t_env **head, char **str);
 int			cmd_unset(t_env **head, char **key);
+int			cmd_exit(char **input);
 int			var_exist(char *key, t_env *env);
 void		print_list(t_env *head);
 t_env		*merge_sort(t_env *head);
@@ -180,4 +181,5 @@ int			cmd_env(t_env *env);
 void		expand(t_tokens *token_list, t_env *env);
 char		*search_value(char *key, t_env *env);
 
+int	count_cmd(char **cmd);
 #endif
