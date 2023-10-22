@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 19:36:05 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/22 15:33:15 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,18 @@
 char	*search_value(char *key, t_env *env)
 {
 	size_t	len;
+	char	*empty;
 
+	empty = NULL;
 	len = ft_strlen(key);
 	while (env)
 	{
 		if (ft_strncmp(key, env->key, len) == 0)
-			return (env->value);
+			return (ft_strdup(env->value));
 		env = env->next;
 	}
-	return (ft_strdup(""));
+	empty = ft_strdup("");
+	return (empty);
 }
 
 char	*print_qm(char *data)
@@ -48,10 +51,10 @@ void	expand(t_tokens *token_list, t_env *env)
 {
 	t_tokens	*current;
 	char		*val;
-	size_t		len;
 	char		*key;
 
 	current = token_list;
+	val = NULL;
 	while (current != NULL)
 	{
 		if (current->token == QUESTION && current->s_quote == false)
@@ -59,14 +62,11 @@ void	expand(t_tokens *token_list, t_env *env)
 		if (current->token == DOLLAR && current->s_quote == false)
 		{
 			key = ft_strjoin(current->data + 1, "=");
-			len = ft_strlen(key);
-			if (len > 1)
-			{
-				val = search_value(key, env);
-				free(key);
-				if (val)
-					replace_val(current, val);
-			}
+			if (!key)
+				err_msg("Malloc\n");
+			val = search_value(key, env);
+			free(key);
+			replace_val(current, val);
 		}
 		current = current->next;
 	}
