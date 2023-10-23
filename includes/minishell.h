@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 21:04:09 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:20:16 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,4 +182,6 @@ void		expand(t_tokens *token_list, t_env *env);
 char		*search_value(char *key, t_env *env);
 
 int	count_cmd(char **cmd);
+
+void	signal_heredoc(int sig);
 #endif

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:53 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 20:33:27 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:10:42 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	create_heredoc(char *delim, char *filename)
 	}
 	while (1)
 	{
+		signal(SIGINT, signal_heredoc);
 		str = readline("> ");
 		if (str == NULL)
 			break ;

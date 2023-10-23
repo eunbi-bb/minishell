@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 20:43:06 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:28:28 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,12 @@ pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 	fd_in = 0;
 	pid = fork();
 	if (lexer->heredoc == true)
-		signal_handler(HEREDOC);
-	if (lexer->heredoc == false)
+	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
+		lexer->heredoc = false;
+	}
+	else
 		signal_handler(CHILD);
 	if (pid == -1)
 		err_msg(ERROR_CHILD);

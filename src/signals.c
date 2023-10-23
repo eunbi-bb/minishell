@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 20:44:09 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:11:03 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	backslash(int sig)
 	}
 }
 
-static void	ctrl_c(int sig)
+void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -47,15 +47,13 @@ static void	ctrl_c(int sig)
 	}
 }
 
-static void	signal_heredoc(int sig)
+void	signal_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
 		rl_replace_line("", 0);
-		write(STDOUT_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-		exit(1);
+		write(STDOUT_FILENO, "> ^C\n", 5);
+		exit(0);
 	}
 }
 
