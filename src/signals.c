@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/08/30 15:20:36 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/23 17:11:03 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:54:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	backslash(int sig)
 	}
 }
 
-void	ctrl_c(int sig)
+static void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/23 17:32:04 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 17:54:10 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct s_data
 	int		i;
 }	t_data;
 
+//	signal.c
 void		signal_handler(int sig);
 void		signal_heredoc(int sig);
 

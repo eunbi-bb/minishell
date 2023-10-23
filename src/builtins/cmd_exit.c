@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/22 21:22:09 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 21:22:53 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/23 18:11:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 bool	is_str_digits(char *str)
 {
+	int	i;
+
+	i = 0;
 	if (str == NULL || *str == '\0')
 		return (false);
-	while (*str)
+	if (str[0] == '-')
+		i++;
+	while (str[i] != '\0')
 	{
-		if (!ft_isdigit(*str))
+		if (!ft_isdigit(str[i]))
 			return (false);
-		str++;
+		i++;
 	}
 	return (true);
 }
