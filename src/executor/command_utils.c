@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 14:08:16 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 15:54:24 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int	execute_command(t_parser *parser)
 			{
 				if (parser->cmd_list->data)
 				{
+					execute_redir(parser, parser->cmd_list->redir, 0);
 					if (execve(parser->command, parser->cmd_list->data, \
 						parser->envp) < 0)
 						perror_exit(ERROR_EXECVE);

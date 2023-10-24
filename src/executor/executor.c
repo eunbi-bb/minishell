@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 11:14:56 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 16:17:25 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ static bool	redir_check(t_redir *redir)
 
 	current = redir;
 	if (redir == NULL)
-		return (true);
+		return (false);
 	while (current != NULL)
 	{
 		if (current->redir_type >= LESSER && current->redir_type <= APPEND)
-			return (false);
+			return (true);
 		current = current->next;
 	}
-	return (true);
+	return (false);
 }
 
 /*
@@ -60,10 +60,10 @@ static bool	redir_check(t_redir *redir)
 */
 pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
-	int		fd_in;
+	// int		fd_in;
 	pid_t	pid;
 
-	fd_in = 0;
+	// fd_in = 0;
 	pid = fork();
 	if (lexer->heredoc == true)
 	{
@@ -77,11 +77,11 @@ pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 		err_msg(ERROR_CHILD);
 	else if (pid == 0)
 	{
-		if (parser->cmd_list->redir != NULL)
-			fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
+		// if (parser->cmd_list->redir != NULL && parser->cmd_list == NULL)
+		// 	fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
+		// if (fd_in > 0 && redir_check(parser->cmd_list->redir) == false)
+		// 	close(fd_in);
 		g_exit_status = execute_child(parser, lexer, fds, i);
-		if (fd_in > 0 && redir_check(parser->cmd_list->redir) == true)
-			close(fd_in);
 		exit(g_exit_status);
 	}
 	return (pid);
@@ -108,7 +108,7 @@ static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 	head = parser->cmd_list;
 	while (parser->cmd_list)
 	{
-		if (redir_check(parser->cmd_list->redir) == true \
+		if (redir_check(parser->cmd_list->redir) == false \
 			&& is_builtin(parser) == 0 && lexer->pipe_num == 0)
 		{
 			g_exit_status = execute_builtin(parser);

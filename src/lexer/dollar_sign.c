@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/24 12:22:46 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 14:23:55 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ void	find_dollar(char *str, t_lexer *lexer, char quote)
 	char	*tmp;
 	int		i;
 
-	if (str == NULL)
-		return ;
 	if (str[0] == '\0')
 		add_after(&lexer->token_list, new_token_node('\0', DEFAULT, quote));
 	i = 0;
