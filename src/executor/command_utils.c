@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 12:07:57 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 14:08:16 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	*command_check(char **path, char *cmd)
 		command = ft_strjoin(tmp, cmd);
 		if (command == NULL)
 			exit(EXIT_FAILURE);
-		if (!access(command, X_OK))
+		if (access(command, F_OK) == 0)
 		{
 			free(tmp);
 			return (command);
@@ -90,13 +90,18 @@ static int	generate_command(t_parser *parser)
 		parser->command = NULL;
 	else
 		parser->command = command_check(parser->cmd_dirs, *cmd->data);
-	if (parser->command == NULL)
+	if (access(*cmd->data, F_OK) == 0 && access(*cmd->data, X_OK) == -1)
+	{
+		cmd_error(*cmd->data, ERROR_PERMISSION);
+		return (EXIT_DIR);
+	}
+	else if (parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
+		parser->command = *cmd->data;
+	else if (parser->command == NULL)
 	{
 		cmd_error(*cmd->data, ERROR_CMD);
 		return (EXIT_CMD);
 	}
-	if (parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
-		parser->command = *cmd->data;
 	return (EXIT_SUCCESS);
 }
 

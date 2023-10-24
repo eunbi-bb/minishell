@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 11:24:23 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 16:51:24 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 12:41:14 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define ERROR_EXECVE "execve error"
 # define ERROR_DIR  " Is a directory"
 # define EXIT_DIR 126
+# define ERROR_PERMISSION "Permission denied"
 
 //Signal error
 # define ERROR_SIG "signal error" 
