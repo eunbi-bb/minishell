@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 16:00:23 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 11:56:17 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*extract_word(char	*str, int i, int j, char quote)
 
 	tmp = NULL;
 	if (str[i + 1] == quote)
-		tmp = ft_strdup("''");
+		tmp = ft_strdup("");
 	else if (quote != '\0')
 		tmp = ft_substr(str, i + 1, j - 2);
 	else

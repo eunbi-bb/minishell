@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/23 17:17:51 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 12:01:07 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 
 int	is_builtin(t_parser *cmd)
 {
-	if (ft_strcmp(cmd->cmd_list->data[0], "echo") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "pwd") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "env") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "cd") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "export") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "unset") == 0 \
-		|| ft_strcmp(cmd->cmd_list->data[0], "exit") == 0)
+	if (cmd->cmd_list->data[0] != NULL)
 	{
-		return (0);
+		if (ft_strcmp(cmd->cmd_list->data[0], "echo") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "pwd") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "env") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "cd") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "export") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "unset") == 0 \
+			|| ft_strcmp(cmd->cmd_list->data[0], "exit") == 0)
+			return (0);
+		else
+			return (1);
 	}
 	else
-	{
 		return (1);
-	}
 }
 
 int	execute_builtin(t_parser *cmd)

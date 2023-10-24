@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/23 17:31:40 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 11:11:45 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ void	unlink_exit(char *file_name)
 */
 int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
 {
-	int		signal_handling;
+	// int		signal_handling;
 	t_redir	*head;
 
 	head = redir;
-	signal_handling = 0;
+	// signal_handling = 0;
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)
@@ -104,7 +104,7 @@ int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
 			here_document(parser->cmd_list);
 			if (!parser->cmd_list->data && !redir->next)
 			{
-				signal_handling = 0;
+				// signal_handling = 0;
 				unlink_exit(redir->file_name);
 			}
 		}
