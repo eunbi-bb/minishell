@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:50 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 19:53:59 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/25 09:23:20 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,16 @@ void	free_cmd_list(t_parser *parser)
 
 void	free_env_list(t_parser *parser)
 {
-	int	i;
+	t_env	*tmp;
 
-	i = 0;
-	while (parser->env[i])
+	while (parser->env)
 	{
-		printf("env->key: %s\n", parser->env[i]->key);
-		parser->env[i] = parser->env[i]->next;
-		if (parser->env[i]->key)
-			free(parser->env[i]->key);
-		if (parser->env[i]->value)
-			free(parser->env[i]->value);
-		free(parser->env[i]);
-		i++;
+		tmp = parser->env;
+		parser->env = parser->env->next;
+		if (tmp->key)
+			free(tmp->key);
+		if (tmp->value)
+			free(tmp->value);
+		free(tmp);
 	}
-	free(parser->env);
 }

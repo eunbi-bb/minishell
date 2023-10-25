@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/25 07:56:58 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/25 09:19:20 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 #include "error.h"
 
 // Function to split the linked list into two halves
-void	split_list(t_env *source, t_env **leftRef, t_env **rightRef)
+void	split_list(t_env *source, t_env **left_ref, t_env **right_ref)
 {
 	t_env	*fast;
 	t_env	*slow;
 
 	if (source == NULL || source->next == NULL)
 	{
-		*leftRef = source;
-		*rightRef = NULL;
+		*left_ref = source;
+		*right_ref = NULL;
 	}
 	else
 	{
@@ -37,8 +37,8 @@ void	split_list(t_env *source, t_env **leftRef, t_env **rightRef)
 				fast = fast->next;
 			}
 		}
-		*leftRef = source;
-		*rightRef = slow->next;
+		*left_ref = source;
+		*right_ref = slow->next;
 		slow->next = NULL;
 	}
 }
@@ -104,6 +104,5 @@ void	print_list(t_env *head)
 	{
 		printf("declare -x %s%s\n", current->key, current->value);
 		current = current->next;
-		free_sorted(head);
 	}
 }

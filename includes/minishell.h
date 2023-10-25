@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 22:08:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/25 09:23:45 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,17 +92,6 @@ typedef struct s_parser
 	char	*command;
 	int		cmd_exit_code;
 }	t_parser;
-
-typedef struct s_data
-{
-	char	*eq_sign;
-	char	*env;
-	size_t	key_len;
-	char	*key;
-	char	*value;
-	t_env	*new_node;
-	int		i;
-}	t_data;
 
 //	signal.c
 void		signal_handler(int sig);
