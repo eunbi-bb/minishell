@@ -6,139 +6,134 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 19:53:23 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/24 22:13:46 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error.h"
 
-void	free_data(t_data *data)
-{
-	if (data->eq_sign != NULL)
-		free(data->eq_sign);
-	if (data->env != NULL)
-		free(data->env);
-	if (data->key != NULL)
-		free(data->key);
-	if (data->value != NULL)
-		free(data->value);
-	free(data);
-}
+// char	**free_array(char **str, int count)
+// {
+// 	int	i;
 
-t_env	*create_node(char *key, char *value)
-{
-	t_env	*new_node;
+// 	i = 0;
+// 	while (i < count)
+// 	{
+// 		free(str[i]);
+// 		i++;
+// 	}
+// 	free(str);
+// 	return (NULL);
+// }
 
+// int	count_env_llist(t_env **head)
+// {
+// 	int	i;
+// 	t_env	*current;
+
+// 	i = 0;
+// 	current = *head;
+//     while (current)
+//     {
+//         i++;
+//         current = current->next;
+//     }
+// 	return (i + 1);
+// }
+
+// char	**join_key_value(t_env **head)
+// {
+// 	char	**str;
+// 	int		i;
+// 	t_env	*current;
+
+// 	str = (char **)ft_calloc(count_env_llist(head), sizeof(char *));
+// 	current = *head;
+// 	i = 0;
+// 	while (current)
+// 	{
+// 		str[i] = ft_strjoin(current->key, current->value);
+// 		if (!str[i])
+// 			return (free_array(str, i + 1));
+// 		i++;
+// 		current = current->next;
+// 	}
+// 	str[i] = NULL;
+// 	return (str);
+// }
+
+
+t_env	*create_env_node(char* key, char* value)
+{
+    t_env* new_node;
+	
 	new_node = ft_calloc(1, sizeof(t_env));
-	if (new_node == NULL)
-		perror_exit("malloc fail");
-	new_node->key = ft_strdup(key);
-	if (new_node->key == NULL)
-		perror_exit("malloc fail");
+    if (new_node == NULL) 
+		perror_exit("malloc err");
+    new_node->key = ft_strdup(key);
 	free(key);
-	new_node->value = ft_strdup(value);
-	if (new_node->value == NULL)
-		perror_exit("malloc fail");
+    new_node->value = ft_strdup(value);
 	free(value);
-	new_node->next = NULL;
-	return (new_node);
+    new_node->next = NULL;
+    return (new_node);
 }
 
-int	cmd_env(t_env *env)
+void	add_after_env(t_env **before, t_env *new_node)
+{
+	t_env	*head;
+
+	head = *before;
+	if (head == NULL)
+	{
+		*before = new_node;
+	}
+	else
+	{
+		while (head->next != NULL)
+			head = head->next;
+		head->next = new_node;
+	}
+}
+
+int cmd_env(t_env *env)
 {
 	t_env	*head;
 
 	head = env;
-	while (env)
-	{
-		printf("%s%s\n", env->key, env->value);
-		env = env->next;
-	}
+    while (env)
+    {
+        printf("%s%s\n", env->key, env->value);
+        env = env->next;
+    }
 	env = head;
-	return (0);
+    return (0);
 }
 
-// t_env **create_link_list(char** envp, t_data *data)
-// {
-// 	t_env	**head;
-// 	t_env	*current;
-// 	int		i;
 
-// 	head = NULL;
-// 	current = NULL;
-// 	i = 0;
-// 	while (envp[i] != NULL)
-// 	{
-// 		data->env = envp[i];
-// 		data->eq_sign = ft_strchr(data->env, '=');
-// 		if (data->eq_sign == NULL)
-// 		{
-// 			i++;
-// 			continue;
-// 		}
-// 		data->key_len = data->eq_sign - data->env + 1;
-// 		data->key = ft_strndup(data->env, data->key_len);
-// 		data->value = ft_strdup(data->eq_sign + 1);
-//  		data->new_node = create_node(data->key, data->value);
-// 		if (head == NULL)
-// 		{
-// 			head = ft_calloc(1, sizeof(t_env*));
-// 			*head = data->new_node;
-// 			current = data->new_node;
-// 		}
-// 		else 
-// 		{
-// 			current->next = data->new_node;
-// 			current = data->new_node;
-// 		}
-// 		i++;
-// 	}
-// 	//free_data(data);
-// 	return head;
-// }
-
-t_env	*create_node_from_env(char *env, t_data *data)
+void	create_env_list(t_parser *parser, char** envp)
 {
-	data->env = env;
-	data->eq_sign = ft_strchr(data->env, '=');
-	if (data->eq_sign == NULL)
-		return (NULL);
-	data->key_len = data->eq_sign - data->env + 1;
-	data->key = ft_strndup(data->env, data->key_len);
-	if (!data->key)
-		perror_exit("malloc err");
-	data->value = ft_strdup(data->eq_sign + 1);
-	if (!data->value)
-		perror_exit("malloc err");
-	return (create_node(data->key, data->value));
-}
+	char	*env;
+	char	*equal_sign;
+	char	*key;
+	char	*value;
+	int		i;
 
-t_env	**create_link_list(char **envp, t_data *data)
-{
-	t_env	**head;
-	t_env	*current;
-
-	head = NULL;
-	current = NULL;
-	data->i = 0;
-	while (envp[++data->i] != NULL)
+	i = 0;
+	while (envp[i] != NULL)
 	{
-		data->new_node = create_node_from_env(envp[data->i], data);
-		if (data->new_node != NULL)
-		{
-			if (head == NULL)
-			{
-				head = ft_calloc(1, sizeof(t_env *));
-				*head = data->new_node;
-				current = data->new_node;
-			}
-			else
-			{
-				current->next = data->new_node;
-				current = data->new_node;
-			}
-		}
+		env = ft_strdup(envp[i]);
+		equal_sign = ft_strchr(env, '=');
+		if (equal_sign == NULL)
+			return ;
+		key = ft_strndup(env, equal_sign - env + 1);
+		if (!key)
+			perror_exit("malloc err");
+		value = ft_strdup(equal_sign + 1);
+		if	(!value)
+			perror_exit("malloc err");
+		free(env);
+		add_after_env(&parser->env, create_env_node(key, value));
+		i++;
 	}
-	return (head);
 }

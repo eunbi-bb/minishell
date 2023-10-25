@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 21:31:54 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 11:53:41 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/24 18:39:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	free_sorted(t_env *head)
 	while (current != NULL)
 	{
 		next = current->next;
-		free(current->key);
-		free(current->value);
+		if (current->key)
+			free(current->key);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = next;
 	}

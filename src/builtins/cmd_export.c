@@ -6,26 +6,26 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 11:53:25 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/24 22:09:30 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error.h"
 
-void	unset_var(t_env **head, char *key)
+void	unset_var(t_env *head, char *key)
 {
 	t_env	*current;
 	t_env	*previous;
 
-	current = *head;
+	current = head;
 	previous = NULL;
 	while (current != NULL)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 		{
 			if (previous == NULL)
-				*head = current->next;
+				head = current->next;
 			else
 				previous->next = current->next;
 			free(current->key);
@@ -38,14 +38,14 @@ void	unset_var(t_env **head, char *key)
 	}
 }
 
-t_env	*insert_node(char *str, t_env **head)
+t_env	*insert_node(char *str, t_env *head)
 {
 	char	*eq_s;
 	size_t	key_len;
 	t_env	*new_node;
 	t_env	*current;
 
-	current = *head;
+	current = head;
 	new_node = (t_env *)malloc(sizeof(t_env));
 	if (new_node == NULL)
 	{
@@ -73,23 +73,23 @@ int	valid_char(char *str)
 	return (0);
 }
 
-void	add_to_list(t_env *current, t_env **head, char *str)
+void	add_to_list(t_env *current, t_env *head, char *str)
 {
 	t_env	*new_node;
 
 	new_node = insert_node(str, head);
-	if (*head == NULL)
-		*head = new_node;
+	if (head == NULL)
+		head = new_node;
 	else
 	{
-		current = *head;
+		current = head;
 		while (current->next != NULL)
 			current = current->next;
 		current->next = new_node;
 	}
 }
 
-int	cmd_export(t_env **head, char **str)
+int	cmd_export(t_env *head, char **str)
 {
 	t_env	*current;
 	t_env	*sorted;
@@ -99,7 +99,7 @@ int	cmd_export(t_env **head, char **str)
 	current = NULL;
 	if (!str[1])
 	{
-		sorted = merge_sort(*head);
+		sorted = merge_sort(head);
 		print_list(sorted);
 	}
 	else

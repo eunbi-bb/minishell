@@ -6,17 +6,17 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/15 20:33:25 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 22:11:38 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error.h"
 
-void	unset_free(t_env *current, t_env *previous, t_env **head)
+void	unset_free(t_env *current, t_env *previous)
 {
 	if (previous == NULL)
-		*head = current->next;
+		current = current->next;
 	else
 		previous->next = current->next;
 	if (current->key != NULL)
@@ -33,7 +33,7 @@ void	check_malloc(char *key)
 		err_msg("malloc fail");
 }
 
-int	cmd_unset(t_env **head, char **key)
+int	cmd_unset(t_env *head, char **key)
 {
 	t_env	*current;
 	t_env	*previous;
@@ -46,12 +46,12 @@ int	cmd_unset(t_env **head, char **key)
 	{
 		key_eq = ft_strjoin(key[i], "=");
 		check_malloc(key_eq);
-		current = *head;
+		current = head;
 		while (current)
 		{
 			if (strcmp(current->key, key_eq) == 0)
 			{
-				unset_free(current, previous, head);
+				unset_free(current, previous);
 				break ;
 			}
 			previous = current;

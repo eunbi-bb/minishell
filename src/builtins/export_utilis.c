@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 11:48:35 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/25 07:56:58 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ void	print_list(t_env *head)
 	current = head;
 	while (current != NULL)
 	{
-		printf("declare -x %s %s\n", current->key, current->value);
+		printf("declare -x %s%s\n", current->key, current->value);
 		current = current->next;
+		free_sorted(head);
 	}
-	free_sorted(head);
 }

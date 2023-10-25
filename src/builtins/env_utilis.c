@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 13:25:00 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/18 19:58:41 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/24 22:02:07 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ char	**free_array(char **str, int count)
 	return (NULL);
 }
 
-int	count_env_llist(t_env **head)
+int	count_env_llist(t_env *head)
 {
 	int		i;
 	t_env	*current;
 
 	i = 0;
-	current = *head;
+	current = head;
 	while (current)
 	{
 		i++;
@@ -42,7 +42,7 @@ int	count_env_llist(t_env **head)
 	return (i + 1);
 }
 
-char	**join_key_value(t_env **head)
+char	**join_key_value(t_env *head)
 {
 	char	**str;
 	int		i;
@@ -51,7 +51,7 @@ char	**join_key_value(t_env **head)
 	str = (char **)ft_calloc(count_env_llist(head), sizeof(char *));
 	if (!str)
 		perror_exit("Malloc");
-	current = *head;
+	current = head;
 	i = 0;
 	while (current)
 	{

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:58 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 12:01:07 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 22:07:38 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	execute_builtin(t_parser *cmd)
 	else if (ft_strcmp(cmd->cmd_list->data[0], "pwd") == 0)
 		return (cmd_pwd());
 	else if (ft_strcmp(cmd->cmd_list->data[0], "env") == 0)
-		return (cmd_env(*cmd->env));
+		return (cmd_env(cmd->env));
 	else if (ft_strcmp(cmd->cmd_list->data[0], "cd") == 0)
-		return (cmd_cd(cmd->cmd_list->data, *cmd->env));
+		return (cmd_cd(cmd->cmd_list->data, cmd->env));
 	else if (ft_strcmp(cmd->cmd_list->data[0], "export") == 0)
 		return (cmd_export(cmd->env, cmd->cmd_list->data));
 	else if (ft_strcmp(cmd->cmd_list->data[0], "unset") == 0)

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/23 17:17:17 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/24 21:43:37 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	rl_initialize();
 	init_utils(&lexer, &parser, &data);
-	parser.env = create_link_list(envp, &data);
+	create_env_list(&parser, envp);
 	shell_loop(&lexer, &parser, *parser.env);
-	destroy_lexer_parser(&lexer, &parser);
+	// destroy_lexer_parser(&lexer, &parser);
 	return (0);
 }

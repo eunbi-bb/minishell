@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 20:39:27 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/24 22:02:59 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ static int	is_directory(const char *path)
 		return (0);
 }
 
-char	**get_cmd_dirs(t_env **envp)
+char	**get_cmd_dirs(t_env *envp)
 {
 	char	*tmp;
 	char	**dirs;
 	t_env	*head;
 
-	head = *envp;
+	head = envp;
 	dirs = NULL;
 	while (head)
 	{
