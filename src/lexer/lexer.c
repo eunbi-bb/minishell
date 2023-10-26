@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 20:06:50 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 21:31:08 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,12 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 
 static int	get_len_dollar(char *str, int i)
 {
-	while (str[i])
-	{
-		if (str[i] == '$' || is_whitespace(str[i]) \
-			|| is_token(str[i]) >= 0 || str[i] == '\"' || str[i] == '\'')
-		{
-			--i;
-			break ;
-		}
-		else if (str[i] == '+')
-			break ;
-		i++;
-	}
-	return (i);
+		while (str[i] && (str[i] == '$' || str[i] == '\"' || str[i] == '\''))
+			i++;
+		while (str[i] && str[i] != '$' && is_whitespace(str[i]) == false && str[i] != '+' \
+			&& is_token(str[i]) == -1 && str[i] != '\"' && str[i] != '\'')
+			++i;
+	return (i - 1);
 }
 
 bool	lexical_analyzer(t_lexer *lexer)
@@ -163,21 +156,22 @@ char *replacer(char *data, t_parser *parser)
 	int			i;
 	int			begin_expand = -1;
 	int			end_expand = -1;
+	int 		next;
 
 	i = 0;
+		quote = '\0';
 	while (data[i] && end_expand < 0)
 	{
 		if (data[i] == '\'' || data[i] == '\"')
 		{
 			quote = data[i];
-			int next = i + next_quote(data, i, quote);
-			while (i < next)
+			next = i + next_quote(data, i, quote);
+			while (i < next && end_expand < 0)
 			{
 				if (data[i] == '$' && quote == '\"')
 				{
 					begin_expand = i;
-					end_expand = get_len_dollar(data, begin_expand + 1);
-					i += end_expand;
+					end_expand = get_len_dollar(data, begin_expand);
 				}
 				else
 					i++;
@@ -186,7 +180,7 @@ char *replacer(char *data, t_parser *parser)
 		else if (data[i] == '$')
 		{
 			begin_expand = i;
-			end_expand = get_len_dollar(data, begin_expand + 1);
+			end_expand = get_len_dollar(data, begin_expand);
 			i += end_expand;
 		}
 		i++;
@@ -195,7 +189,8 @@ char *replacer(char *data, t_parser *parser)
 		return data;
 	if (end_expand < 0)
 		end_expand = ft_strlen(data);
-	char *found_value = ft_substr(data, begin_expand, end_expand);
+	char *found_value = NULL;
+	found_value = ft_substr(data, begin_expand, end_expand - begin_expand + 1);
 	expand_value = ft_strdup(expand(found_value, parser->env));
 	// printf("Found value %s\n", found_value);
 	free(found_value);
@@ -204,8 +199,6 @@ char *replacer(char *data, t_parser *parser)
 
 	char *begin = ft_substr(data, 0, begin_expand);
 	char *end = ft_substr(data, end_expand + 1, ft_strlen(data));
-	// printf("Begin %s\n", begin);
-	// printf("end %s\n", end);
 	char *result = ft_strjoin(ft_strjoin(begin, expand_value), end);
 	free(begin);
 	free(end);
