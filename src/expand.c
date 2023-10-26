@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/26 19:39:52 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 22:23:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 
 char	*search_value(char *key, t_env *env)
 {
+	t_env	*curr;
 	size_t	len;
 	char	*empty;
 
 	empty = NULL;
 	len = ft_strlen(key);
-	while (env)
+	curr = env;
+	while (curr)
 	{
-		if (ft_strncmp(key, env->key, len) == 0)
-			return (ft_strdup(env->value));
-		env = env->next;
+		if (ft_strncmp(key, curr->key, len) == 0)
+			return (ft_strdup(curr->value));
+		curr = curr->next;
 	}
 	empty = ft_strdup("");
 	return (empty);
