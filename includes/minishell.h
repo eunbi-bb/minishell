@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 09:39:19 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 15:22:35 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 /***** lexer *****/
 //	lexer.c
 bool		lexical_analyzer(t_lexer *lexer);
+void		determine_expanding(t_lexer *lexer);
 void		free_tmp(char *tmp);
 //	lexer_utils.c
 bool		is_whitespace(char c);

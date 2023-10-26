@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 12:34:13 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 18:35:30 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,226 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
 			quote = str[i + j];
-			j += next_quote(str, i + j, quote);
+			j += next_quote(str, i + j, quote) + 1;
 		}
 		else if (is_whitespace(str[i + j]))
 			break ;
 		else if (is_token(str[i + j]) == -1)
 		{
-			while (str[i + j] && is_token(str[i + j]) == -1 && is_whitespace(str[i + j]) == false)
+			while (str[i + j] && is_token(str[i + j]) == -1 && is_whitespace(str[i + j]) == false \
+				&& str[i + j] != '\'' && str[i + j] != '\"')
 				j++;
 		}
 		if (tmp == NULL)
 			tmp = ft_substr(str, i, j);
 		else
 		{
-			tmp2 = ft_strjoin(tmp, ft_substr(str, i, j));
+			tmp2 = ft_strjoin(tmp, ft_substr(str, i + ft_strlen(tmp) , j - ft_strlen(tmp)));
 			free(tmp);
-			tmp = tmp2;
+			tmp = ft_strdup(tmp2);
+			free(tmp2);
 		}
 	}
 	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT, '\0'));
 	free_tmp(tmp);
 	return (j);
 }
+
+static int	get_len_dollar(char *str, int i)
+{
+	while (str[i])
+	{
+		if (str[i] == '$' || str[i] == '+' || is_whitespace(str[i]) \
+			|| is_token(str[i]) >= 0 || str[i] == '\"' || str[i] == '\'')
+		{
+			--i;
+			break ;
+		}
+		i++;
+	}
+	return (i);
+}
+
+bool	lexical_analyzer(t_lexer *lexer)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (lexer->arg[i])
+	{
+		j = 0;
+		i = skip_whitespace(lexer->arg, i);
+		if (is_token(lexer->arg[i]) >= 0)
+			j = take_tokens(lexer, lexer->arg, i);
+		else
+			j = arg_divider(lexer, lexer->arg, i);
+		if (j < 0)
+			return (false);
+		i = i + j;
+	}
+	free(lexer->arg);
+	return (true);
+}
+
+char *replacer(char *data)
+{
+	char		quote;
+	char		*expand_value;
+	int			i;
+	int			begin_expand = -1;
+	int			end_expand = -1;
+
+	i = 0;
+	while (data[i] && end_expand < 0)
+	{
+		if (data[i] == '\'' || data[i] == '\"')
+		{
+			// printf("Found quote at index %d\n", i);
+			quote = data[i];
+			// printf("quote %c\n", quote);
+			int next = i + next_quote(data, i, quote);
+			while (i < next)
+			{
+				if (data[i] == '$' && quote == '\"')
+				{
+					// printf("Found $ at index %d\n", i);
+					// printf("Quote is %c\n", quote);
+					begin_expand = i;
+					end_expand = get_len_dollar(data, begin_expand + 1);
+					i += end_expand;
+				}
+				else
+					i++;
+			}
+			// printf("Closed quote at index %d\n", i);
+			// end_expand = i;
+		}
+		else if (data[i] == '$')
+		{
+			
+			// printf("Found $ at index %d\n", i);
+			begin_expand = i;
+			end_expand = get_len_dollar(data, begin_expand + 1);
+			i += end_expand;
+		}
+		i++;
+	}
+
+	if (begin_expand < 0)
+		return data;
+
+	if (end_expand < 0)
+		end_expand = ft_strlen(data);
+
+	// char *found_value = ft_substr(data, begin_expand, end_expand);
+	expand_value = "hello";
+
+	// printf("Found value %s\n", found_value);
+	// printf("Replacing with value %s\n", expand_value);
+
+	char *begin = ft_substr(data, 0, begin_expand);
+	char *end = ft_substr(data, end_expand + 1, ft_strlen(data));
+	// printf("Begin %s\n", begin);
+	// printf("end %s\n", end);
+	char *result = ft_strjoin(ft_strjoin(begin, expand_value), end);
+	// printf("Result %s\n", result);
+
+	return result;
+}
+
+
+void	determine_expanding(t_lexer *lexer)
+{
+	// printf("TEST\n");
+	t_tokens	*head;
+
+	head = lexer->token_list;
+
+	while (lexer->token_list)
+	{
+		char *result = "";
+		char *data;
+		char *tmp;
+		data = ft_strdup(lexer->token_list->data);
+
+		tmp = ft_strdup(data);
+		while (ft_strcmp(data, result) != 0)
+		{
+			data = ft_strdup(tmp);
+			result = replacer(data);
+			tmp = ft_strdup(result);
+		}
+
+		lexer->token_list->data = result;
+
+		lexer->token_list = lexer->token_list->next;
+	}
+
+	lexer->token_list = head;
+}
+
+
+
+// static int	get_len_dollar(char *str)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '$' || str[i] == '+' 
+// 			|| is_whitespace(str[i]) || is_token(str[i]) >= 0)
+// 			break ;
+// 		i++;
+// 	}
+// 	return (i);
+// }
+
+// char	*expand_dollar(t_tokens *token, int i)
+// {
+// 	int	len;
+
+// 	if (token->data[i + 1] && token->data[i + 1] == '?')
+// 		expand_exitcode();
+// 	else
+// 	{
+// 		len = get_len_dollar(&token->data[i + 1]);
+// 		expand_var(token, i, len);
+// 	}
+// }
+
+// void	determine_expanding(t_lexer *lexer)
+// {
+// 	t_tokens	*head;
+// 	char		quote;
+// 	char		*tmp;
+// 	int			i;
+
+// 	i = 0;
+// 	head = lexer->token_list;
+// 	while (lexer->token_list->data[i])
+// 	{
+// 		if (lexer->token_list->data[i] == '\'' || lexer->token_list->data[i] == '\"')
+// 		{
+// 			quote = lexer->token_list->data[i];
+// 			while (i < next_quote(lexer->token_list->data, i, quote))
+// 			{
+// 				if (lexer->token_list->data[i] == '$' && quote == '\"')
+// 					tmp = expand_dollar(lexer->token_list, i);
+// 				else
+// 					i++;
+// 			}
+// 		}
+// 		else if (lexer->token_list->data[i] == '$')
+// 			tmp = expand_dollar(lexer->token_list, i);
+// 		else
+// 			i++;
+// 	}
+// 	lexer->token_list = head;
+// }
+
+
 
 // static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
 // {
@@ -144,26 +342,3 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 // 	return (j);
 // }
 
-bool	lexical_analyzer(t_lexer *lexer)
-{
-	int		i;
-	int		j;
-	// char	quote;
-
-	// quote = '\0';
-	i = 0;
-	while (lexer->arg[i])
-	{
-		j = 0;
-		i = skip_whitespace(lexer->arg, i);
-		if (is_token(lexer->arg[i]) >= 0)
-			j = take_tokens(lexer, lexer->arg, i);
-		else
-			j = arg_divider(lexer, lexer->arg, i);
-		if (j < 0)
-			return (false);
-		i = i + j;
-	}
-	free(lexer->arg);
-	return (true);
-}
