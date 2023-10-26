@@ -1,70 +1,113 @@
-#include "../../includes/minishell.h"
-#include "../../includes/error.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   redirection.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/24 16:06:02 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include "error.h"
 #include <fcntl.h>
 
-int	open_infile(char *file, t_cmd *cmd)
+static int	open_infile(char *file, t_redir *redir)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY); 
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		err_msg(ERROR_INFILE);
 	dup2(fd, STDIN_FILENO);
-	if (cmd->redir->redir_type == HERE_DOC)
+	if (redir->redir_type == HERE_DOC && !redir->next)
 		unlink(file);
-	close(fd);
-	// if (fd == -1 && dup2(fd, STDIN_FILENO) == -1)
-	// 	err_msg(ERROR_PIPE_IN);
-	// else
-	// 	close(fd);
+	if (fd > 0)
+		close(fd);
 	return (fd);
 }
 
-int	create_outfile(t_cmd *cmd)
+static int	create_outfile(t_redir *redir)
 {
 	int	fd;
+	int	type;
 
-	if (cmd->redir->redir_type == APPEND)
-	{
-		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_APPEND, 0000644);
-		if (fd == -1)
-			err_msg(ERROR_OUTFILE);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+	if (redir->redir_type == APPEND)
+		type = O_APPEND;
 	else
-	{
-		fd = open(cmd->redir->file_name, O_CREAT | O_RDWR | O_TRUNC, 0000644);
-		if (fd == -1)
-			err_msg(ERROR_OUTFILE);
-		dup2(fd, STDOUT_FILENO);
+		type = O_TRUNC;
+	fd = open(redir->file_name, O_CREAT | O_RDWR | type, 0000644);
+	if (fd == -1)
+		err_msg(ERROR_OUTFILE);
+	dup2(fd, STDOUT_FILENO);
+	if (fd > 0)
 		close(fd);
-	}
 	return (EXIT_SUCCESS);
 }
 
-int	redirection(t_cmd *cmd)
+/*
+*	Depending on the redirection type, 
+*	it either executes 'create_outfile()' or 'open_infile()'.
+*/
+static int	redirection(t_redir *redir)
 {
-	t_redir	*tmp;
+	t_redir	*head;
 	int		fd_in;
 
-	tmp = cmd->redir;
-	while (cmd->redir != NULL)
+	head = redir;
+	fd_in = 0;
+	while (redir != NULL)
 	{
-		//printf("%d\n", cmd->redir->redir_type);
-		if (cmd->redir->redir_type == GREATER || cmd->redir->redir_type == APPEND)
+		if (redir->redir_type == GREATER || redir->redir_type == APPEND)
 		{
-			if (create_outfile(cmd))
+			if (create_outfile(redir))
 				return (EXIT_FAILURE);
 		}
-		else if (cmd->redir->redir_type == LESSER || cmd->redir->redir_type == HERE_DOC)
+		if (redir->redir_type == LESSER || redir->redir_type == HERE_DOC)
 		{
-			fd_in = open_infile(cmd->redir->file_name, cmd);
+			fd_in = open_infile(redir->file_name, redir);
 			if (fd_in == -1)
 				return (EXIT_FAILURE);
 		}
-		cmd->redir = cmd->redir->next;
+		redir = redir->next;
 	}
-	cmd->redir = tmp;
+	redir = head;
+	return (fd_in);
+}
+
+void	unlink_exit(char *file_name)
+{
+	unlink(file_name);
+	exit(EXIT_SUCCESS);
+}
+
+/*
+*	If the redirection type is HERE_DOC, start by executing here_document() 
+*	to generate a temporary file. If Heredoc is executed without any other command,
+*	then unlink the temporary file and exit. 
+*	Otherwise, proceed to execute redirection(). The redirection() returns 'fd_in' 
+*	if the infile has been opened. In the child_process(), it will be closed.
+*/
+int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
+{
+	t_redir	*head;
+
+	head = redir;
+
+	while (redir)
+	{
+		if (redir != NULL && redir->redir_type == HERE_DOC)
+		{
+			here_document(parser->cmd_list);
+			if (!parser->cmd_list->data && !redir->next)
+				unlink_exit(redir->file_name);
+		}
+		if (redir != NULL && redir->redir_type != DEFAULT)
+			fd_in = redirection(parser->cmd_list->redir);
+		redir = redir->next;
+	}
+	redir = head;
 	return (fd_in);
 }

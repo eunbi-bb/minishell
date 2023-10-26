@@ -1,142 +1,146 @@
-#include "../../includes/executor.h"
-#include "../../includes/parser.h"
-#include "../../includes/error.h"
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   executor.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/24 16:17:25 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	create_pipes(int pipe_num, int fds[])
+#include "error.h"
+#include "minishell.h"
+
+static int	execute_child(t_parser *parser, t_lexer *lexer, int fds[], int i)
 {
-	int	i;
+	int		value;
 
-	i = 0;
-	while (i < pipe_num)
+	if (i != 0)
 	{
-		if (pipe(fds + (i * 2)) == -1)
-		{
-			perror("pipe error");
-			exit(EXIT_FAILURE);
-		}
-		i++;
+		if (dup2(fds[i - 2], STDIN_FILENO) == -1)
+			perror_exit(ERROR_DUP2_IN);
 	}
+	if (parser->cmd_list->next)
+	{
+		if (dup2(fds[i + 1], STDOUT_FILENO) == -1)
+			perror_exit(ERROR_DUP2_OUT);
+	}
+	close_ends(lexer->pipe_num, fds);
+	value = execute_command(parser);
+	return (value);
 }
 
-void	close_ends(int pipe_num, int fds[])
+/*
+*	Check if the redir linked list contains redir_type.
+*	Return true if it contains it, otherwise return false.
+*/
+static bool	redir_check(t_redir *redir)
 {
-	int	i;
-	i = 0;
-	while (i < pipe_num * 2)
+	t_redir	*current;
+
+	current = redir;
+	if (redir == NULL)
+		return (false);
+	while (current != NULL)
 	{
-		close(fds[i]);
-		i++;
+		if (current->redir_type >= LESSER && current->redir_type <= APPEND)
+			return (true);
+		current = current->next;
 	}
+	return (false);
 }
 
-int	wait_pipes(pid_t pid, int pipe_num)
+/*
+*	Generate child processes. Initially, redirect based on the command and 
+*	then execute the command. The 'execute_child' will return an 'exit_code' 
+*	based on its status. This 'exit_code' is stored in 'g_exit_status' and 
+*	will later be used in the expander for the '$?' character.
+*/
+pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
-	int	i;
-	int	status;
+	// int		fd_in;
+	pid_t	pid;
 
-	i = 0;
-	while (i < pipe_num + 1)
+	// fd_in = 0;
+	pid = fork();
+	if (lexer->heredoc == true)
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status) == 0)
-		{
-			return (WEXITSTATUS(status));
-		}
-		i++;
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
+		lexer->heredoc = false;
 	}
-	return (0);
-}
-
-int is_builtin(t_parser_utils *cmd)
-{
-	if (strcmp(cmd->cmd_list->data[0], "echo") == 0 ||
-		strcmp(cmd->cmd_list->data[0], "pwd") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "exit") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "env") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "cd") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "export") == 0 ||
-        strcmp(cmd->cmd_list->data[0], "unset") == 0)
-		return (0);
 	else
-		return (1);
+		signal_handler(CHILD);
+	if (pid == -1)
+		err_msg(ERROR_CHILD);
+	else if (pid == 0)
+	{
+		// if (parser->cmd_list->redir != NULL && parser->cmd_list == NULL)
+		// 	fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
+		// if (fd_in > 0 && redir_check(parser->cmd_list->redir) == false)
+		// 	close(fd_in);
+		g_exit_status = execute_child(parser, lexer, fds, i);
+		exit(g_exit_status);
+	}
+	return (pid);
 }
 
-void execute_builtin(t_parser_utils *cmd)
+/*
+*	Execute commands. If the input consists of only one built-in command 
+*	without redirecion, execute that command and terminate the executor. 
+*	Otherwise, generate child processes and execute them inside.
+*	The 'built_in' variable  is used to determine whether the parent process
+*	needs to wait for child processes or not.
+*	'i' increments every 2 to redirect STDIN(even number) and STDOUT(odd number)
+	inside the 'child_process()'.
+*/
+static void	executor(t_lexer *lexer, t_parser *parser, int fds[])
 {
-	if (strcmp(cmd->cmd_list->data[0], "echo") == 0)
-		cmd_echo(cmd->cmd_list->data);
-	else if (strcmp(cmd->cmd_list->data[0], "pwd") == 0)
-		cmd_pwd();
-	else if (strcmp(cmd->cmd_list->data[0], "exit") == 0)
-		cmd_exit();
-	else if (strcmp(cmd->cmd_list->data[0], "env") == 0)
-		cmd_env(*cmd->env);
-	else if (strcmp(cmd->cmd_list->data[0], "cd") == 0)
-		cmd_cd(cmd->cmd_list->data, *cmd->env);
-	else if (strcmp(cmd->cmd_list->data[0], "export") == 0)
-		cmd_export(cmd->env, cmd->cmd_list->data[1]);
-	else if (strcmp(cmd->cmd_list->data[0], "unset") == 0)
-		cmd_unset(cmd->env, cmd->cmd_list->data[1]);
-}
-
-int	executor(t_parser_utils *cmd, t_lexer_utils *lexer)
-{
-	int		fds[lexer->pipe_num * 2];
-	int		fd_in;
-	int		pipe_num;
 	pid_t	pid;
 	int		i;
-	int		n;
-	char	**envp;
-	
-	envp = join_key_value(cmd->env);
+	int		built_in;
+	t_cmd	*head;
+
 	i = 0;
-	n = 0;
-	pipe_num = lexer->pipe_num;
-	create_pipes(pipe_num, fds);
-	while (cmd->cmd_list != NULL)
+	built_in = 0;
+	head = parser->cmd_list;
+	while (parser->cmd_list)
 	{
-		pid = fork();
-		if (pid == -1)
-			err_msg(ERROR_CHILD);
-		else if (pid == 0)
+		if (redir_check(parser->cmd_list->redir) == false \
+			&& is_builtin(parser) == 0 && lexer->pipe_num == 0)
 		{
-			while (cmd->cmd_list->redir)
-			{
-				if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type == HERE_DOC)
-					here_document(cmd->cmd_list, lexer);
-				if (cmd->cmd_list->redir != NULL && cmd->cmd_list->redir->redir_type != DEFAULT)
-					fd_in = redirection(cmd->cmd_list);
-				cmd->cmd_list->redir = cmd->cmd_list->redir->next;
-			}
-			if (i != 0)
-			{
-				if (dup2(fds[i - 2], 0) == -1)
-					perror_exit(ERROR_DUP2_IN);
-			}
-			if (cmd->cmd_list->next)
-			{
-				if (dup2(fds[i + 1], 1) == -1)
-					perror_exit(ERROR_DUP2_OUT);
-			}
-			close_ends(pipe_num, fds);
-			generate_command(cmd);
-			if(is_builtin(cmd) == 0)
-				execute_builtin(cmd);
-			// cmd->command = command_check(cmd->cmd_dirs, *cmd->cmd_list->data);
-			else if (execve(cmd->command, cmd->cmd_list->data, envp) < 0)
-			{
-				perror("execve error");
-				exit(1);
-			}
-			if (fd_in > 0)
-				close(fd_in);
+			g_exit_status = execute_builtin(parser);
+			built_in = 1;
+			break ;
 		}
-		cmd->cmd_list = cmd->cmd_list->next;
+		pid = child_process(lexer, parser, fds, i);
+		parser->cmd_list = parser->cmd_list->next;
 		i += 2;
-		n++;
 	}
-	close_ends(pipe_num, fds);
-	return (wait_pipes(pid, pipe_num));
+	close_ends(lexer->pipe_num, fds);
+	if (built_in == 0)
+		wait_pipes(pid, lexer->pipe_num);
+	parser->cmd_list = head;
+}
+
+/* 
+*	Set up for executing commands.
+*	This involves allocating pipe file descriptors, creating pipes,
+*	and launching the 'executor()'.
+*/
+void	setup_executor(t_lexer *lexer, t_parser *parser)
+{
+	int		*fds;
+
+	fds = malloc(lexer->pipe_num * 2 * sizeof(int));
+	if (fds == NULL)
+	{
+		free(fds);
+		err_msg(ERROR_FDS);
+	}
+	create_pipes(lexer->pipe_num, fds);
+	executor(lexer, parser, fds);
+	free(fds);
 }

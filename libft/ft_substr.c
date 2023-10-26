@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 16:12:29 by eucho         #+#    #+#                 */
-/*   Updated: 2022/12/21 14:04:09 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/09/25 22:20:16 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	i = 0;
 	s_len = ft_strlen(s);
-	if (s == 0)
+	if (s == NULL)
 		return (NULL);
 	if (len > s_len)
 		len = s_len;

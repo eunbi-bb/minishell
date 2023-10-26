@@ -3,18 +3,70 @@
 /*                                                        ::::::::            */
 /*   cmd_exit.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/08/16 13:03:25 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 13:02:13 by ssemanco      ########   odam.nl         */
+/*   Created: 2023/10/22 21:22:09 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/23 18:11:45 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-void cmd_exit()
+bool	is_str_digits(char *str)
 {
-    //free if necessary
-    printf("got here \n");
-    exit(1); //exit with status
+	int	i;
+
+	i = 0;
+	if (str == NULL || *str == '\0')
+		return (false);
+	if (str[0] == '-')
+		i++;
+	while (str[i] != '\0')
+	{
+		if (!ft_isdigit(str[i]))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+static void	exit_err(int i, char *data)
+{
+	if (i == 1)
+	{
+		write(STDOUT_FILENO, "exit\nMinishell:", 16);
+		write(STDERR_FILENO, " too many arguments\n", 20);
+		exit(1);
+	}
+	else if (i == 2)
+	{
+		write(STDOUT_FILENO, "exit\nMinishell:", 16);
+		write(STDERR_FILENO, data, ft_strlen(data));
+		write(STDERR_FILENO, " numeric argument required\n", 27);
+		exit(2);
+	}
+}
+
+int	cmd_exit(char **data)
+{
+	int	exit_c;
+
+	if (data[1])
+	{
+		if (is_str_digits(data[1]) == false)
+			exit_err(2, data[1]);
+		else
+		{
+			if (count_cmd(data) > 2)
+				exit_err(1, NULL);
+			else
+			{
+				exit_c = ft_atoi(data[1]);
+				write(STDOUT_FILENO, "exit\n", 5);
+				exit(exit_c % 256);
+			}
+		}
+	}
+	write(STDOUT_FILENO, "exit\n", 5);
+	exit (0);
 }

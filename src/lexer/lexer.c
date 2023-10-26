@@ -1,53 +1,47 @@
-#include "../../includes/minishell.h"
-#include "../../includes/lexer.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexer.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/26 12:34:13 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	skip_whitespace(char *s, int i)
-{
-	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
-		i++;
-	return (i);
-}
+#include "minishell.h"
 
-//Checking if the character is a token or not.
-int	is_token(int c)
-{
-	t_lexer_utils type;
-	int i;
-
-	type.type_arr = "|<>";
-	i = 0;
-	while (type.type_arr[i])
-	{
-		if (type.type_arr[i] == c)
-		{
-			return (i);
-		}
-		i++;
-	}
-	return (-1);
-}
-
-//Putting a token in a node
-int	take_tokens(t_lexer_utils *lexer, char *str, int i)
+/*
+*	Scan an input string and tokenizes specific characters such as,
+*	>>	: APPEND
+*	<<	: HERE_DOC
+*	>	: GREATER
+*	<	: LESSER
+*	|	: PIPE
+*	And store these tokens in a token_list. Return 1 or 2 if it is a token,
+*	to skip in the entire string.
+*/
+static int	take_tokens(t_lexer *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
-		add_after(&lexer->token_list, new_token_node(APPEND));
+		add_after(&lexer->token_list, new_token_node(NULL, APPEND, '\0'));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
 	{
-		add_after(&lexer->token_list, new_token_node(HERE_DOC));
+		add_after(&lexer->token_list, new_token_node(NULL, HERE_DOC, '\0'));
 		lexer->heredoc = true;
 		return (2);
 	}
 	else if (is_token(str[i]) == GREATER)
-		add_after(&lexer->token_list, new_token_node(GREATER));
+		add_after(&lexer->token_list, new_token_node(NULL, GREATER, '\0'));
 	else if (is_token(str[i]) == LESSER)
-		add_after(&lexer->token_list, new_token_node(LESSER));
+		add_after(&lexer->token_list, new_token_node(NULL, LESSER, '\0'));
 	else if (is_token(str[i]) == PIPE)
 	{
-		add_after(&lexer->token_list, new_token_node(PIPE));
+		add_after(&lexer->token_list, new_token_node(NULL, PIPE, '\0'));
 		lexer->pipe_num++;
 	}
 	else
@@ -55,51 +49,108 @@ int	take_tokens(t_lexer_utils *lexer, char *str, int i)
 	return (1);
 }
 
-int	quotes(char *str, int i)
-{
-	int	j;
+/*
+*	Extract the word between quotes.
+*	If there is nothing between the quotes, set tmp to an empty string.
+*/
+// static char	*extract_word(char	*str, int i, int j, char quote)
+// {
+// 	char	*tmp;
 
-	j = 1;
-	while (str[i + j] && str[i + j] != str[i])
-		j++;
-	return (++j);
+// 	tmp = NULL;
+// 	if (str[i + 1] == quote)
+// 		tmp = ft_strdup("");
+// 	else if (quote != '\0')
+// 		tmp = ft_substr(str, i + 1, j - 2);
+// 	else
+// 		tmp = ft_substr(str, i + 1, j - 1);
+// 	return (tmp);
+// }
+
+void	free_tmp(char *tmp)
+{
+	if (tmp != NULL)
+		free(tmp);
 }
 
-//Find a begining and end of a string(depending on white spaces or quotes) and generate a sub-string. And add to a node.
-int	arg_divider(t_lexer_utils *lexer, char *str, int i)
+/*
+*	Dividing given string based on quotes and white spaces.
+*	After division, parse it to find_dollar() to find '$' for expansion
+*	and generate nodes in the token_list.
+*/
+static int	arg_divider(t_lexer *lexer, char *str, int i)
 {
 	int		j;
 	char	*tmp;
+	char	*tmp2;
 	char	quote;
 
 	j = 0;
+	tmp = NULL;
 	while (str[i + j] && (is_token(str[i + j]) == -1))
 	{
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
 			quote = str[i + j];
-			j += quotes(str, i + j);
-			tmp = ft_strtrim(ft_substr(str, i, j), &quote);
+			j += next_quote(str, i + j, quote);
 		}
-		else if (str[i + j] == ' ' || str[i + j] == '\t' || str[i + j] == '\n' || str[i + j] == '\v' || str[i + j] == '\f' || str[i + j] == '\r')
+		else if (is_whitespace(str[i + j]))
 			break ;
+		else if (is_token(str[i + j]) == -1)
+		{
+			while (str[i + j] && is_token(str[i + j]) == -1 && is_whitespace(str[i + j]) == false)
+				j++;
+		}
+		if (tmp == NULL)
+			tmp = ft_substr(str, i, j);
 		else
 		{
-			j++;
-			if (is_token(str[i + j]) == -1)
-				tmp = ft_substr(str, i, j);
+			tmp2 = ft_strjoin(tmp, ft_substr(str, i, j));
+			free(tmp);
+			tmp = tmp2;
 		}
 	}
-	//printf("tmp = %s\n", tmp);
-	add_after(&lexer->token_list, new_node(tmp));
+	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT, '\0'));
+	free_tmp(tmp);
 	return (j);
 }
 
-bool	lexical_analyzer(t_lexer_utils *lexer)
-{
-	int	i;
-	int	j;
+// static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
+// {
+// 	int		j;
+// 	char	*tmp;
 
+// 	j = 0;
+// 	tmp = NULL;
+// 	while (str[i + j] && (is_token(str[i + j]) == -1))
+// 	{
+// 		if (str[i + j] == '\'' || str[i + j] == '\"')
+// 		{
+// 			if (tmp != NULL)
+// 				break ;
+// 			quote = str[i + j];
+// 			j += next_quote(str, i + j, quote);
+// 			tmp = extract_word(str, i, j, quote);
+// 		}
+// 		else if (is_whitespace(str[i + j]) || quote != '\0')
+// 			break ;
+// 		else if (is_token(str[i + j++]) == -1)
+// 		{
+// 			free_tmp(tmp);
+// 			tmp = ft_substr(str, i, j);
+// 		}
+// 	}
+// 	find_dollar(tmp, lexer, quote);
+// 	return (j);
+// }
+
+bool	lexical_analyzer(t_lexer *lexer)
+{
+	int		i;
+	int		j;
+	// char	quote;
+
+	// quote = '\0';
 	i = 0;
 	while (lexer->arg[i])
 	{
@@ -113,47 +164,6 @@ bool	lexical_analyzer(t_lexer_utils *lexer)
 			return (false);
 		i = i + j;
 	}
-	return (true);
-}
-
-//Checking if quotes are in a pair.
-bool	match_quotes(char *str)
-{
-	int	i;
-	int	j;
-	int	num_s;
-	int	num_d;
-
-	i = 0;
-	num_s = 0;
-	num_d = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			num_s++;
-			j = i + 1;
-			while (str[j] != '\'' && str[j])
-			{
-				if (str[j] == '\'')
-					num_s++;
-				j++;
-			}
-		}
-		else if (str[i] == '\"')
-		{
-			num_d++;
-			j = i + 1;
-			while (str[j] != '\"' && str[j])
-			{
-				if (str[j] == '\"')
-					num_d++;
-				j++;
-			}
-		}
-		i++;
-	}
-	if ((num_s % 2) != 0 || (num_d % 2) != 0)
-		return (false);
+	free(lexer->arg);
 	return (true);
 }

@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strlen.c                                        :+:    :+:            */
+/*   ft_strndup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: eucho <eucho@student.42.fr>                  +#+                     */
+/*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/10 16:11:36 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/15 02:00:50 by eunbi         ########   odam.nl         */
+/*   Created: 2023/10/18 18:18:13 by ssemanco      #+#    #+#                 */
+/*   Updated: 2023/10/22 11:55:44 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	DESCRIPTION
-		strlen() calculates the length of a given string.
-	RETURN VALUE
-		The length of the given string.
-*/
-#include <stdlib.h>
+#include "libft.h"
 
-size_t	ft_strlen(const char *s)
+char	*ft_strndup(const char *s1, size_t n)
 {
-	size_t	i;
+	size_t	size;
+	char	*str;
 
-	i = 0;
-	while (s[i])
-	{
-		i++;
-	}
-	return (i);
+	size = n + 1;
+	str = (char *)malloc(size);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s1, size);
+	return (str);
 }

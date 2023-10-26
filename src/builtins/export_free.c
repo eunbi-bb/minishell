@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cmd_pwd.c                                          :+:    :+:            */
+/*   export_free.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/24 15:35:55 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/17 21:40:14 by eunbi         ########   odam.nl         */
+/*   Created: 2023/10/18 21:31:54 by ssemanco      #+#    #+#                 */
+/*   Updated: 2023/10/24 18:39:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <limits.h>
 
-int	cmd_pwd(void)
+void	free_sorted(t_env *head)
 {
-	char	pwd[PATH_MAX];
+	t_env	*current;
+	t_env	*next;
 
-	if (getcwd(pwd, sizeof(pwd)) == NULL)
+	current = head;
+	while (current != NULL)
 	{
-		perror("getcwd");
-		return (-1);
-	}
-	else
-	{
-		printf("%s\n", pwd);
-		return (0);
+		next = current->next;
+		if (current->key)
+			free(current->key);
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next;
 	}
 }

@@ -6,117 +6,134 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/09/17 13:06:30 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/24 22:13:46 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
+#include "error.h"
 
-char	**free_array(char **str, int count)
+// char	**free_array(char **str, int count)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < count)
+// 	{
+// 		free(str[i]);
+// 		i++;
+// 	}
+// 	free(str);
+// 	return (NULL);
+// }
+
+// int	count_env_llist(t_env **head)
+// {
+// 	int	i;
+// 	t_env	*current;
+
+// 	i = 0;
+// 	current = *head;
+//     while (current)
+//     {
+//         i++;
+//         current = current->next;
+//     }
+// 	return (i + 1);
+// }
+
+// char	**join_key_value(t_env **head)
+// {
+// 	char	**str;
+// 	int		i;
+// 	t_env	*current;
+
+// 	str = (char **)ft_calloc(count_env_llist(head), sizeof(char *));
+// 	current = *head;
+// 	i = 0;
+// 	while (current)
+// 	{
+// 		str[i] = ft_strjoin(current->key, current->value);
+// 		if (!str[i])
+// 			return (free_array(str, i + 1));
+// 		i++;
+// 		current = current->next;
+// 	}
+// 	str[i] = NULL;
+// 	return (str);
+// }
+
+
+t_env	*create_env_node(char* key, char* value)
 {
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		free((void *)str[i]);
-		i++;
-	}
-	free(str);
-	return (NULL);
-}
-
-int	count_env_llist(t_env **head)
-{
-	int	i;
-	t_env	*current;
-
-	i = 0;
-	current = *head;
-    while (current)
-    {
-        i++;
-        current = current->next;
-    }
-	return (i + 1);
-}
-
-char	**join_key_value(t_env **head)
-{
-	char	**str;
-	//const char	*key_is;
-	int		i;
-	t_env	*current;
-
-	str = (char **)ft_calloc(count_env_llist(head), sizeof(char *));
-	current = *head;
-	i = 0;
-	while (current)
-	{
-		//key_is = ft_strjoin((char *)current->key, "=");
-		// if (!key_is)
-		// 	return (free_array(str, i));
-		str[i] = ft_strjoin((char *)current->key, (char *)current->value);
-		if (!str[i])
-			return (free_array(str, i + 1));
-		i++;
-		current = current->next;
-		//free((void *)key_is);
-	}
-	str[i] = NULL;
-	return str;
-}
-
-t_env* createNode(char* key, char* value) {
-    t_env* newNode = ft_calloc(1, sizeof(t_env));
-    if (newNode == NULL) {
-        perror("malloc");
-        exit(1);
-    }
-    newNode->key = strdup(key);
+    t_env* new_node;
+	
+	new_node = ft_calloc(1, sizeof(t_env));
+    if (new_node == NULL) 
+		perror_exit("malloc err");
+    new_node->key = ft_strdup(key);
 	free(key);
-    newNode->value = strdup(value);
+    new_node->value = ft_strdup(value);
 	free(value);
-    newNode->next = NULL;
-    return newNode;
+    new_node->next = NULL;
+    return (new_node);
 }
 
-void cmd_env(t_env *env)
+void	add_after_env(t_env **before, t_env *new_node)
 {
-    while(env)
+	t_env	*head;
+
+	head = *before;
+	if (head == NULL)
+	{
+		*before = new_node;
+	}
+	else
+	{
+		while (head->next != NULL)
+			head = head->next;
+		head->next = new_node;
+	}
+}
+
+int cmd_env(t_env *env)
+{
+	t_env	*head;
+
+	head = env;
+    while (env)
     {
         printf("%s%s\n", env->key, env->value);
         env = env->next;
     }
-    
+	env = head;
+    return (0);
 }
 
-t_env **createLinkedList(char** envp) {
-    t_env** head = NULL;
-    t_env* current = NULL;
 
-    for (int i = 0; envp[i] != NULL; i++) {
-        char* env = envp[i];
-        char* equalSign = strchr(env, '=');
-        if (equalSign == NULL) {
-            // Skip environment variables without an equal sign
-            continue;
-        }
-        size_t keyLength = equalSign - env + 1;
-        char* key = strndup(env, keyLength);
-        char* value = strdup(equalSign + 1);
+void	create_env_list(t_parser *parser, char** envp)
+{
+	char	*env;
+	char	*equal_sign;
+	char	*key;
+	char	*value;
+	int		i;
 
-        t_env* newNode = createNode(key, value);
-
-        if (head == NULL) {
-			// head = (t_env**)malloc(sizeof(t_env*));
-			head = ft_calloc(1, sizeof(t_env*));
-            *head = newNode;
-            current = newNode;
-        } else {
-            current->next = newNode;
-            current = newNode;
-        }
-    }
-    return head;
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		env = ft_strdup(envp[i]);
+		equal_sign = ft_strchr(env, '=');
+		if (equal_sign == NULL)
+			return ;
+		key = ft_strndup(env, equal_sign - env + 1);
+		if (!key)
+			perror_exit("malloc err");
+		value = ft_strdup(equal_sign + 1);
+		if	(!value)
+			perror_exit("malloc err");
+		free(env);
+		add_after_env(&parser->env, create_env_node(key, value));
+		i++;
+	}
 }

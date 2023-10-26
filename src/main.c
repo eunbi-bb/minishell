@@ -1,115 +1,131 @@
-#include "../includes/minishell.h"
-#include "../includes/executor.h"
-#include "../includes/error.h"
-#include <readline/readline.h>
-#include <readline/history.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/26 12:37:45 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-int sigint_received;
+#include "minishell.h"
+#include "error.h"
 
-void	init_utils(t_lexer_utils *lexer, t_parser_utils	*parser)
+int	g_exit_status;
+
+void	init_utils(t_lexer *lexer, t_parser	*parser)
 {
 	lexer->pipe_num = 0;
 	lexer->heredoc = false;
 	lexer->token_list = NULL;
 	parser->cmd_list = NULL;
 	parser->pid = 0;
-	parser->reset = false;
 	parser->env = NULL;
 }
 
-int	shell_loop(t_lexer_utils *lexer, t_parser_utils	*parser_utils)
+/*
+*	Set up a loop for reading user input,
+*	handling scenarios where the user wants to exit or enters an empty line.
+*	It also maintains a command history using the Readline library,
+*	allowing the user to navigate and reuse previous commands.
+*	if (!line) : Check if line is NULL, which happens if the user presses Ctrl+D.
+*	if (!*line): If the line is empty, it frees the memory allocated for line 
+*					and then calls readline_loop() recursively.
+*	if (*line): If the input line is not empty (i.e., the user entered a command), 
+*				it adds the input line to the command history using add_history.
+*				This allows to recall and reuse previously entered commands.
+*/
+static char	*readline_loop(void)
 {
-	char			*line;
-	int				status;
+	char	*line;
 
-	status = 0;
-	 if (signal(SIGINT, sigint_handler) == SIG_ERR) {
-        perror("signal");
-        exit(EXIT_FAILURE);
-    }
-	while (status == 0)
+	rl_on_new_line();
+	line = readline("Minishell% ");
+	if (!line)
 	{
-		 if (sigint_received) {
-            sigint_received = 0; // Reset the flag
-            line = readline("Minishell% ");
-        } else {
-            line = readline("Minishell% ");
-        }
-		lexer->arg = ft_strtrim(line, " ");
-		if (lexer->arg == NULL)
-		{
-			write(STDOUT_FILENO, "exit\n", 6);
-			exit(EXIT_SUCCESS);
-		}
-		if(*line)
-            add_history(line);
-		// if (lexer->arg[0] == '\0')
-		// 	return(reset_utils(lexer, parser_utils));
-		if (match_quotes(lexer->arg) == false)
-			return (err_msg(ERROR_QUOTE));
-		if (lexical_analyzer(lexer) == false)
-			return (err_msg(ERROR_LEXER));
-		parser(lexer, parser_utils);
-		// if (lexer->heredoc == TRUE)
-		// 	here_document(parser_utils->cmd_list, lexer);
-		// int n = 1;
-
-		// while (parser_utils->cmd_list)
-		// {
-		// 	printf("\n--------Number of command : %d---------\n", n);
-		// 	int	arg_num = count_args(lexer->token_list);
-		// 	int i = 0;
-		// 	if (parser_utils->cmd_list->data && parser_utils->cmd_list->data[i] != NULL)
-		// 	{
-		// 		while (parser_utils->cmd_list->data[i] && i <= arg_num)
-		// 		{
-		// 			printf("cmd->data[%d] : %s\n", i,parser_utils->cmd_list->data[i]);
-		// 			i++;
-		// 		}
-		// 	}
-		// 	if (parser_utils->cmd_list->redir)
-		// 	{
-		// 		t_redir *cmd_redir = parser_utils->cmd_list->redir;
-		// 		while (cmd_redir)
-		// 		{
-		// 			printf("cmd->redir_type : %d\n", cmd_redir->redir_type);
-		// 			printf("cmd->filename : %s\n\n", cmd_redir->file_name);
-		// 			cmd_redir = cmd_redir->next;
-		// 		}
-		// 	}
-		// 	parser_utils->cmd_list = parser_utils->cmd_list->next;
-		// 	n++;
-		// }
-		status = executor(parser_utils, lexer);
-		free(line);
-		destroy_lexer_list(&lexer->token_list);
-		destroy_parser_list(&parser_utils->cmd_list);
-		lexer->pipe_num = 0;
+		rl_clear_history();
+		return (0);
 	}
-	return (status);
+	if (!*line)
+	{
+		free(line);
+		return (readline_loop());
+	}
+	if (*line)
+		add_history(line);
+	return (line);
 }
 
+static void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
+{
+	(void)env;
+	parser_utils->envp = join_key_value(parser_utils->env);
+	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
+	if (lexical_analyzer(lexer) == false)
+		err_msg(ERROR_LEXER);
+	t_tokens *curr;
+
+	curr = lexer->token_list;
+	while (curr)
+	{
+		printf("%s\n", curr->data);
+		curr = curr->next;
+	}
+	// expand(lexer->token_list, env);
+	// parser(lexer, parser_utils);
+	// setup_executor(lexer, parser_utils);
+}
+
+/*
+*	Obtain input from the prompt through readline_loop()
+*	and if the input passes input_check(), then proceed to run Minishell.
+*/
+static void	shell_loop(t_lexer *lexer, t_parser	*parser, t_env *env)
+{
+	char			*line;
+
+	g_exit_status = 0;
+	while (g_exit_status >= 0)
+	{
+		signal_handler(PARENT);
+		line = readline_loop();
+		if (line)
+			lexer->arg = ft_strtrim(line, " ");
+		else
+			lexer->arg = line;
+		if (!lexer->arg)
+		{
+			free(line);
+			write(STDOUT_FILENO, "exit\n", 5);
+			exit(EXIT_SUCCESS);
+		}
+		if (input_check(lexer->arg) == false)
+			free_prev_line(lexer, line);
+		else
+		{
+			run_shell(lexer, parser, env);
+			reset(lexer, parser, line);
+		}
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_lexer_utils	lexer;
-	t_parser_utils	parser;
-	int				exit_code;
+	t_lexer		lexer;
+	t_parser	parser;
 
-	//system ("leaks minishell -q");
 	argv = NULL;
 	if (argc != 1 && argv[0] != NULL)
 	{
 		printf("Invalid argument.\n");
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	rl_initialize();
 	init_utils(&lexer, &parser);
-	parser.env = createLinkedList(envp);
-	parser.cmd_dirs = get_cmd_dirs(parser.env);
-	//pwd(&parser);status
-	exit_code = shell_loop(&lexer, &parser);
-	printf("exit code : %d\n", exit_code);
-	// free (str);
-	return (exit_code);
+	create_env_list(&parser, envp);
+	shell_loop(&lexer, &parser, (&parser)->env);
+	// destroy_lexer_parser(&lexer, &parser);
+	return (0);
 }

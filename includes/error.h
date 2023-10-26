@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   error.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: eucho <eucho@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/18 11:24:23 by eucho         #+#    #+#                 */
+/*   Updated: 2023/10/24 12:41:14 by eunbi         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 //File errors
@@ -8,7 +20,8 @@
 # define ERROR_FORK "Filed to fork\n"
 //Syntax error
 # define ERROR_QUOTE "syntax error: unexpected EOF while looking for matching"
-
+# define ERROR_NEWLINE "minishell: syntax error near unexpected token `newline'"
+# define ERROR_PIPE	"minishell: syntax error near unexpected token `|'"
 # define ERROR_LEXER "lexer error"
 # define ERROR_MEM "memory error"
 
@@ -22,10 +35,23 @@
 //Command error
 # define ERROR_CMD "command not found"
 # define EXIT_CMD 127
+# define ERROR_EXECVE "execve error"
+# define ERROR_DIR  " Is a directory"
+# define EXIT_DIR 126
+# define ERROR_PERMISSION "Permission denied"
+
+//Signal error
+# define ERROR_SIG "signal error" 
+
+//fds error
+# define ERROR_FDS "fds malloc error"
+
 # include <errno.h>
 # include <unistd.h>
+# include <stdbool.h>
 
+bool	input_check(char *str);
 int		err_msg(char *str);
 void	perror_exit(char *str);
-void	cmd_error(char *cmd);
+void	cmd_error(char *cmd, char *error);
 #endif

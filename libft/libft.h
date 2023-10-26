@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 16:01:27 by eucho         #+#    #+#                 */
-/*   Updated: 2023/02/25 11:57:08 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/18 18:22:04 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ int		ft_atoi(const char *str);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
+int		ft_strcmp(const char *str1, const char *str2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strdup(const char *s1);
+char	*ft_strndup(const char *s1, size_t n);
 //memory
 void	ft_bzero(void *s, size_t n);
 void	*ft_memset(void *b, int c, size_t len);
