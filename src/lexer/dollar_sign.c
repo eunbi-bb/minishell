@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/24 14:23:55 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 09:48:09 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ static int	split_dollar(char *str, int i, t_lexer *lexer, char quote)
 		len = get_len_dollar(&str[i + 1]) + 1;
 		tmp = ft_substr(str, i, len);
 		add_after(&lexer->token_list, new_token_node(tmp, DOLLAR, quote));
+		// 		add_to_last(&lexer->token_list, tmp);
 		i += len;
 	}
 	free(tmp);

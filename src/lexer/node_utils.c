@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/22 15:56:17 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/26 09:38:53 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,27 @@ void	add_after(t_tokens **before, t_tokens *new_node)
 		while (head->next != NULL)
 			head = head->next;
 		head->next = new_node;
+	}
+}
+
+void	add_to(t_tokens *before, char *data)
+{
+	before->data = ft_strjoin(before->data, data);
+}
+
+void	add_to_last(t_tokens **before, char *data)
+{
+	t_tokens	*head;
+
+	head = *before;
+	if (head == NULL)
+	{
+		return;
+	}
+	else
+	{
+		while (head->next != NULL)
+			head = head->next;
+		head->data = ft_strjoin(head->data, data);
 	}
 }

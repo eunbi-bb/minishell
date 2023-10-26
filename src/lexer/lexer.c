@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 11:56:17 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 12:34:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ static int	take_tokens(t_lexer *lexer, char *str, int i)
 *	Extract the word between quotes.
 *	If there is nothing between the quotes, set tmp to an empty string.
 */
-static char	*extract_word(char	*str, int i, int j, char quote)
-{
-	char	*tmp;
+// static char	*extract_word(char	*str, int i, int j, char quote)
+// {
+// 	char	*tmp;
 
-	tmp = NULL;
-	if (str[i + 1] == quote)
-		tmp = ft_strdup("");
-	else if (quote != '\0')
-		tmp = ft_substr(str, i + 1, j - 2);
-	else
-		tmp = ft_substr(str, i + 1, j - 1);
-	return (tmp);
-}
+// 	tmp = NULL;
+// 	if (str[i + 1] == quote)
+// 		tmp = ft_strdup("");
+// 	else if (quote != '\0')
+// 		tmp = ft_substr(str, i + 1, j - 2);
+// 	else
+// 		tmp = ft_substr(str, i + 1, j - 1);
+// 	return (tmp);
+// }
 
 void	free_tmp(char *tmp)
 {
@@ -78,10 +78,12 @@ void	free_tmp(char *tmp)
 *	After division, parse it to find_dollar() to find '$' for expansion
 *	and generate nodes in the token_list.
 */
-static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
+static int	arg_divider(t_lexer *lexer, char *str, int i)
 {
 	int		j;
 	char	*tmp;
+	char	*tmp2;
+	char	quote;
 
 	j = 0;
 	tmp = NULL;
@@ -89,31 +91,66 @@ static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
 	{
 		if (str[i + j] == '\'' || str[i + j] == '\"')
 		{
-			if (tmp != NULL)
-				break ;
 			quote = str[i + j];
 			j += next_quote(str, i + j, quote);
-			tmp = extract_word(str, i, j, quote);
 		}
-		else if (is_whitespace(str[i + j]) || quote != '\0')
+		else if (is_whitespace(str[i + j]))
 			break ;
-		else if (is_token(str[i + j++]) == -1)
+		else if (is_token(str[i + j]) == -1)
 		{
-			free_tmp(tmp);
+			while (str[i + j] && is_token(str[i + j]) == -1 && is_whitespace(str[i + j]) == false)
+				j++;
+		}
+		if (tmp == NULL)
 			tmp = ft_substr(str, i, j);
+		else
+		{
+			tmp2 = ft_strjoin(tmp, ft_substr(str, i, j));
+			free(tmp);
+			tmp = tmp2;
 		}
 	}
-	find_dollar(tmp, lexer, quote);
+	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT, '\0'));
+	free_tmp(tmp);
 	return (j);
 }
+
+// static int	arg_divider(t_lexer *lexer, char *str, int i, char quote)
+// {
+// 	int		j;
+// 	char	*tmp;
+
+// 	j = 0;
+// 	tmp = NULL;
+// 	while (str[i + j] && (is_token(str[i + j]) == -1))
+// 	{
+// 		if (str[i + j] == '\'' || str[i + j] == '\"')
+// 		{
+// 			if (tmp != NULL)
+// 				break ;
+// 			quote = str[i + j];
+// 			j += next_quote(str, i + j, quote);
+// 			tmp = extract_word(str, i, j, quote);
+// 		}
+// 		else if (is_whitespace(str[i + j]) || quote != '\0')
+// 			break ;
+// 		else if (is_token(str[i + j++]) == -1)
+// 		{
+// 			free_tmp(tmp);
+// 			tmp = ft_substr(str, i, j);
+// 		}
+// 	}
+// 	find_dollar(tmp, lexer, quote);
+// 	return (j);
+// }
 
 bool	lexical_analyzer(t_lexer *lexer)
 {
 	int		i;
 	int		j;
-	char	quote;
+	// char	quote;
 
-	quote = '\0';
+	// quote = '\0';
 	i = 0;
 	while (lexer->arg[i])
 	{
@@ -122,7 +159,7 @@ bool	lexical_analyzer(t_lexer *lexer)
 		if (is_token(lexer->arg[i]) >= 0)
 			j = take_tokens(lexer, lexer->arg, i);
 		else
-			j = arg_divider(lexer, lexer->arg, i, quote);
+			j = arg_divider(lexer, lexer->arg, i);
 		if (j < 0)
 			return (false);
 		i = i + j;

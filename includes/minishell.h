@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/25 09:23:45 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 09:39:19 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ void		find_dollar(char *str, t_lexer *lexer, char quote);
 //	node_utils.c
 t_tokens	*new_token_node(char *data, t_types token, char quote);
 void		add_after(t_tokens **before, t_tokens *new_node);
+void		add_to(t_tokens *before, char *data);
+void		add_to_last(t_tokens **before, char *data);
 /***** free *****/
 //	free_destroy.c
 void		free_prev_line(t_lexer *lexer, char *line);
@@ -150,8 +152,6 @@ void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
 //	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
-
-t_env		**create_link_list(char **envp, t_data *data);
 
 int			cmd_echo(char **cmd);
 int			cmd_pwd(void);
