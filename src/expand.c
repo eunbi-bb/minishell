@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 15:36:33 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/26 19:39:52 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,45 +30,25 @@ char	*search_value(char *key, t_env *env)
 	return (empty);
 }
 
-char	*print_qm(char *data)
+char	*expand(char *str, t_env *env)
 {
-	char	*exitc;
+	char	*key;
+	int		i;
+	char	*out;
 
-	exitc = ft_itoa(g_exit_status);
-	free(data);
-	data = ft_strdup(exitc);
-	free(exitc);
-	return (data);
-}
-
-void	replace_val(t_tokens *current, char *val)
-{
-	free(current->data);
-	current->data = ft_strdup(val);
-	free(val);
-}
-
-void	expand(t_tokens *token_list, t_env *env)
-{
-	t_tokens	*current;
-	char		*val;
-	char		*key;
-
-	current = token_list;
-	val = NULL;
-	while (current != NULL)
+	out = NULL;
+	i = 0;
+	if (str[i + 1] && str[i + 1] == '?')
+		out = ft_strdup(ft_itoa(g_exit_status));
+	else if (str[i] == '$' && str[i + 1] == '\0')
+		out = ft_strdup("$");
+	else
 	{
-		if (current->token == QUESTION && current->s_quote == false)
-			current->data = print_qm(current->data);
-		if (current->token == DOLLAR && current->s_quote == false)
-		{
-			key = ft_strjoin(current->data + 1, "=");
-			if (!key)
-				err_msg("Malloc\n");
-			val = search_value(key, env);
-			free(key);
-			replace_val(current, val);
-		}
-		current = current->next;
+		key = ft_strjoin(str + 1, "=");
+		if (!key)
+			err_msg("Malloc\n");
+		out = search_value(key, env);
+		free(key);
 	}
+	return (out);
 }

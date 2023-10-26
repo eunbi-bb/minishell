@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 18:35:30 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 20:06:50 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,14 @@ static int	get_len_dollar(char *str, int i)
 {
 	while (str[i])
 	{
-		if (str[i] == '$' || str[i] == '+' || is_whitespace(str[i]) \
+		if (str[i] == '$' || is_whitespace(str[i]) \
 			|| is_token(str[i]) >= 0 || str[i] == '\"' || str[i] == '\'')
 		{
 			--i;
 			break ;
 		}
+		else if (str[i] == '+')
+			break ;
 		i++;
 	}
 	return (i);
@@ -154,7 +156,7 @@ bool	lexical_analyzer(t_lexer *lexer)
 	return (true);
 }
 
-char *replacer(char *data)
+char *replacer(char *data, t_parser *parser)
 {
 	char		quote;
 	char		*expand_value;
@@ -167,16 +169,12 @@ char *replacer(char *data)
 	{
 		if (data[i] == '\'' || data[i] == '\"')
 		{
-			// printf("Found quote at index %d\n", i);
 			quote = data[i];
-			// printf("quote %c\n", quote);
 			int next = i + next_quote(data, i, quote);
 			while (i < next)
 			{
 				if (data[i] == '$' && quote == '\"')
 				{
-					// printf("Found $ at index %d\n", i);
-					// printf("Quote is %c\n", quote);
 					begin_expand = i;
 					end_expand = get_len_dollar(data, begin_expand + 1);
 					i += end_expand;
@@ -184,30 +182,24 @@ char *replacer(char *data)
 				else
 					i++;
 			}
-			// printf("Closed quote at index %d\n", i);
-			// end_expand = i;
 		}
 		else if (data[i] == '$')
 		{
-			
-			// printf("Found $ at index %d\n", i);
 			begin_expand = i;
 			end_expand = get_len_dollar(data, begin_expand + 1);
 			i += end_expand;
 		}
 		i++;
 	}
-
 	if (begin_expand < 0)
 		return data;
-
 	if (end_expand < 0)
 		end_expand = ft_strlen(data);
-
-	// char *found_value = ft_substr(data, begin_expand, end_expand);
-	expand_value = "hello";
-
+	char *found_value = ft_substr(data, begin_expand, end_expand);
+	expand_value = ft_strdup(expand(found_value, parser->env));
 	// printf("Found value %s\n", found_value);
+	free(found_value);
+
 	// printf("Replacing with value %s\n", expand_value);
 
 	char *begin = ft_substr(data, 0, begin_expand);
@@ -215,13 +207,15 @@ char *replacer(char *data)
 	// printf("Begin %s\n", begin);
 	// printf("end %s\n", end);
 	char *result = ft_strjoin(ft_strjoin(begin, expand_value), end);
+	free(begin);
+	free(end);
 	// printf("Result %s\n", result);
 
 	return result;
 }
 
 
-void	determine_expanding(t_lexer *lexer)
+void	determine_expanding(t_lexer *lexer, t_parser *parser)
 {
 	// printf("TEST\n");
 	t_tokens	*head;
@@ -239,12 +233,11 @@ void	determine_expanding(t_lexer *lexer)
 		while (ft_strcmp(data, result) != 0)
 		{
 			data = ft_strdup(tmp);
-			result = replacer(data);
+			result = replacer(data, parser);
 			tmp = ft_strdup(result);
 		}
-
-		lexer->token_list->data = result;
-
+		free(lexer->token_list->data);
+		lexer->token_list->data = ft_strdup(result);
 		lexer->token_list = lexer->token_list->next;
 	}
 

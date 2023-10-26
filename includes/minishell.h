@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 15:22:35 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/26 19:40:33 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void		add_after_redir(t_redir **before, t_redir *new_node);
 /***** lexer *****/
 //	lexer.c
 bool		lexical_analyzer(t_lexer *lexer);
-void		determine_expanding(t_lexer *lexer);
+void		determine_expanding(t_lexer *lexer, t_parser *parser);
 void		free_tmp(char *tmp);
 //	lexer_utils.c
 bool		is_whitespace(char c);
@@ -169,7 +169,7 @@ void		free_sorted(t_env *head);
 void	create_env_list(t_parser *parser, char** envp);
 char	**join_key_value(t_env *head);
 int 		cmd_env(t_env *env);
-void		expand(t_tokens *token_list, t_env *env);
+char	*expand(char *str, t_env *env);
 char		*search_value(char *key, t_env *env);
 
 int			count_cmd(char **cmd);
