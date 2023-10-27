@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 20:13:50 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:29:07 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 		{
 			quote = str[i + j];
 			j += next_quote(str, i + j, quote) + 1;
+			// if (str[i + 1] == quote)
+			// {
+			// 	printf("HERE\n");
+			// 	tmp = ft_strdup("");
+			// 	break ;
+			// }
 		}
 		else if (is_whitespace(str[i + j]))
 			break ;
@@ -145,7 +151,7 @@ char *replacer(char *data, t_parser *parser)
 	int 		next;
 
 	i = 0;
-		quote = '\0';
+	quote = '\0';
 	while (data[i] && end_expand < 0)
 	{
 		if (data[i] == '\'' || data[i] == '\"')
@@ -273,7 +279,10 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 		}
 		free(lexer->token_list->data);
 		char *result2 = remove_quotes(result);
-		lexer->token_list->data = ft_strdup(result2);
+		if (result2 != NULL)
+			lexer->token_list->data = ft_strdup(result2);
+		else
+			lexer->token_list->data = NULL;
 		free(result2);
 		lexer->token_list = lexer->token_list->next;
 	}
