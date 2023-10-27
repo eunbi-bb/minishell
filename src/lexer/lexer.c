@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 20:41:05 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 21:02:21 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,22 @@ static int	take_tokens(t_lexer *lexer, char *str, int i)
 {
 	if (is_token(str[i]) == GREATER && is_token(str[i + 1]) == GREATER)
 	{
-		add_after(&lexer->token_list, new_token_node(NULL, APPEND, '\0'));
+		add_after(&lexer->token_list, new_token_node(NULL, APPEND));
 		return (2);
 	}
 	else if (is_token(str[i]) == LESSER && is_token(str[i + 1]) == LESSER)
 	{
-		add_after(&lexer->token_list, new_token_node(NULL, HERE_DOC, '\0'));
+		add_after(&lexer->token_list, new_token_node(NULL, HERE_DOC));
 		lexer->heredoc = true;
 		return (2);
 	}
 	else if (is_token(str[i]) == GREATER)
-		add_after(&lexer->token_list, new_token_node(NULL, GREATER, '\0'));
+		add_after(&lexer->token_list, new_token_node(NULL, GREATER));
 	else if (is_token(str[i]) == LESSER)
-		add_after(&lexer->token_list, new_token_node(NULL, LESSER, '\0'));
+		add_after(&lexer->token_list, new_token_node(NULL, LESSER));
 	else if (is_token(str[i]) == PIPE)
 	{
-		add_after(&lexer->token_list, new_token_node(NULL, PIPE, '\0'));
+		add_after(&lexer->token_list, new_token_node(NULL, PIPE));
 		lexer->pipe_num++;
 	}
 	else
@@ -75,12 +75,6 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 		{
 			quote = str[i + j];
 			j += next_quote(str, i + j, quote) + 1;
-			// if (str[i + 1] == quote)
-			// {
-			// 	printf("HERE\n");
-			// 	tmp = ft_strdup("");
-			// 	break ;
-			// }
 		}
 		else if (is_whitespace(str[i + j]))
 			break ;
@@ -102,7 +96,7 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 			free(tmp2);
 		}
 	}
-	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT, '\0'));
+	add_after(&lexer->token_list, new_token_node(tmp, DEFAULT));
 	free_tmp(tmp);
 	return (j);
 }

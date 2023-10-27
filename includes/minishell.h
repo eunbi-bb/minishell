@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 19:40:33 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:59:58 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,13 @@ typedef enum types
 	LESSER,
 	GREATER,
 	HERE_DOC,
-	APPEND,
-	DOLLAR,
-	QUESTION
+	APPEND
 }	t_types;
 
 typedef struct s_tokens
 {
 	char			*data;
 	t_types			token;
-	bool			s_quote;
-	bool			d_quote;
 	struct s_tokens	*next;
 }	t_tokens;
 
@@ -120,7 +116,7 @@ int			next_quote(char *str, int i, char quote);
 //	dollar_sign.c
 void		find_dollar(char *str, t_lexer *lexer, char quote);
 //	node_utils.c
-t_tokens	*new_token_node(char *data, t_types token, char quote);
+t_tokens	*new_token_node(char *data, t_types token);
 void		add_after(t_tokens **before, t_tokens *new_node);
 void		add_to(t_tokens *before, char *data);
 void		add_to_last(t_tokens **before, char *data);

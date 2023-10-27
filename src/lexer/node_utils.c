@@ -6,14 +6,14 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 09:38:53 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:59:24 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 
-t_tokens	*new_token_node(char *data, t_types token, char quote)
+t_tokens	*new_token_node(char *data, t_types token)
 {
 	t_tokens	*new;
 
@@ -28,15 +28,6 @@ t_tokens	*new_token_node(char *data, t_types token, char quote)
 	else
 		new->data = ft_strdup(data);
 	new->token = token;
-	if (quote == '\'')
-		new->s_quote = true;
-	else if (quote == '\"')
-		new->d_quote = true;
-	else
-	{
-		new->s_quote = false;
-		new->d_quote = false;
-	}
 	new->next = NULL;
 	return (new);
 }

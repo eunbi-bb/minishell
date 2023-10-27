@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:41 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/25 22:37:04 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 21:00:35 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ t_cmd	*generate_cmd(t_tokens *tokens, t_cmd *cmd)
 	generate_redir(curr, cmd);
 	while (0 <= arg_num-- && curr)
 	{
-		if (curr->data != NULL \
-			&& (curr->token == DEFAULT || curr->token >= DOLLAR))
+		if (curr->data != NULL && curr->token == DEFAULT)
 		{
 			len = ft_strlen(curr->data) + 1;
 			cmd->data[i] = ft_calloc(len, sizeof(char));
