@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 20:59:58 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 22:30:50 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ bool		is_whitespace(char c);
 int			skip_whitespace(char *s, int i);
 int			is_token(int c);
 bool		match_quotes(char *str);
-int			next_quote(char *str, int i, char quote);
+int			next_quote(char *str, int i);
 //	dollar_sign.c
 void		find_dollar(char *str, t_lexer *lexer, char quote);
 //	node_utils.c

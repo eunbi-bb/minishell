@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 19:57:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 17:43:36 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 21:58:02 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ bool	match_quotes(char *str)
 *	Finding an end quote.
 *	It returns the length from the beginning quote to the end quote. 
 */
-int	next_quote(char *str, int i, char quote)
+int	next_quote(char *str, int i)
 {
-	int	j;
+	char	quote;
+	int		j;
 
+	quote = str[i];
 	j = 0;
 	if (str[i + j] == quote)
 	{
