@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/26 22:23:29 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:43:16 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,17 @@ char	*expand(char *str, t_env *env)
 	char	*key;
 	int		i;
 	char	*out;
+	char	*exit_code;
 
 	out = NULL;
+	exit_code = NULL;
 	i = 0;
 	if (str[i + 1] && str[i + 1] == '?')
-		out = ft_strdup(ft_itoa(g_exit_status));
+	{
+		exit_code = ft_itoa(g_exit_status);
+		out = ft_strdup(exit_code);
+		free(exit_code);
+	}
 	else if (str[i] == '$' && str[i + 1] == '\0')
 		out = ft_strdup("$");
 	else

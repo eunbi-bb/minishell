@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 20:29:07 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:41:05 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,27 +264,32 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 	data = NULL;
 	while (lexer->token_list)
 	{
-		if (tmp != NULL)
-			free(tmp);
-		data = ft_strdup(lexer->token_list->data);
-		tmp = ft_strdup(data);
-		while (ft_strcmp(data, result) != 0)
+		if (lexer->token_list->token == DEFAULT)
 		{
-			free(data);
-			data = ft_strdup(tmp);
-			free(result);
-			result = replacer(data, parser);
-			free(tmp);
-			tmp = ft_strdup(result);
+			if (tmp != NULL)
+				free(tmp);
+			data = ft_strdup(lexer->token_list->data);
+			tmp = ft_strdup(data);
+			while (ft_strcmp(data, result) != 0)
+			{
+				free(data);
+				data = ft_strdup(tmp);
+				free(result);
+				result = replacer(data, parser);
+				free(tmp);
+				tmp = ft_strdup(result);
+			}
+			free(lexer->token_list->data);
+			char *result2 = remove_quotes(result);
+			if (result2 != NULL)
+				lexer->token_list->data = ft_strdup(result2);
+			else
+				lexer->token_list->data = NULL;
+			free(result2);
+			lexer->token_list = lexer->token_list->next;
 		}
-		free(lexer->token_list->data);
-		char *result2 = remove_quotes(result);
-		if (result2 != NULL)
-			lexer->token_list->data = ft_strdup(result2);
 		else
-			lexer->token_list->data = NULL;
-		free(result2);
-		lexer->token_list = lexer->token_list->next;
+			lexer->token_list = lexer->token_list->next;
 	}
 	if (data)
 		free(data);
