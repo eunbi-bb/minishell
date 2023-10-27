@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/26 23:45:01 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/27 20:13:50 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,12 +177,10 @@ char *replacer(char *data, t_parser *parser)
 		end_expand = ft_strlen(data);
 	char *found_value = NULL;
 	found_value = ft_substr(data, begin_expand, end_expand - begin_expand + 1);
-	expand_value = ft_strdup(expand(found_value, parser->env));
-	// printf("Found value %s\n", found_value);
+	char *search = expand(found_value, parser->env);
+	expand_value = ft_strdup(search);
+	free(search);
 	free(found_value);
-
-	// printf("Replacing with value %s\n", expand_value);
-
 	char	*begin = ft_substr(data, 0, begin_expand);
 	char	*end = ft_substr(data, end_expand + 1, ft_strlen(data));
 	char	*tmp = ft_strjoin(begin, expand_value);
@@ -213,6 +211,7 @@ char	*remove_quotes(char *str)
 	int		i;
 	int		start;
 	char	*result;
+	char	*new_result;
 	char	*tmp;
 
 	i = 0;
@@ -229,13 +228,16 @@ char	*remove_quotes(char *str)
 			i++;
 		if (i > start)
 		{
-			tmp = ft_substr(str, start, i - start);
+			// tmp = ft_substr(str, start, i - start);
 			if (result == NULL)
 				result = ft_substr(str, start, i - start);
 			else
 			{
-				tmp = ft_substr(str, start, i - start); 
-				result = ft_strjoin(result, tmp);
+				tmp = ft_substr(str, start, i - start);
+				new_result = ft_strjoin(result, tmp);
+				free(result);
+				result = ft_strdup(new_result);
+				free(new_result);
 				free(tmp);
 			}
 		}
@@ -249,7 +251,6 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 	char		*result;
 	char 		*data;
 	char 		*tmp;
-	char		*arg;
 
 	head = lexer->token_list;
 	result = ft_strdup("");
@@ -271,9 +272,9 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 			tmp = ft_strdup(result);
 		}
 		free(lexer->token_list->data);
-		arg = remove_quotes(result);
-		lexer->token_list->data = ft_strdup(arg);
-		// lexer->token_list->data = ft_strdup(result);
+		char *result2 = remove_quotes(result);
+		lexer->token_list->data = ft_strdup(result2);
+		free(result2);
 		lexer->token_list = lexer->token_list->next;
 	}
 	if (data)
