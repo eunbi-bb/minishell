@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/22 21:22:09 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/23 18:11:45 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/28 19:19:58 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,14 @@ static void	exit_err(int i, char *data)
 	{
 		write(STDOUT_FILENO, "exit\nMinishell:", 16);
 		write(STDERR_FILENO, " too many arguments\n", 20);
-		exit(1);
 	}
 	else if (i == 2)
 	{
-		write(STDOUT_FILENO, "exit\nMinishell:", 16);
+		write(STDOUT_FILENO, "exit\nMinishell: exit: ", 16);
 		write(STDERR_FILENO, data, ft_strlen(data));
-		write(STDERR_FILENO, " numeric argument required\n", 27);
-		exit(2);
+		write(STDERR_FILENO, ": numeric argument required\n", 27);
 	}
+	exit(i);
 }
 
 int	cmd_exit(char **data)
