@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/29 01:17:38 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 01:27:24 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,15 @@ char	*remove_quotes(char *str)
 			start = i;
 			while (str[i] && (str[i] != quote))
 				i++;
-			if (i > start)
-				result = combine_result(str, result, i, start);
 		}
 		else
 		{
 			start = i;
 			while (str[i] && (str[i] != '\"' && str[i] != '\''))
 				i++;
-			if (i > start)
-				result = combine_result(str, result, i, start);
 		}
+		if (i > start)
+			result = combine_result(str, result, i, start);
 	}
 	return (result);
 }
