@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 20:05:55 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 20:36:11 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char *resolver(char *data, t_parser *parser)
 
 	str = data;
 	tmp = str;
-	result = NULL;
+	result = "";
 	while (ft_strcmp(str, result) != 0)
 	{
 		// free(str);
@@ -169,7 +169,7 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 		if (lexer->token_list->token == DEFAULT)
 		{
 			tmp = resolver(lexer->token_list->data, parser);
-			// free(lexer->token_list->data); // TODO maybe can be removed
+			free(lexer->token_list->data); // TODO maybe can be removed
 			if (tmp != NULL)
 				lexer->token_list->data = tmp;
 			else
