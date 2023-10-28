@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 18:48:36 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 19:14:46 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ static int	get_len_dollar(char *str, int i)
 		i++;
 	while (str[i] && str[i] != '$' && is_whitespace(str[i]) == false && str[i] != '+' \
 		&& is_token(str[i]) == -1 && str[i] != '\"' && str[i] != '\'')
+	{
+		if (str[i] == '?')
+			return (i);
 		++i;
+	}
 	return (i - 1);
 }
 
