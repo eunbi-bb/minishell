@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 19:14:46 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 19:35:16 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,9 @@ char *resolver(char *data, t_parser *parser)
 		result = replacer(str, parser);
 		tmp = result;
 	}
-	// str = NULL;
-	// if (str != NULL)
-	// 	free(str);
-	// free(tmp);
-	return (remove_quotes(result));
+	tmp = remove_quotes(result);
+	free(result);
+	return tmp;
 }
 
 // Loop over all arguments to check for dollar signs to replace.
