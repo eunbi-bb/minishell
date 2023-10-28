@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 22:02:59 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 21:20:40 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ static int	generate_command(t_parser *parser)
 
 int	execute_command(t_parser *parser)
 {
+	execute_redir(parser, parser->cmd_list->redir, 0);
 	if (parser->cmd_list->data)
 	{
 		if (is_builtin(parser) == 0)
@@ -121,13 +122,9 @@ int	execute_command(t_parser *parser)
 				return (parser->cmd_exit_code);
 			else
 			{
-				if (parser->cmd_list->data)
-				{
-					execute_redir(parser, parser->cmd_list->redir, 0);
-					if (execve(parser->command, parser->cmd_list->data, \
-						parser->envp) < 0)
-						perror_exit(ERROR_EXECVE);
-				}
+				if (execve(parser->command, parser->cmd_list->data, \
+					parser->envp) < 0)
+					perror_exit(ERROR_EXECVE);
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 20:36:11 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 21:12:13 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,10 +149,6 @@ char *resolver(char *data, t_parser *parser)
 		result = replacer(str, parser);
 		tmp = result;
 	}
-	// str = NULL;
-	// if (str != NULL)
-	// 	free(str);
-	// free(tmp);
 	return (remove_quotes(result));
 }
 
@@ -169,9 +165,12 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 		if (lexer->token_list->token == DEFAULT)
 		{
 			tmp = resolver(lexer->token_list->data, parser);
-			free(lexer->token_list->data); // TODO maybe can be removed
+			free(lexer->token_list->data);
 			if (tmp != NULL)
-				lexer->token_list->data = tmp;
+			{
+				lexer->token_list->data = ft_strdup(tmp);
+				free(tmp);
+			}
 			else
 				lexer->token_list->data = NULL;
 		}
