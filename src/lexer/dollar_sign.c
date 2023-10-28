@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 17:26:36 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 18:48:36 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,20 @@ char	*remove_quotes(char *str)
 	int		i;
 	int		start;
 	char	*result;
+	char	quote;
 
 	i = 0;
 	start = 0;
 	result = NULL;
+	quote = '\0';
 	while (str[i])
 	{
-		while (str[i] && (str[i] == '\'' || str[i] == '\"'))
+		if (str[i] == '\'' || str[i] == '\"')
+			quote = str[i];
+		while (str[i] && str[i] == quote)
 			i++;
 		start = i;
-		while (str[i] && str[i] != '\'' && str[i] != '\"')
+		while (str[i] && str[i] != quote)
 			i++;
 		if (i > start)
 			result = combine_result(str, result, i, start);
@@ -119,7 +123,7 @@ char *replacer(char *str, t_parser *parser)
 			return replace_between(parser, str, i, get_len_dollar(str, i));
 		i++;
 	}
-	return str;
+	return (str);
 }
 
 // Loop over the data until all values with a dollar sign are replaced.
