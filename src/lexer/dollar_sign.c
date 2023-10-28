@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/29 01:27:24 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 01:32:37 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,10 @@ char	*combine_result(char *str, char *result, int i, int start)
 	return (result);
 }
 
-char	*remove_quotes(char *str)
+char	*extract_word(char *str, int i, int start, char *result)
 {
-	int		i;
-	int		start;
-	char	*result;
 	char	quote;
 
-	i = 0;
-	start = 0;
-	result = NULL;
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
@@ -78,6 +72,18 @@ char	*remove_quotes(char *str)
 			result = combine_result(str, result, i, start);
 	}
 	return (result);
+}
+
+char	*remove_quotes(char *str)
+{
+	int		i;
+	int		start;
+	char	*result;
+
+	i = 0;
+	start = 0;
+	result = NULL;
+	return(extract_word(str, i, start, result));
 }
 
 // Replace the value between the indexes with its ENV value.
