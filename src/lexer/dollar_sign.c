@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 19:35:16 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/28 20:05:55 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,18 +140,20 @@ char *resolver(char *data, t_parser *parser)
 
 	str = data;
 	tmp = str;
-	result = "";
+	result = NULL;
 	while (ft_strcmp(str, result) != 0)
 	{
 		// free(str);
 		str = tmp;
-		// free(result);
+
 		result = replacer(str, parser);
 		tmp = result;
 	}
-	tmp = remove_quotes(result);
-	free(result);
-	return tmp;
+	// str = NULL;
+	// if (str != NULL)
+	// 	free(str);
+	// free(tmp);
+	return (remove_quotes(result));
 }
 
 // Loop over all arguments to check for dollar signs to replace.
@@ -167,7 +169,7 @@ void	determine_expanding(t_lexer *lexer, t_parser *parser)
 		if (lexer->token_list->token == DEFAULT)
 		{
 			tmp = resolver(lexer->token_list->data, parser);
-			free(lexer->token_list->data); // TODO maybe can be removed
+			// free(lexer->token_list->data); // TODO maybe can be removed
 			if (tmp != NULL)
 				lexer->token_list->data = tmp;
 			else
