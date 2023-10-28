@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/28 21:12:13 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 01:17:38 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,25 @@ char	*remove_quotes(char *str)
 	i = 0;
 	start = 0;
 	result = NULL;
-	quote = '\0';
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
-			quote = str[i];
-		while (str[i] && str[i] == quote)
-			i++;
-		start = i;
-		while (str[i] && str[i] != quote)
-			i++;
-		if (i > start)
-			result = combine_result(str, result, i, start);
+		{
+			quote = str[i++];
+			start = i;
+			while (str[i] && (str[i] != quote))
+				i++;
+			if (i > start)
+				result = combine_result(str, result, i, start);
+		}
+		else
+		{
+			start = i;
+			while (str[i] && (str[i] != '\"' && str[i] != '\''))
+				i++;
+			if (i > start)
+				result = combine_result(str, result, i, start);
+		}
 	}
 	return (result);
 }
@@ -143,9 +150,7 @@ char *resolver(char *data, t_parser *parser)
 	result = "";
 	while (ft_strcmp(str, result) != 0)
 	{
-		// free(str);
 		str = tmp;
-
 		result = replacer(str, parser);
 		tmp = result;
 	}
@@ -155,26 +160,28 @@ char *resolver(char *data, t_parser *parser)
 // Loop over all arguments to check for dollar signs to replace.
 void	determine_expanding(t_lexer *lexer, t_parser *parser)
 {
-	t_tokens	*head;
 	char 		*tmp;
+	char		*data;
+	t_tokens	*curr;
 
 	tmp = NULL;
-	head = lexer->token_list;
-	while (lexer->token_list)
+	curr = lexer->token_list;
+	while (curr)
 	{
-		if (lexer->token_list->token == DEFAULT)
+		if (curr->token == DEFAULT)
 		{
-			tmp = resolver(lexer->token_list->data, parser);
-			free(lexer->token_list->data);
+			data = ft_strdup(curr->data);
+			free(curr->data);
+			tmp = resolver(data, parser);
+			free(data);
 			if (tmp != NULL)
 			{
-				lexer->token_list->data = ft_strdup(tmp);
+				curr->data = ft_strdup(tmp);
 				free(tmp);
 			}
 			else
-				lexer->token_list->data = NULL;
+				curr->data = NULL;
 		}
-		lexer->token_list = lexer->token_list->next;
+		curr = curr->next;
 	}
-	lexer->token_list = head;
 }
