@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 21:31:54 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 14:30:11 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/29 16:48:42 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	valid_char(char *str)
 	if (ft_isdigit(str[0]))
 		return (1);
 	if (ft_strchr(str, '-'))
+		return (1);
+	if (str[0] == '=')
 		return (1);
 	return (0);
 }

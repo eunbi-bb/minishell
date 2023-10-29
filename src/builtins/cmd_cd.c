@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 14:59:17 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/29 16:49:36 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	replace_paths(t_env *env)
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd == NULL)
 	{
-		write(STDERR_FILENO, "cd: error retrieving current directory:getcwd:", 46);
-		write(STDERR_FILENO, "cannot access parent directories:", 33);
+		write(STDERR_FILENO, "cd: error retrieving current directory:", 39);
+		write(STDERR_FILENO, "getcwd:cannot access parent directories:", 40);
 		write(STDERR_FILENO, "No such file or directory\n", 26);
 		return ;
 	}
@@ -50,10 +50,18 @@ void	replace_paths(t_env *env)
 	free(new_pwd);
 }
 
+int	cd_error(void)
+{
+	write(STDERR_FILENO, "cd: too many arguments\n", 23);
+	return (1);
+}
+
 int	cmd_cd(char **path, t_env *env)
 {
 	char	*home;
 
+	if (count_cmd(path) > 2)
+		return (cd_error());
 	if (!path[1])
 	{
 		home = search_value("HOME=", env);

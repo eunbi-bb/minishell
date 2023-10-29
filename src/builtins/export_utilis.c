@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 16:03:23 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:40:45 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ int	var_exist(char *key, t_env *env)
 	size_t	len;
 	char	*str;
 
-	str = ft_strtrim(key, "=");
-	len = ft_strlen(str);
 	while (env)
 	{
+		str = ft_strtrim(key, "=");
+		len = ft_strlen(str);
 		if (ft_strncmp(str, env->key, len) == 0 \
 			&& ft_strlen(str) == ft_strlen(env->key))
 		{
@@ -98,6 +98,8 @@ int	var_exist(char *key, t_env *env)
 			free(str);
 			return (0);
 		}
+		if (str)
+			free(str);
 		env = env->next;
 	}
 	return (1);
