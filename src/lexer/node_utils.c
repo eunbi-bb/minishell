@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/20 14:24:46 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 20:59:24 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:22:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	add_to_last(t_tokens **before, char *data)
 	head = *before;
 	if (head == NULL)
 	{
-		return;
+		return ;
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:13 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/28 21:13:24 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:20:25 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ static bool	redir_check(t_redir *redir)
 */
 pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 {
-	// int		fd_in;
 	pid_t	pid;
 
-	// fd_in = 0;
 	pid = fork();
 	if (lexer->heredoc == true)
 	{
@@ -77,10 +75,6 @@ pid_t	child_process(t_lexer *lexer, t_parser *parser, int fds[], int i)
 		err_msg(ERROR_CHILD);
 	else if (pid == 0)
 	{
-		// if (parser->cmd_list->redir != NULL && parser->cmd_list == NULL)
-		// 	fd_in = execute_redir(parser, parser->cmd_list->redir, fd_in);
-		// if (fd_in > 0 && redir_check(parser->cmd_list->redir) == false)
-		// 	close(fd_in);
 		g_exit_status = execute_child(parser, lexer, fds, i);
 		exit(g_exit_status);
 	}

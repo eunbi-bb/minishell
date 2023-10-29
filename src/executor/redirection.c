@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:14:16 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/28 21:21:31 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:20:48 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	execute_redir(t_parser *parser, t_redir *redir, int fd_in)
 	t_redir	*head;
 
 	head = redir;
-
 	while (redir)
 	{
 		if (redir != NULL && redir->redir_type == HERE_DOC)

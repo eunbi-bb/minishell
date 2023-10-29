@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 13:31:21 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:54:33 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,70 @@ char	*expand(char *str, t_env *env)
 		free(key);
 	}
 	return (out);
+}
+
+static int	count_dollar(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+// Loop over the data until all values with a dollar sign are replaced.
+// Before returning, remove all quotes from the string.
+static char	*expanded_data(char *data, t_parser *parser)
+{
+	char	*result;
+	int		replace_count;
+	int		replaced_count;
+
+	result = NULL;
+	replace_count = count_dollar(data);
+	if (replace_count == 0)
+		return (remove_quotes(data));
+	replaced_count = 0;
+	while (replaced_count < replace_count)
+	{
+		if (result != NULL)
+		{
+			data = strdup(result);
+			free(result);
+		}
+		result = replacer(data, parser);
+		if (replaced_count > 0)
+			free(data);
+		replaced_count++;
+	}
+	data = remove_quotes(result);
+	if (result != NULL)
+		free(result);
+	return (data);
+}
+
+// Loop over all arguments to check for dollar signs to replace.
+void	expand_token_list(t_lexer *lexer, t_parser *parser)
+{
+	char		*tmp;
+	t_tokens	*curr;
+
+	curr = lexer->token_list;
+	while (curr)
+	{
+		if (curr->token == DEFAULT)
+		{
+			tmp = expanded_data(curr->data, parser);
+			free(curr->data);
+			curr->data = tmp;
+		}
+		curr = curr->next;
+	}
 }

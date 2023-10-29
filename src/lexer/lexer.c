@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:12:20 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 21:59:35 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:22:00 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	*combine_args(char *str, char *tmp, int i, int j)
 		tmp = ft_substr(str, i, j);
 	else
 	{
-		sub_str = ft_substr(str, i + ft_strlen(tmp) , j - ft_strlen(tmp));
+		sub_str = ft_substr(str, i + ft_strlen(tmp), j - ft_strlen(tmp));
 		tmp2 = ft_strjoin(tmp, sub_str);
 		free(tmp);
 		free(sub_str);
@@ -76,6 +76,7 @@ static char	*combine_args(char *str, char *tmp, int i, int j)
 	}
 	return (tmp);
 }
+
 /*
 *	Dividing given string based on quotes and white spaces.
 *	After division, parse it to find_dollar() to find '$' for expansion
@@ -96,8 +97,8 @@ static int	arg_divider(t_lexer *lexer, char *str, int i)
 			break ;
 		else if (is_token(str[i + j]) == -1)
 		{
-			while (str[i + j] && is_token(str[i + j]) == -1 && !is_whitespace(str[i + j]) \
-				&& str[i + j] != '\'' && str[i + j] != '\"')
+			while (str[i + j] && str[i + j] != '\'' && str[i + j] != '\"' \
+				&& is_token(str[i + j]) == -1 && !is_whitespace(str[i + j]))
 				j++;
 		}
 		tmp = combine_args(str, tmp, i, j);

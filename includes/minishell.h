@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/27 22:30:50 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:54:10 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,30 @@ typedef struct s_parser
 void		signal_handler(int sig);
 void		signal_heredoc(int sig);
 
+/***** lexer *****/
+//	lexer.c
+bool		lexical_analyzer(t_lexer *lexer);
+void		expand_token_list(t_lexer *lexer, t_parser *parser);
+void		free_tmp(char *tmp);
+//	lexer_utils.c
+bool		is_whitespace(char c);
+int			skip_whitespace(char *s, int i);
+int			is_token(int c);
+bool		match_quotes(char *str);
+int			next_quote(char *str, int i);
+//	node_utils.c
+t_tokens	*new_token_node(char *data, t_types token);
+void		add_after(t_tokens **before, t_tokens *new_node);
+void		add_to(t_tokens *before, char *data);
+void		add_to_last(t_tokens **before, char *data);
+//	remove_quotes.c
+char	*remove_quotes(char *str);
+/***** expander*****/
+//	expand.c
+void	expand_token_list(t_lexer *lexer, t_parser *parser);
+char	*expand(char *str, t_env *env);
+//	expand_utils.c
+char	*replacer(char *str, t_parser *parser);
 /***** parser *****/
 //	parser.c
 void		parser(t_lexer *lexer, t_parser *parser);
@@ -102,24 +126,6 @@ void		add_after_cmd(t_cmd **before, t_cmd *new_node);
 //	redir_node_utils.c
 t_redir		*create_redir_node(void);
 void		add_after_redir(t_redir **before, t_redir *new_node);
-/***** lexer *****/
-//	lexer.c
-bool		lexical_analyzer(t_lexer *lexer);
-void		determine_expanding(t_lexer *lexer, t_parser *parser);
-void		free_tmp(char *tmp);
-//	lexer_utils.c
-bool		is_whitespace(char c);
-int			skip_whitespace(char *s, int i);
-int			is_token(int c);
-bool		match_quotes(char *str);
-int			next_quote(char *str, int i);
-//	dollar_sign.c
-void		find_dollar(char *str, t_lexer *lexer, char quote);
-//	node_utils.c
-t_tokens	*new_token_node(char *data, t_types token);
-void		add_after(t_tokens **before, t_tokens *new_node);
-void		add_to(t_tokens *before, char *data);
-void		add_to_last(t_tokens **before, char *data);
 /***** free *****/
 //	free_destroy.c
 void		free_prev_line(t_lexer *lexer, char *line);

@@ -25,11 +25,13 @@ HEADERS		= $(addprefix $(HEADER_DIR), $(HEADER_SRC))
 INCLUDES	= -I$(HEADER_DIR)
 
 SRC_DIR		= src/
-SRC_FILE	= main.c error.c expand.c signals.c \
+SRC_FILE	= main.c error.c signals.c \
 				lexer/lexer.c \
 				lexer/node_utils.c \
 				lexer/lexer_utils.c \
-				lexer/dollar_sign.c \
+				lexer/remove_quotes.c \
+				expander/expand_utils.c\
+				expander/expand.c\
 				parser/parser.c \
 				parser/cmd_node_utils.c \
 				parser/redir_node_utils.c \

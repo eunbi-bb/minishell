@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:11:54 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/28 22:48:53 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:31:40 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	run_shell(t_lexer *lexer, t_parser *parser_utils, t_env *env)
 	parser_utils->cmd_dirs = get_cmd_dirs(parser_utils->env);
 	if (lexical_analyzer(lexer) == false)
 		err_msg(ERROR_LEXER);
-	determine_expanding(lexer, parser_utils);
+	expand_token_list(lexer, parser_utils);
 	parser(lexer, parser_utils);
 	setup_executor(lexer, parser_utils);
 }
@@ -118,6 +118,6 @@ int	main(int argc, char **argv, char **envp)
 	init_utils(&lexer, &parser);
 	create_env_list(&parser, envp);
 	shell_loop(&lexer, &parser, (&parser)->env);
-	// destroy_lexer_parser(&lexer, &parser);
+	destroy_lexer_parser(&lexer, &parser);
 	return (0);
 }
