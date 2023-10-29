@@ -103,7 +103,8 @@ int cmd_env(t_env *env)
 	head = env;
     while (env)
     {
-        printf("%s%s\n", env->key, env->value);
+		if (ft_strchr(env->key, '=') != NULL)
+        	printf("%s%s\n", env->key, env->value);
         env = env->next;
     }
 	env = head;

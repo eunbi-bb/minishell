@@ -33,6 +33,30 @@ void	check_malloc(char *key)
 		err_msg("malloc fail");
 }
 
+void unset_no_es(t_env *head, char *key)
+{
+    t_env *current = head;
+    t_env *previous = NULL;
+
+    while (current)
+    {
+        if (ft_strcmp(current->key, key) == 0 && ft_strcmp(current->value, "") == 0)
+        {
+            if (previous == NULL)
+                head = current->next;
+            else
+                previous->next = current->next;
+            free(current->key);
+            free(current->value);
+            free(current);
+            current = NULL;
+            return ;
+        }
+        previous = current;
+        current = current->next;
+    }
+}
+
 int	cmd_unset(t_env *head, char **key)
 {
 	t_env	*current;
@@ -57,6 +81,7 @@ int	cmd_unset(t_env *head, char **key)
 			previous = current;
 			current = current->next;
 		}
+		unset_no_es(head, key[i]);
 		free(key_eq);
 	}
 	return (0);

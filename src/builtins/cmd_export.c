@@ -54,12 +54,18 @@ t_env	*insert_node(char *str, t_env *head)
 	}
 	eq_s = ft_strchr(str, '=');
 	if (eq_s == NULL)
-		return (NULL);
-	key_len = eq_s - str + 1;
-	new_node->key = ft_substr(str, 0, key_len);
-	if (var_exist(new_node->key, current) == 0)
-		unset_var(head, new_node->key);
-	new_node->value = ft_strdup(eq_s + 1);
+	{
+		new_node->key = ft_substr(str, 0, ft_strlen(str));
+		new_node->value = ft_strdup("");
+	}
+	else 
+	{
+		key_len = eq_s - str + 1;
+		new_node->key = ft_substr(str, 0, key_len);
+		if (var_exist(new_node->key, current) == 0)
+			unset_var(head, new_node->key);
+		new_node->value = ft_strdup(eq_s + 1);
+	}
 	new_node->next = NULL;
 	return (new_node);
 }
