@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 14:54:33 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 15:59:18 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ char	*expand(char *str, t_env *env)
 	i = 0;
 	if (str[i + 1] && str[i + 1] == '?')
 	{
-		exit_code = ft_itoa(g_exit_status);
-		out = ft_strdup(exit_code);
-		free(exit_code);
+		out = ft_itoa(g_exit_status);
 	}
 	else if (str[i] == '$' && str[i + 1] == '\0')
 		out = ft_strdup("$");
@@ -55,7 +53,7 @@ char	*expand(char *str, t_env *env)
 		key = ft_strjoin(str + 1, "=");
 		if (!key)
 			err_msg("Malloc\n");
-		out = search_value(key, env);
+		out = ft_strdup(search_value(key, env));
 		free(key);
 	}
 	return (out);
@@ -94,7 +92,7 @@ static char	*expanded_data(char *data, t_parser *parser)
 	{
 		if (result != NULL)
 		{
-			data = strdup(result);
+			data = ft_strdup(result);
 			free(result);
 		}
 		result = replacer(data, parser);

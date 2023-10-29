@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/29 14:45:17 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/29 14:53:25 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 15:59:04 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*expand_data(t_parser *parser, char *data, int begin, int end)
 	end_str = ft_substr(data, end + 1, ft_strlen(data));
 	tmp = ft_strjoin(begin_str, search);
 	free(begin_str);
+    free(search);
 	result = ft_strjoin(tmp, end_str);
 	free(tmp);
 	free(end_str);
