@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/25 09:19:20 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:24:41 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,26 @@ t_env	*merge_sort(t_env *head)
 	left = merge_sort(left);
 	right = merge_sort(right);
 	sorted = merge(left, right);
+	print_list(sorted);
 	return (sorted);
 }
 
 int	var_exist(char *key, t_env *env)
 {
 	size_t	len;
+	char	*str;
 
-	len = ft_strlen(key);
+	str = ft_strtrim(key, "=");
+	len = ft_strlen(str);
 	while (env)
 	{
-		if (ft_strncmp(key, env->key, len) == 0)
+		if (ft_strncmp(str, env->key, len) == 0 \
+			&& ft_strlen(str) == ft_strlen(env->key))
+		{
+			printf("match\n");
+			free(str);
 			return (0);
+		}
 		env = env->next;
 	}
 	return (1);

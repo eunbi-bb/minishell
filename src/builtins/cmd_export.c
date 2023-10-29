@@ -6,78 +6,12 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/25 09:23:38 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:32:28 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "error.h"
-
-void	unset_var(t_env *head, char *key)
-{
-	t_env	*current;
-	t_env	*previous;
-
-	current = head;
-	previous = NULL;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			if (previous == NULL)
-				head = current->next;
-			else
-				previous->next = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
-			return ;
-		}
-		previous = current;
-		current = current->next;
-	}
-}
-
-t_env	*insert_node(char *str, t_env *head)
-{
-	char	*eq_s;
-	size_t	key_len;
-	t_env	*new_node;
-	t_env	*current;
-
-	current = head;
-	new_node = (t_env *)malloc(sizeof(t_env));
-	if (new_node == NULL)
-	{
-		perror("malloc");
-		exit(1);
-	}
-	eq_s = ft_strchr(str, '=');
-	if (eq_s == NULL)
-	{
-		new_node->key = ft_substr(str, 0, ft_strlen(str));
-		new_node->value = ft_strdup("");
-	}
-	else 
-	{
-		key_len = eq_s - str + 1;
-		new_node->key = ft_substr(str, 0, key_len);
-		if (var_exist(new_node->key, current) == 0)
-			unset_var(head, new_node->key);
-		new_node->value = ft_strdup(eq_s + 1);
-	}
-	new_node->next = NULL;
-	return (new_node);
-}
-
-int	valid_char(char *str)
-{
-	if (ft_isdigit(str[0]))
-		return (1);
-	if (ft_strchr(str, '-'))
-		return (1);
-	return (0);
-}
 
 void	add_to_list(t_env *current, t_env *head, char *str)
 {
@@ -95,21 +29,59 @@ void	add_to_list(t_env *current, t_env *head, char *str)
 	}
 }
 
-int	cmd_export(t_env *head, char **str)
+t_env	*create_node(char *key, char *value)
+{
+	t_env	*new_node;
+
+	new_node = (t_env *)malloc(sizeof(t_env));
+	if (new_node)
+	{
+		new_node->key = ft_strdup(key);
+		new_node->value = ft_strdup(value);
+		new_node->next = NULL;
+	}
+	return (new_node);
+}
+
+t_env	*copy_env_list(t_env *source)
+{
+	t_env	*head;
+	t_env	*tail;
+	t_env	*new_node;
+
+	head = NULL;
+	tail = NULL;
+	while (source)
+	{
+		new_node = create_node(source->key, source->value);
+		if (new_node)
+		{
+			if (!head)
+			{
+				head = new_node;
+				tail = new_node;
+			}
+			else
+			{
+				tail->next = new_node;
+				tail = new_node;
+			}
+		}
+		source = source->next;
+	}
+	return (head);
+}
+
+int	cmd_export(t_env *head, t_env *sorted, char **str)
 {
 	t_env	*current;
-	t_env	*sorted;
 	int		i;
 
 	i = 1;
 	current = NULL;
-	// executing export without argument
+	sorted = copy_env_list(head);
 	if (!str[1])
-	{
-		sorted = merge_sort(head);
-		print_list(sorted);
-		// free_sorted(head);
-	}
+		sorted = merge_sort(sorted);
 	else
 	{
 		while (str[i])
@@ -117,11 +89,13 @@ int	cmd_export(t_env *head, char **str)
 			if (valid_char(str[i]) == 1)
 			{
 				printf("export: '%s': not a valid identifier\n", str[i]);
+				free_sorted(sorted);
 				return (1);
 			}
 			add_to_list(current, head, str[i]);
 			i++;
 		}
 	}
+	free_sorted(sorted);
 	return (0);
 }

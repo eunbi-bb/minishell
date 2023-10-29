@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/28 14:32:33 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/24 22:11:38 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:44:49 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,37 @@ void	check_malloc(char *key)
 		err_msg("malloc fail");
 }
 
-void unset_no_es(t_env *head, char *key)
+void	unset_no_es(t_env *head, char *key)
 {
-    t_env *current = head;
-    t_env *previous = NULL;
+	t_env	*current;
+	t_env	*previous;
 
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0 && ft_strcmp(current->value, "") == 0)
-        {
-            if (previous == NULL)
-                head = current->next;
-            else
-                previous->next = current->next;
-            free(current->key);
-            free(current->value);
-            free(current);
-            current = NULL;
-            return ;
-        }
-        previous = current;
-        current = current->next;
-    }
+	current = head;
+	previous = NULL;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0 \
+			&& ft_strcmp(current->value, "") == 0)
+		{
+			if (previous == NULL)
+				head = current->next;
+			else
+				previous->next = current->next;
+			free(current->key);
+			free(current->value);
+			free(current);
+			current = NULL;
+			return ;
+		}
+		previous = current;
+		current = current->next;
+	}
+}
+
+void	unset_free_no_es(t_env *head, char *key, char *key_eq)
+{
+	unset_no_es(head, key);
+	free(key_eq);
 }
 
 int	cmd_unset(t_env *head, char **key)
@@ -81,8 +90,7 @@ int	cmd_unset(t_env *head, char **key)
 			previous = current;
 			current = current->next;
 		}
-		unset_no_es(head, key[i]);
-		free(key_eq);
+		unset_free_no_es(head, key[i], key_eq);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 12:21:26 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:03:33 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	replace_paths(t_env *env)
 	pwd = search_value("PWD", env);
 	env_replace_var("OLDPWD", env, pwd);
 	new_pwd = getcwd(NULL, 0);
+	//if (new_pwd == NULL)
 	env_replace_var("PWD", env, new_pwd);
 	free(new_pwd);
 }

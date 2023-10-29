@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/24 22:13:46 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:48:37 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,19 @@
 // 	return (str);
 // }
 
-
-t_env	*create_env_node(char* key, char* value)
+t_env	*create_env_node(char *key, char *value)
 {
-    t_env* new_node;
-	
+	t_env	*new_node;
+
 	new_node = ft_calloc(1, sizeof(t_env));
-    if (new_node == NULL) 
+	if (new_node == NULL)
 		perror_exit("malloc err");
-    new_node->key = ft_strdup(key);
+	new_node->key = ft_strdup(key);
 	free(key);
-    new_node->value = ft_strdup(value);
+	new_node->value = ft_strdup(value);
 	free(value);
-    new_node->next = NULL;
-    return (new_node);
+	new_node->next = NULL;
+	return (new_node);
 }
 
 void	add_after_env(t_env **before, t_env *new_node)
@@ -96,23 +95,22 @@ void	add_after_env(t_env **before, t_env *new_node)
 	}
 }
 
-int cmd_env(t_env *env)
+int	cmd_env(t_env *env)
 {
 	t_env	*head;
 
 	head = env;
-    while (env)
-    {
+	while (env)
+	{
 		if (ft_strchr(env->key, '=') != NULL)
-        	printf("%s%s\n", env->key, env->value);
-        env = env->next;
-    }
+			printf("%s%s\n", env->key, env->value);
+		env = env->next;
+	}
 	env = head;
-    return (0);
+	return (0);
 }
 
-
-void	create_env_list(t_parser *parser, char** envp)
+void	create_env_list(t_parser *parser, char **envp)
 {
 	char	*env;
 	char	*equal_sign;
@@ -131,7 +129,7 @@ void	create_env_list(t_parser *parser, char** envp)
 		if (!key)
 			perror_exit("malloc err");
 		value = ft_strdup(equal_sign + 1);
-		if	(!value)
+		if (!value)
 			perror_exit("malloc err");
 		free(env);
 		add_after_env(&parser->env, create_env_node(key, value));

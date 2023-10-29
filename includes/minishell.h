@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/25 09:23:45 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:38:27 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_parser
 	t_cmd	*cmd_list;
 	char	*args;
 	t_env	*env;
+	t_env	*sorted;
 	char	**envp;
 	char	**cmd_dirs;
 	int		pipes;
@@ -151,18 +152,21 @@ void		wait_pipes(pid_t pid, int pipe_num);
 //	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
 
-t_env		**create_link_list(char **envp, t_data *data);
+// t_env		**create_link_list(char **envp, t_data *data);
 
 int			cmd_echo(char **cmd);
 int			cmd_pwd(void);
 int			cmd_cd(char **path, t_env *env);
-int			cmd_export(t_env *head, char **str);
+int			cmd_export(t_env *head, t_env *sorted, char **str);
 int			cmd_unset(t_env *head, char **key);
 int			cmd_exit(char **input);
 int			var_exist(char *key, t_env *env);
 void		print_list(t_env *head);
 t_env		*merge_sort(t_env *head);
 void		free_sorted(t_env *head);
+t_env		*insert_node(char *str, t_env *head);
+void		unset_var(t_env *head, char *key);
+int			valid_char(char *str);
 
 //env.c
 void	create_env_list(t_parser *parser, char** envp);
@@ -170,6 +174,7 @@ char	**join_key_value(t_env *head);
 int 		cmd_env(t_env *env);
 void		expand(t_tokens *token_list, t_env *env);
 char		*search_value(char *key, t_env *env);
+t_env		*create_env_node(char* key, char* value);
 
 int			count_cmd(char **cmd);
 #endif
