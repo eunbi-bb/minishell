@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:10:30 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 12:26:01 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:43:08 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	input_check(char *str)
 	return (true);
 }
 
-void	cmd_error(char *cmd, char *error)
+int	cmd_error(char *cmd, char *error, int exit_code)
 {
 	write(STDERR_FILENO, "Minishell: ", 11);
 	write(STDERR_FILENO, "\'", 1);
@@ -66,6 +66,7 @@ void	cmd_error(char *cmd, char *error)
 	write(STDERR_FILENO, "\' ", 2);
 	write(STDERR_FILENO, error, ft_strlen(error) + 1);
 	write(STDERR_FILENO, "\n", 1);
+	return (exit_code);
 }
 
 int	err_msg(char *str)

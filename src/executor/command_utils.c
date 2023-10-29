@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 16:13:05 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/29 14:20:08 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:40:43 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,26 +82,18 @@ static int	generate_command(t_parser *parser)
 
 	cmd = parser->cmd_list;
 	if (is_directory(*cmd->data) == 1)
-	{
-		cmd_error(*cmd->data, ERROR_DIR);
-		return (EXIT_DIR);
-	}
+		return (cmd_error(*cmd->data, ERROR_DIR, EXIT_DIR));
 	if (cmd->data[0] == NULL)
 		parser->command = NULL;
 	else
 		parser->command = command_check(parser->cmd_dirs, *cmd->data);
-	if (cmd->data[0] && access(*cmd->data, F_OK) == 0 && access(*cmd->data, X_OK) == -1)
-	{
-		cmd_error(*cmd->data, ERROR_PERMISSION);
-		return (EXIT_DIR);
-	}
+	if (cmd->data[0] \
+		&& access(*cmd->data, F_OK) == 0 && access(*cmd->data, X_OK) == -1)
+		return (cmd_error(*cmd->data, ERROR_PERMISSION, EXIT_DIR));
 	else if (parser->cmd_dirs == NULL && access(*cmd->data, X_OK) == 0)
 		parser->command = *cmd->data;
 	else if (parser->command == NULL)
-	{
-		cmd_error(*cmd->data, ERROR_CMD);
-		return (EXIT_CMD);
-	}
+		return (cmd_error(*cmd->data, ERROR_CMD, EXIT_CMD));
 	return (EXIT_SUCCESS);
 }
 
