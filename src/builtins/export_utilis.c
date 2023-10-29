@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 17:29:39 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 21:08:11 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ t_env	*merge_sort(t_env *head)
 	left = merge_sort(left);
 	right = merge_sort(right);
 	sorted = merge(left, right);
-	print_list(sorted);
 	return (sorted);
 }
 

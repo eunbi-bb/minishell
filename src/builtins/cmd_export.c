@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/14 15:38:07 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 16:02:40 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 21:08:24 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ int	cmd_export(t_env *head, t_env *sorted, char **str)
 	current = NULL;
 	sorted = copy_env_list(head);
 	if (!str[1])
+	{
 		sorted = merge_sort(sorted);
+		print_list(sorted);
+	}
 	else
 	{
 		while (str[i])
