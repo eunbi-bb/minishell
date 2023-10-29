@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/29 01:32:37 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:05:48 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char *replace_between(t_parser *parser, char *data, int begin, int end)
 	char	*result;
 
 	if (begin < 0)
-		return data;
+		return ft_strdup(data);
 	if (end < 0)
 		end = ft_strlen(data);
 	tmp = ft_substr(data, begin, end - begin + 1);
@@ -106,7 +106,6 @@ char *replace_between(t_parser *parser, char *data, int begin, int end)
 	end_str = ft_substr(data, end + 1, ft_strlen(data));
 	tmp = ft_strjoin(begin_str, search);
 	free(begin_str);
-	free(search);
 	result = ft_strjoin(tmp, end_str);
 	free(tmp);
 	free(end_str);
@@ -138,53 +137,70 @@ char *replacer(char *str, t_parser *parser)
 			return replace_between(parser, str, i, get_len_dollar(str, i));
 		i++;
 	}
-	return (str);
+	return ft_strdup(str);
+}
+
+int count_dollar(char *str)
+{
+	int			i;
+	int			count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{// TODO check if there is a value (no ' " or space") after the dollar
+		if (str[i] == '$')
+			count++;
+		i++;
+	}
+	return count;
 }
 
 // Loop over the data until all values with a dollar sign are replaced.
 // Before returning, remove all quotes from the string.
 char *resolver(char *data, t_parser *parser)
 {
-	char		*result;
-	char 		*str;
-	char 		*tmp;
+	char	*result = NULL;
 
-	str = data;
-	tmp = str;
-	result = "";
-	while (ft_strcmp(str, result) != 0)
+	int replace_count = count_dollar(data);
+	if (replace_count == 0)
+		return remove_quotes(data);
+	int replaced_count = 0;
+	while (replaced_count < replace_count)
 	{
-		str = tmp;
-		result = replacer(str, parser);
-		tmp = result;
+		if (result != NULL)
+		{
+			data = strdup(result);
+			free(result);
+		}
+		result = replacer(data, parser);
+		if (replaced_count > 0)
+			free(data);
+		replaced_count++;
 	}
-	return (remove_quotes(result));
+
+	data = remove_quotes(result);
+		if (result != NULL)
+		{
+			free(result);
+		}
+	return (data);
 }
 
 // Loop over all arguments to check for dollar signs to replace.
 void	determine_expanding(t_lexer *lexer, t_parser *parser)
 {
-	char 		*tmp;
-	char		*data;
+	char	*tmp;
 	t_tokens	*curr;
 
-	tmp = NULL;
 	curr = lexer->token_list;
 	while (curr)
 	{
 		if (curr->token == DEFAULT)
 		{
-			data = ft_strdup(curr->data);
+			tmp = resolver(curr->data, parser);
 			free(curr->data);
-			tmp = resolver(data, parser);
-			free(data);
-			if (tmp != NULL)
-			{
-				curr->data = ft_strdup(tmp);
-				free(tmp);
-			}
-			else
-				curr->data = NULL;
+			curr->data = tmp;
 		}
 		curr = curr->next;
 	}

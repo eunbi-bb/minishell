@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/28 22:53:32 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 13:31:21 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*search_value(char *key, t_env *env)
 	while (curr)
 	{
 		if (ft_strncmp(key, curr->key, len) == 0)
-			return (ft_strdup(curr->value));
+			return (curr->value);
 		curr = curr->next;
 	}
 	empty = ft_strdup("");
