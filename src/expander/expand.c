@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 15:59:18 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 19:48:40 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	*expand(char *str, t_env *env)
 	int		i;
 	char	*out;
 	char	*exit_code;
+	char	*tmp;
 
 	out = NULL;
 	exit_code = NULL;
@@ -53,7 +54,10 @@ char	*expand(char *str, t_env *env)
 		key = ft_strjoin(str + 1, "=");
 		if (!key)
 			err_msg("Malloc\n");
-		out = ft_strdup(search_value(key, env));
+		tmp = search_value(key, env);
+		out = ft_strdup(tmp);
+		if (ft_strcmp(tmp, "") == 0)
+			free(tmp);
 		free(key);
 	}
 	return (out);
