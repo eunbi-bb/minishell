@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/29 16:03:52 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:35:38 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,13 @@ void		add_after(t_tokens **before, t_tokens *new_node);
 void		add_to(t_tokens *before, char *data);
 void		add_to_last(t_tokens **before, char *data);
 //	remove_quotes.c
-char	*remove_quotes(char *str);
+char		*remove_quotes(char *str);
 /***** expander*****/
 //	expand.c
-void	expand_token_list(t_lexer *lexer, t_parser *parser);
-char	*expand(char *str, t_env *env);
+void		expand_token_list(t_lexer *lexer, t_parser *parser);
+char		*expand(char *str, t_env *env);
 //	expand_utils.c
-char	*replacer(char *str, t_parser *parser);
+char		*replacer(char *str, t_parser *parser);
 /***** parser *****/
 //	parser.c
 void		parser(t_lexer *lexer, t_parser *parser);
@@ -141,7 +141,7 @@ void		free_cmd_list(t_parser *parser);
 void		free_env_list(t_parser *parser);
 /***** executor *****/
 //	command_utils.c
-char	**get_cmd_dirs(t_env *envp);
+char		**get_cmd_dirs(t_env *envp);
 int			execute_command(t_parser *parser);
 //	execute_builtins.c
 int			is_builtin(t_parser *cmd);
@@ -156,9 +156,6 @@ void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
 //	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
-
-// t_env		**create_link_list(char **envp, t_data *data);
-
 int			cmd_echo(char **cmd);
 int			cmd_pwd(void);
 int			cmd_cd(char **path, t_env *env);
@@ -172,14 +169,12 @@ void		free_sorted(t_env *head);
 t_env		*insert_node(char *str, t_env *head);
 void		unset_var(t_env *head, char *key);
 int			valid_char(char *str);
-
 //env.c
-void	create_env_list(t_parser *parser, char** envp);
-char	**join_key_value(t_env *head);
-int 		cmd_env(t_env *env);
-char	*expand(char *str, t_env *env);
+void		create_env_list(t_parser *parser, char **envp);
+char		**join_key_value(t_env *head);
+int			cmd_env(t_env *env);
+char		*expand(char *str, t_env *env);
 char		*search_value(char *key, t_env *env);
-t_env		*create_env_node(char* key, char* value);
-
+t_env		*create_env_node(char *key, char *value);
 int			count_cmd(char **cmd);
 #endif

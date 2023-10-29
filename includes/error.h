@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 11:24:23 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/24 12:41:14 by eunbi         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:43:17 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@
 bool	input_check(char *str);
 int		err_msg(char *str);
 void	perror_exit(char *str);
-void	cmd_error(char *cmd, char *error);
+int		cmd_error(char *cmd, char *error, int exit_code);
 #endif
