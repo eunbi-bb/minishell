@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/15 14:50:56 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 16:40:45 by ssemanco      ########   odam.nl         */
+/*   Updated: 2023/10/29 17:29:39 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	var_exist(char *key, t_env *env)
 		if (ft_strncmp(str, env->key, len) == 0 \
 			&& ft_strlen(str) == ft_strlen(env->key))
 		{
-			printf("match\n");
 			free(str);
 			return (0);
 		}
