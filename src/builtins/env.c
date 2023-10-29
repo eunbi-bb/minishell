@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 14:20:34 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 14:18:28 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 16:03:17 by eucho         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	cmd_env(t_env *env)
 	head = env;
 	while (env)
 	{
-		printf("%s%s\n", env->key, env->value);
+		if (ft_strchr(env->key, '=') != NULL)
+			printf("%s%s\n", env->key, env->value);
 		env = env->next;
 	}
 	env = head;

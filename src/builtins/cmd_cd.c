@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 11:36:32 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/22 12:21:26 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/29 14:59:17 by ssemanco      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ void	replace_paths(t_env *env)
 	pwd = search_value("PWD", env);
 	env_replace_var("OLDPWD", env, pwd);
 	new_pwd = getcwd(NULL, 0);
+	if (new_pwd == NULL)
+	{
+		write(STDERR_FILENO, "cd: error retrieving current directory:getcwd:", 46);
+		write(STDERR_FILENO, "cannot access parent directories:", 33);
+		write(STDERR_FILENO, "No such file or directory\n", 26);
+		return ;
+	}
 	env_replace_var("PWD", env, new_pwd);
 	free(new_pwd);
 }
