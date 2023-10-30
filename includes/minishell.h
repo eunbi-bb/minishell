@@ -6,7 +6,7 @@
 /*   By: eucho <eucho@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 15:20:14 by eucho         #+#    #+#                 */
-/*   Updated: 2023/10/29 16:35:38 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/30 20:15:42 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ void		add_to_last(t_tokens **before, char *data);
 char		*remove_quotes(char *str);
 /***** expander*****/
 //	expand.c
-void		expand_token_list(t_lexer *lexer, t_parser *parser);
 char		*expand(char *str, t_env *env);
+void		expand_token_list(t_lexer *lexer, t_parser *parser);
+char		*search_value(char *key, t_env *env);
 //	expand_utils.c
 char		*replacer(char *str, t_parser *parser);
 /***** parser *****/
@@ -156,25 +157,33 @@ void		close_ends(int pipe_num, int fds[]);
 void		wait_pipes(pid_t pid, int pipe_num);
 //	redirection.c
 int			execute_redir(t_parser *parser, t_redir *redir, int fd_in);
-int			cmd_echo(char **cmd);
-int			cmd_pwd(void);
+/***** builtins *****/
+//	cmd_cd.c
 int			cmd_cd(char **path, t_env *env);
-int			cmd_export(t_env *head, t_env *sorted, char **str);
-int			cmd_unset(t_env *head, char **key);
+//	cmd_echo.c
+int			cmd_echo(char **cmd);
+int			count_cmd(char **cmd);
+//	cmd_exit.c
 int			cmd_exit(char **input);
-int			var_exist(char *key, t_env *env);
+//	cmd_pwd.c
+int			cmd_pwd(void);
+//	cmd_export.c
+int			cmd_export(t_env *head, t_env *sorted, char **str);
 void		print_list(t_env *head);
+//		export_utils.c
+int			var_exist(char *key, t_env *env);
 t_env		*merge_sort(t_env *head);
+//		export_extra.c
 void		free_sorted(t_env *head);
 t_env		*insert_node(char *str, t_env *head);
 void		unset_var(t_env *head, char *key);
 int			valid_char(char *str);
-//env.c
+//	cmd_unset.c
+int			cmd_unset(t_env *head, char **key);
+//	env.c
 void		create_env_list(t_parser *parser, char **envp);
-char		**join_key_value(t_env *head);
 int			cmd_env(t_env *env);
-char		*expand(char *str, t_env *env);
-char		*search_value(char *key, t_env *env);
 t_env		*create_env_node(char *key, char *value);
-int			count_cmd(char **cmd);
+//		env_utils.c
+char		**join_key_value(t_env *head);
 #endif

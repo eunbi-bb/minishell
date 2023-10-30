@@ -6,7 +6,7 @@
 /*   By: ssemanco <ssemanco@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/18 19:33:20 by ssemanco      #+#    #+#                 */
-/*   Updated: 2023/10/29 19:48:40 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/30 20:06:32 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ char	*expand(char *str, t_env *env)
 	char	*key;
 	int		i;
 	char	*out;
-	char	*exit_code;
 	char	*tmp;
 
 	out = NULL;
-	exit_code = NULL;
 	i = 0;
 	if (str[i + 1] && str[i + 1] == '?')
 	{
