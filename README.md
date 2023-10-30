@@ -126,11 +126,11 @@ Execept for **builtins**, the commands that returns from **Parser** are executed
 ---
 
 ### *Expander*
-*Expander takes variables, identified by `$`, and replaces them with their value from environment.*
-```
-Minishell% echo "$USER"
-eunbi
-```
+*Expander takes variables from **Lexer**, identified by `$`, and replaces them with their value from environment.* \
+If a variable is inside single quotes, the **Expander** should not replace it because when a variable is enclosed in single quotes, it should preserve its own value.
+![expander](https://github.com/eunbi-bb/minishell/assets/80834766/5b6bbdf6-0620-4c6e-9180-a869f74b20bd)
+![expander2](https://github.com/eunbi-bb/minishell/assets/80834766/b0557aa1-9fed-4847-8e62-d530d0078659)
+
 ---
 
 ### *Heredoc*
