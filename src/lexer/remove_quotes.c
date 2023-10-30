@@ -6,7 +6,7 @@
 /*   By: eunbi <eunbi@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/09 19:06:41 by eunbi         #+#    #+#                 */
-/*   Updated: 2023/10/29 14:51:28 by eucho         ########   odam.nl         */
+/*   Updated: 2023/10/30 20:05:29 by eunbi         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,17 @@ static char	*combine_result(char *str, char *result, int i, int start)
 	return (result);
 }
 
-static char	*extract_word(char *str, int i, int start, char *result)
+char	*remove_quotes(char *str)
 {
+	int		i;
+	int		start;
+	char	*result;
 	char	quote;
 
+	i = 0;
+	start = 0;
+	result = NULL;
+	quote = '\0';
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
@@ -56,16 +63,4 @@ static char	*extract_word(char *str, int i, int start, char *result)
 			result = combine_result(str, result, i, start);
 	}
 	return (result);
-}
-
-char	*remove_quotes(char *str)
-{
-	int		i;
-	int		start;
-	char	*result;
-
-	i = 0;
-	start = 0;
-	result = NULL;
-	return (extract_word(str, i, start, result));
 }
