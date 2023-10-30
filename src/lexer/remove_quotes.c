@@ -33,17 +33,10 @@ static char	*combine_result(char *str, char *result, int i, int start)
 	return (result);
 }
 
-char	*remove_quotes(char *str)
+static char	*extract_word(char *str, int i, int start, char *result)
 {
-	int		i;
-	int		start;
-	char	*result;
 	char	quote;
 
-	i = 0;
-	start = 0;
-	result = NULL;
-	quote = '\0';
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
@@ -64,3 +57,16 @@ char	*remove_quotes(char *str)
 	}
 	return (result);
 }
+
+char	*remove_quotes(char *str)
+{
+	int		i;
+	int		start;
+	char	*result;
+
+	i = 0;
+	start = 0;
+	result = NULL;
+	return (extract_word(str, i, start, result));
+}
+
